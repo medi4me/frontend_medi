@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_homeCL"
@@ -12,8 +11,7 @@
         android:layout_height="280dp"
         android:background="@color/backgroundGray"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        >
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/home_name"
@@ -22,46 +20,216 @@
             android:text="OOO 님"
             android:textStyle="bold"
             android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="20dp"
-            app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="40dp"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/home_year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="25sp"
             android:text="2024년"
+            android:textSize="25sp"
             android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="@+id/home_name"
             android:layout_marginTop="50dp"
-            app:layout_constraintStart_toStartOf="@+id/home_name"
-            />
+            app:layout_constraintStart_toStartOf="@id/home_name"
+            app:layout_constraintTop_toTopOf="@id/home_name" />
 
         <TextView
             android:id="@+id/home_month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:text="4월"
             android:textSize="25sp"
-            app:layout_constraintTop_toTopOf="@+id/home_year"
-            app:layout_constraintStart_toEndOf="@+id/home_year"
-            android:layout_marginStart="10dp"/>
+            android:textStyle="bold"
+            android:layout_marginStart="10dp"
+            app:layout_constraintStart_toEndOf="@id/home_year"
+            app:layout_constraintTop_toTopOf="@id/home_year" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-<!--    리사이클러뷰로 달력만들기-->
+    <!-- ScrollView 추가 -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/top_homeCL"
-        >
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_homeCL"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/notforget_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="잊지말고 챙겨드세요"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:layout_marginTop="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
 
+            <!--카드뷰로 그림자 처리했음-->
+            <!-- 복용 루틴 레이아웃, 이부분에 안에는 rv로 교체예정 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/home_routine_CL"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/rounded_routine_background"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="5dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/notforget_TV">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_routine_background">
+
+                <TextView
+                    android:id="@+id/tv_routine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="복용 루틴"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+                <!-- 오전 9시 -->
+                <TextView
+                    android:id="@+id/tv_morning_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textStyle="bold"
+                    android:text="오전 9시"
+                    android:textSize="14sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_routine"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_morning_medicine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/rounded_check_background"
+                    android:padding="10dp"
+                    app:layout_constraintTop_toBottomOf="@id/tv_morning_time">
+
+                    <TextView
+                        android:id="@+id/tv_morning_medicine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="테스민정 0.1mg"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1정"
+                        app:layout_constraintStart_toStartOf="@id/tv_morning_medicine"
+                        app:layout_constraintTop_toBottomOf="@id/tv_morning_medicine"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_check"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <!-- 오후 12시 -->
+                <TextView
+                    android:id="@+id/tv_afternoon_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="오후 12시"
+                    android:textSize="14sp"
+                    android:layout_marginStart="10dp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/cl_morning_medicine"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cl_afternoon_medicine"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/rounded_check_background"
+                    android:padding="10dp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/tv_afternoon_time">
+
+                    <TextView
+                        android:id="@+id/tv_afternoon_medicine"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="테스민정 0.1mg"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="@id/tv_afternoon_medicine"
+                        app:layout_constraintTop_toBottomOf="@+id/tv_afternoon_medicine"
+                        android:text="2정"/>
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_uncheck"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/how_today_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="오늘 어때요?"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/home_routine_CL"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/ask_me_TV"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintHorizontal_bias="0"/>
+
+            <TextView
+                android:id="@+id/ask_me_TV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="물어보세요"
+                android:textStyle="bold"
+                app:layout_constraintTop_toTopOf="@id/how_today_TV"
+                app:layout_constraintStart_toEndOf="@id/how_today_TV"
+                android:layout_marginStart="90dp"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 
