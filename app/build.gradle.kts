@@ -34,9 +34,15 @@ android {
         jvmTarget = "1.8"
     }
 
-    viewBinding {
-        enable=true
+//    viewBinding {
+//        enable=true
+//    }
+
+    // AndroidStudio 4.0 ~
+    buildFeatures{
+        viewBinding = true
     }
+
 }
 
 dependencies {
