@@ -6,10 +6,24 @@
     <color name="backgroundGray">#D8D8D8</color>
     <color name="backgroundWhite">#F6F6F6</color>
 
-    <!--복용루틴 전체 색생 -->
+    <!--이름 색상-->
+    <color name="name">#532CEC</color>
+    <!--복용루틴 전체 색상 -->
     <color name="routine">#F4F6FA</color>
     <!--복용루틴 체크박스 포함 안 색상 -->
     <color name="routineBox">#EAF4FF</color>
+    오늘 어때요, 물어보세요 박스색상
+    <color name="boxColor">#1A1059</color>
+    <color name="boxTextColor1">#CBCDFF</color>
+
+
+
+
+
+
+
+
+
     <!--끄적이기, 채팅시작 클릭 버튼 색상-->
     <color name="boxButton">#ECECEC</color>
     <color name="boxText">#949494</color>
