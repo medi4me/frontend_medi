@@ -37,9 +37,15 @@ android {
         jvmTarget = "1.8"
     }
 
-    viewBinding {
-        enable=true
+//    viewBinding {
+//        enable=true
+//    }
+
+    // AndroidStudio 4.0 ~
+    buildFeatures{
+        viewBinding = true
     }
+
     buildFeatures {
         compose = true
     }
@@ -75,4 +81,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //circleindicator
+    implementation("me.relex:circleindicator:2.1.6")
+
 }
