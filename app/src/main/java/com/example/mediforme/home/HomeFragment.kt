@@ -5,15 +5,45 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.mediforme.R
+import com.example.mediforme.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
+    //바인딩 사용하려면 여기 처럼 해줘야 사용 가능 함 -- 1
+    lateinit var binding: FragmentHomeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+
+        // DataBindingUtil을 사용하여 Binding 객체를 초기화합니다.
+        //바인딩 사용하려면 여기 처럼 해줘야 사용 가능 함 -- 2
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // 더미 데이터 생성
+        val routineDrugList = ArrayList<RoutineDrug>()
+        routineDrugList.add(RoutineDrug("오전 9시", "테스민정 0.1mg", "1정", R.drawable.ic_check))
+        routineDrugList.add(RoutineDrug("오후 12시", "테스민 0.1mg", "2정", R.drawable.ic_uncheck))
+        routineDrugList.add(RoutineDrug("오후 12시", "테스민정 0.1mg", "2정", R.drawable.ic_uncheck))
+        routineDrugList.add(RoutineDrug("오후 12시", "테민정 0.1mg", "2정", R.drawable.ic_uncheck))
+        routineDrugList.add(RoutineDrug("오전 9시", "스민정 0.1mg", "1정", R.drawable.ic_check))
+        routineDrugList.add(RoutineDrug("오후 12시", "테스민정 0.1mg", "2정", R.drawable.ic_uncheck))
+
+        // RecyclerView 설정 ==> 이 부분을 데이터 바인딩으로 사용할 수 도 있음,
+        // 데이터 바인딩으로 하는 방법, xml에 <data></data> 여기 안에
+        binding.homeRoutineRV.adapter = RoutineDrugRVAdaptor(routineDrugList)
+        binding.homeRoutineRV.adapter = RoutineDrugRVAdaptor(routineDrugList)
+        binding.homeRoutineRV.layoutManager = LinearLayoutManager(requireContext())
+        binding.homeRoutineRV.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
+
     }
 }
