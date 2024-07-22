@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconSize="30dp"
+        app:itemIconSize="40dp"
         app:itemIconTint="@drawable/btm_color_selector"
         app:itemTextColor="@drawable/btm_color_selector"
         app:labelVisibilityMode="labeled"

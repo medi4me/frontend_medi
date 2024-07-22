@@ -7,19 +7,19 @@
         app:showAsAction="always"
         android:enabled="true"
         android:icon="@drawable/ic_home"
-        android:title="내 공간" />
+        android:title="홈" />
 
     <item
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_search"
         app:showAsAction="always"
-        android:icon="@drawable/ic_dashboard"
+        android:icon="@drawable/ic_search"
         android:title="탐색" />
 
     <item
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_mypage"
         app:showAsAction="always"
-        android:icon="@drawable/ic_notifications"
-        android:title="환경설정" />
+        android:icon="@drawable/ic_mypage"
+        android:title="마이페이지" />
 
 </menu>
 
