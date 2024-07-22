@@ -11,10 +11,17 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentHomeBinding
+import kotlin.concurrent.scheduleAtFixedRate
+import android.os.Handler
+import android.os.Looper
+import java.util.Timer
+
 
 class HomeFragment : Fragment() {
     //바인딩 사용하려면 여기 처럼 해줘야 사용 가능 함 -- 1
     lateinit var binding: FragmentHomeBinding
+    private val timer = Timer()
+    private val handler = Handler(Looper.getMainLooper())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,11 +42,12 @@ class HomeFragment : Fragment() {
         binding.homeBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL //좌우로 스크롤 되게 함
         //배너와 인디케이터 연결
         binding.homeBannerIndicator.setViewPager((binding.homeBannerVp))
-        return binding.root
-
+        startAutoSlide(bannerAdapter)
 
         return binding.root
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,8 +67,20 @@ class HomeFragment : Fragment() {
         binding.homeRoutineRV.adapter = RoutineDrugRVAdaptor(routineDrugList)
         binding.homeRoutineRV.layoutManager = LinearLayoutManager(requireContext())
 
-
-
-
     }
+    private fun startAutoSlide(adpater : BannerVPAdapter) {
+        // 일정 간격으로 슬라이드 변경 (3초마다)
+        timer.scheduleAtFixedRate(3000, 3000) {
+            handler.post {
+                val nextItem = binding.homeBannerVp.currentItem + 1
+                if (nextItem < adpater.itemCount) {
+                    binding.homeBannerVp.currentItem = nextItem
+                } else {
+                    binding.homeBannerVp.currentItem = 0 // 마지막 페이지에서 첫 페이지로 순환
+                }
+            }
+        }
+    }
+
+
 }
