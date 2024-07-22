@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentHomeBinding
 
@@ -23,6 +24,20 @@ class HomeFragment : Fragment() {
         // DataBindingUtil을 사용하여 Binding 객체를 초기화합니다.
         //바인딩 사용하려면 여기 처럼 해줘야 사용 가능 함 -- 2
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        //------------------ 배너 부분 ----------------------------//
+        val bannerAdapter= BannerVPAdapter(this)
+        //이미지도 함께 넣어줌 -> BannerFragment.kt에서 인자 값을 int형으로 받음
+        bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp))
+        bannerAdapter.addFragment(BannerFragment(R.drawable.img_home_viewpager_exp2))
+        //뷰페이저와 어댑터 연결
+        binding.homeBannerVp.adapter = bannerAdapter
+        binding.homeBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL //좌우로 스크롤 되게 함
+        //배너와 인디케이터 연결
+        binding.homeBannerIndicator.setViewPager((binding.homeBannerVp))
+        return binding.root
+
+
         return binding.root
     }
 
@@ -43,6 +58,9 @@ class HomeFragment : Fragment() {
         binding.homeRoutineRV.adapter = RoutineDrugRVAdaptor(routineDrugList)
         binding.homeRoutineRV.adapter = RoutineDrugRVAdaptor(routineDrugList)
         binding.homeRoutineRV.layoutManager = LinearLayoutManager(requireContext())
+
+
+
 
     }
 }

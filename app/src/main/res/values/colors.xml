@@ -8,7 +8,6 @@
 
     <!--이름 색상-->
     <color name="name">#532CEC</color>
-
     <color name="todayBackgroud">#EDEDED</color>
 
 
@@ -19,6 +18,12 @@
     오늘 어때요, 물어보세요 박스색상
     <color name="boxColor">#1A1059</color>
     <color name="boxTextColor1">#CBCDFF</color>
+
+
+
+    <!-- 인디케이터 -->
+    <color name="select_color">#3f3fff</color>
+    <color name="gray_color">#424242</color>
 
 
 

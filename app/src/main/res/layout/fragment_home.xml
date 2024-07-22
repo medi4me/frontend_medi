@@ -167,6 +167,7 @@
 
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/home_bottom_box_CL"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="20dp"
@@ -257,6 +258,27 @@
 
 
             <!--            여기에 배너부분 추가 -->
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/home_banner_vp"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="15dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/home_bottom_box_CL"
+                />
+
+            <me.relex.circleindicator.CircleIndicator3
+                android:id="@+id/home_banner_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                app:ci_drawable_unselected="@drawable/gray_radius"
+                app:ci_drawable="@drawable/blue_radius"
+                app:ci_animator="@animator/scale_with_alpha"
+                app:layout_constraintTop_toBottomOf="@id/home_banner_vp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
