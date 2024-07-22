@@ -13,10 +13,19 @@ class RoutineDrugRVAdaptor(val drougRoutineList: ArrayList<RoutineDrug>):Recycle
     }
 
     override fun onBindViewHolder(holder: Holder, position: Int) {
-        holder.drugTime.text = drougRoutineList[position].drugTime
-        holder.drugName.text = drougRoutineList[position].drugName
-        holder.drugNum.text = drougRoutineList[position].drugNum
-        holder.drugCheckBtn.setImageResource(drougRoutineList[position].drugCheckBtn)
+        val routineDrug = drougRoutineList[position]
+        holder.drugTime.text = routineDrug.drugTime
+        holder.drugName.text = routineDrug.drugName
+        holder.drugNum.text = routineDrug.drugNum
+
+        // CheckBox의 상태를 설정
+        holder.drugCheckBtn.isChecked = routineDrug.drugCheckBtn
+
+        // CheckBox의 상태가 변경될 때 RoutineDrug의 속성도 업데이트
+        holder.drugCheckBtn.setOnCheckedChangeListener { _, isChecked ->
+            routineDrug.drugCheckBtn = isChecked
+            // 필요 시, 체크 상태를 저장하는 로직을 추가할 수 있습니다.
+        }
     }
 
     override fun getItemCount(): Int {

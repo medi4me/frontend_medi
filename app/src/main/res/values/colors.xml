@@ -8,6 +8,10 @@
 
     <!--이름 색상-->
     <color name="name">#532CEC</color>
+
+    <color name="todayBackgroud">#EDEDED</color>
+
+
     <!--복용루틴 전체 색상 -->
     <color name="routine">#F4F6FA</color>
     <!--복용루틴 체크박스 포함 안 색상 -->
