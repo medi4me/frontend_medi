@@ -3,9 +3,9 @@ package com.example.mediforme
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mediforme.dashboard.DashboardFragment
+import com.example.mediforme.search.SearchFragment
 import com.example.mediforme.home.HomeFragment
-import com.example.mediforme.notification.NotificationsFragment
+import com.example.mediforme.mypage.MyPageFragment
 import com.example.mediforme.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -33,15 +33,15 @@ class MainActivity : AppCompatActivity() {
                     return@setOnItemSelectedListener true
                 }
 
-                R.id.navigation_dashboard -> {
+                R.id.navigation_search -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.mainNaviFragmentContainer, DashboardFragment())
+                        .replace(R.id.mainNaviFragmentContainer, SearchFragment())
                         .commitAllowingStateLoss()
                     return@setOnItemSelectedListener true
                 }
-                R.id.navigation_notifications -> {
+                R.id.navigation_mypage -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.mainNaviFragmentContainer, NotificationsFragment())
+                        .replace(R.id.mainNaviFragmentContainer, MyPageFragment())
                         .commitAllowingStateLoss()
                     return@setOnItemSelectedListener true
                 }
