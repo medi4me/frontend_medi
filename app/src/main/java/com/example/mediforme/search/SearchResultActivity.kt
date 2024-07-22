@@ -1,6 +1,5 @@
 package com.example.mediforme.search
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.databinding.ActivitySearchresultBinding
@@ -13,7 +12,9 @@ class SearchResultActivity : AppCompatActivity() {
         binding = ActivitySearchresultBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        val bottomSheetFragment = BottomSheetFragment()
+        binding.addToMedsButton.setOnClickListener {
+            bottomSheetFragment.show(supportFragmentManager, "BottomSheetDialog")
+        }
     }
-
 }
