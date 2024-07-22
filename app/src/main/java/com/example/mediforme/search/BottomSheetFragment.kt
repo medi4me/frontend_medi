@@ -23,7 +23,20 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         val dummyData = listOf(
             Medicine("부타정", "0.7mg"),
             Medicine("파프티정", "0.5mg"),
+            Medicine("타이레놀", "0.3mg"),
+            Medicine("부타정", "0.7mg"),
+            Medicine("파프티정", "0.5mg"),
+            Medicine("타이레놀", "0.3mg"),
+            Medicine("부타정", "0.7mg"),
+            Medicine("파프티정", "0.5mg"),
+            Medicine("타이레놀", "0.3mg"),
+            Medicine("부타정", "0.7mg"),
+            Medicine("파프티정", "0.5mg"),
+            Medicine("타이레놀", "0.3mg"),
+            Medicine("부타정", "0.7mg"),
+            Medicine("파프티정", "0.5mg"),
             Medicine("타이레놀", "0.3mg")
+
         )
 
         // 어댑터 설정
