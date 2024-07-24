@@ -26,6 +26,12 @@
 <!--today condition 프래그먼트-->
     <color name="stroke">#CDCBD3</color>
     <color name="btncolor">#1A1059</color>
+    
+    
+    
+    
+<!--    mypage 프래그먼트-->
+    <color name="drugNum">#515059</color>
 
 
 
