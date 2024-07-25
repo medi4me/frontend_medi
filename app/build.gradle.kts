@@ -1,7 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    id ("androidx.navigation.safeargs.kotlin")
 }
+
 
 android {
     namespace = "com.example.mediforme"
@@ -87,7 +89,7 @@ dependencies {
     implementation("me.relex:circleindicator:2.1.6")
 
     //navigation을 위한 의존성 추가
-    val nav_version = "2.7.7"
+    val nav_version = "2.7.3"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")

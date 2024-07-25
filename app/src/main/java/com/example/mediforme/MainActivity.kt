@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         binding.mainBnv.setupWithNavController(navController)
 
         // 최소 실행시 프래그먼트 설정
-        binding.mainBnv.selectedItemId = R.id.navigation_home
-        navController.navigate(R.id.navigation_home)
+        binding.mainBnv.selectedItemId = R.id.homeFragment
+        navController.navigate(R.id.homeFragment)
     }
 }

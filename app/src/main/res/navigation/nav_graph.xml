@@ -3,17 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/navigation_home">
-
-
+    app:startDestination="@id/homeFragment">
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/homeFragment"
         android:name="com.example.mediforme.home.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home">
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home"
+        >
         <action
-            android:id="@+id/action_homeFragment_to_todayConditionFragment"
+            android:id="@+id/action_homeFragment_to_todayConditionFragment3"
             app:destination="@id/todayConditionFragment" />
     </fragment>
 
@@ -37,6 +36,7 @@
         android:label="MyPageFragment"
         tools:layout="@layout/fragment_mypage"
         />
+
 
 
 </navigation>
