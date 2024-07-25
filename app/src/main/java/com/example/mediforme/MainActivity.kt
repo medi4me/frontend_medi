@@ -3,50 +3,39 @@ package com.example.mediforme
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mediforme.search.SearchFragment
-import com.example.mediforme.home.HomeFragment
-import com.example.mediforme.mypage.MyPageFragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.mediforme.databinding.ActivityMainBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(binding.root) // setContentView를 먼저 호출합니다.
 
-        initBottomNavigation()
+        setNavigation() // 이후에 setNavigation 호출
     }
 
-    private fun initBottomNavigation() {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.mainNaviFragmentContainer, HomeFragment())
-            .commitAllowingStateLoss()
+    private fun setNavigation() {
+        binding.mainBnv.itemIconTintList = null
 
-        binding.mainBnv.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.navigation_home -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.mainNaviFragmentContainer, HomeFragment())
-                        .commitAllowingStateLoss()
-                    return@setOnItemSelectedListener true
-                }
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.mainNaviFragmentContainer) as? NavHostFragment
+            ?: return
 
-                R.id.navigation_search -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.mainNaviFragmentContainer, SearchFragment())
-                        .commitAllowingStateLoss()
-                    return@setOnItemSelectedListener true
-                }
-                R.id.navigation_mypage -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.mainNaviFragmentContainer, MyPageFragment())
-                        .commitAllowingStateLoss()
-                    return@setOnItemSelectedListener true
-                }
-            }
-            false
-        }
+        navController = navHostFragment.navController
+        binding.mainBnv.setupWithNavController(navController)
+
+        // 최소 실행시 프래그먼트 설정
+        binding.mainBnv.selectedItemId = R.id.navigation_home
+        navController.navigate(R.id.navigation_home)
     }
 }

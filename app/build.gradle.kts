@@ -44,11 +44,10 @@ android {
     // AndroidStudio 4.0 ~
     buildFeatures{
         viewBinding = true
-    }
-
-    buildFeatures {
         compose = true
     }
+
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
@@ -73,6 +72,8 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -84,5 +85,12 @@ dependencies {
 
     //circleindicator
     implementation("me.relex:circleindicator:2.1.6")
+
+    //navigation을 위한 의존성 추가
+    val nav_version = "2.7.7"
+    implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+    androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
 }

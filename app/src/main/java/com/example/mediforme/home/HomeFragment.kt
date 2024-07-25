@@ -49,23 +49,14 @@ class HomeFragment : Fragment() {
         // howTodayCV 클릭 리스너 설정
         binding.howTodayCV.setOnClickListener {
             // TodayConditionFragment로 교체
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, TodayConditionFragment())
-                .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있게
-                .commitAllowingStateLoss()
+//            binding.howTodayCV.setOnClickListener {
+//                // TodayConditionFragment로 교체
+//                val action = HomeFragmentDirections.actionHomeFragmentToTodayConditionFragment()
+//                findNavController().navigate(action)
+//            }
+
         }
-        // howTodayCV 클릭 리스너 설정
-//        binding.howTodayCV.setOnClickListener {
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.mainNaviFragmentContainer, HomeFragment())
-//                .commitAllowingStateLoss()
-//        }
-//        // howTodayCV 클릭 리스너 설정
-//        binding.howTodayCV.setOnClickListener {
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, HomeFragment())
-//                .commitAllowingStateLoss()
-//        }
+
         return binding.root
     }
 
