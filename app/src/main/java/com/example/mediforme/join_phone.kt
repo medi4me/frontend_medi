@@ -24,6 +24,8 @@ class join_phone : AppCompatActivity() {
         phone_num_ET = findViewById(R.id.phone_num_ET)
         veri_btn = findViewById(R.id.veri_btn)
 
+        veri_btn.isEnabled = false
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
