@@ -6,11 +6,11 @@
     <color name="backgroundGray">#D8D8D8</color>
     <color name="backgroundWhite">#F6F6F6</color>
 
+
+<!--    홈 프레그먼트-->
     <!--이름 색상-->
     <color name="name">#532CEC</color>
     <color name="todayBackgroud">#EDEDED</color>
-
-
     <!--복용루틴 전체 색상 -->
     <color name="routine">#F4F6FA</color>
     <!--복용루틴 체크박스 포함 안 색상 -->
@@ -18,12 +18,14 @@
     오늘 어때요, 물어보세요 박스색상
     <color name="boxColor">#1A1059</color>
     <color name="boxTextColor1">#CBCDFF</color>
-
-
-
     <!-- 인디케이터 -->
     <color name="select_color">#3f3fff</color>
     <color name="gray_color">#424242</color>
+
+
+<!--today condition 프래그먼트-->
+    <color name="stroke">#CDCBD3</color>
+    <color name="btncolor">#1A1059</color>
 
 
 
