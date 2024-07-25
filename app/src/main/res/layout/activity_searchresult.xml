@@ -242,11 +242,13 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
+            android:background="@drawable/btn_select"
+            android:textColor="@color/white"
             app:layout_constraintTop_toBottomOf="@+id/more_info_tv"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
-            android:text="복용 약에 추가하기" />
+            android:text="복용 약에 추가하기"/>
 
         <Button
             android:id="@+id/check_combination_button"
@@ -259,7 +261,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:text="약물 조합 확인하기" />
+            android:background="@drawable/option_background_noncolor"
+            android:text="약물 조합 확인하기"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
