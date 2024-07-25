@@ -54,18 +54,6 @@ class HomeFragment : Fragment() {
                 .addToBackStack(null) // 뒤로 가기 버튼을 눌렀을 때 이전 프래그먼트로 돌아갈 수 있게
                 .commitAllowingStateLoss()
         }
-        // howTodayCV 클릭 리스너 설정
-//        binding.howTodayCV.setOnClickListener {
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.mainNaviFragmentContainer, HomeFragment())
-//                .commitAllowingStateLoss()
-//        }
-//        // howTodayCV 클릭 리스너 설정
-//        binding.howTodayCV.setOnClickListener {
-//            parentFragmentManager.beginTransaction()
-//                .replace(R.id.fragment_container, HomeFragment())
-//                .commitAllowingStateLoss()
-//        }
         return binding.root
     }
 
