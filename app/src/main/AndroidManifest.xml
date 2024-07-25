@@ -22,7 +22,7 @@
             android:name=".join_phone"
             android:exported="false" />
         <activity
-            android:name=".Splash"
+            android:name=".MainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".Splash"
             android:exported="true">
 
         </activity>
