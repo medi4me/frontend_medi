@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".info_age">
+
+    <ImageView
+        android:layout_width="215dp"
+        android:layout_height="60dp"
+        android:src="@drawable/icon_main_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="63dp"/>
+
+    <TextView
+        android:layout_width="184dp"
+        android:layout_height="20dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="정확한 맞춤형 서비스를 위해"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="184dp"/>
+
+    <TextView
+        android:layout_width="280dp"
+        android:layout_height="33dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="당신의 나이를 알려주세요."
+        android:textSize="27sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="212dp"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
