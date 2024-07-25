@@ -1,0 +1,5 @@
+<!-- res/drawable/text_color_selector.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true" android:color="@color/white" /> <!-- 누를 때 텍스트 색상 -->
+    <item android:color="@color/btncolor" /> <!-- 기본 텍스트 색상 -->
+</selector>
