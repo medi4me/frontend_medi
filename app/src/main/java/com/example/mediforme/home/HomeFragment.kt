@@ -86,7 +86,6 @@ class HomeFragment : Fragment() {
         // RecyclerView 설정 ==> 이 부분을 데이터 바인딩으로 사용할 수 도 있음,
         // 데이터 바인딩으로 하는 방법, xml에 <data></data> 여기 안에
         binding.homeRoutineRV.adapter = RoutineDrugRVAdaptor(routineDrugList)
-        binding.homeRoutineRV.adapter = RoutineDrugRVAdaptor(routineDrugList)
         binding.homeRoutineRV.layoutManager = LinearLayoutManager(requireContext())
 
     }
