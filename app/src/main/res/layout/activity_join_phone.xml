@@ -49,34 +49,32 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="180dp"/>
 
-    <Button
-        android:id="@+id/button"
+    <EditText
+        android:id="@+id/phone_num_ET"
         android:layout_width="352dp"
         android:layout_height="68dp"
         android:layout_marginTop="245dp"
         android:background="@drawable/background_input"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        android:layout_width="150dp"
-        android:layout_height="24dp"
-        android:fontFamily="@font/pretendard_regular"
         android:hint="010-0000-0000"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/button"
-        app:layout_constraintTop_toTopOf="@+id/button"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="19dp"/>
+        android:paddingStart="30dp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="number"/>
 
     <Button
+        android:id="@+id/veri_btn"
         android:layout_width="352dp"
         android:layout_height="68dp"
         android:layout_marginTop="562dp"
-        android:background="@drawable/background_verification"
+        android:background="@drawable/btn_select"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="인증번호 받기"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/pretendard_regular"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
