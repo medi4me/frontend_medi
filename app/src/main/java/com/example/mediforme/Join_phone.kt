@@ -7,11 +7,10 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class join_phone : AppCompatActivity() {
+class Join_phone : AppCompatActivity() {
 
     private lateinit var phone_num_ET: EditText
     private lateinit var veri_btn: Button

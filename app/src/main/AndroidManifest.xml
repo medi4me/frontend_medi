@@ -13,17 +13,20 @@
         android:theme="@style/Theme.MediForMe"
         tools:targetApi="31">
         <activity
-            android:name=".dialog_logout"
+            android:name=".search.Join_service"
             android:exported="false" />
         <activity
-            android:name=".dialog_warning"
+            android:name=".Dialog_logout"
             android:exported="false" />
         <activity
-            android:name=".join_phone"
+            android:name=".Dialog_warning"
+            android:exported="false" />
+        <activity
+            android:name=".Join_phone"
             android:exported="false" />
         <activity
             android:name=".Splash"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,9 +35,7 @@
         </activity>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>
