@@ -26,6 +26,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             Medicine("타이레놀", "0.3mg"),
             Medicine("부타정", "0.7mg")
 
+
         )
 
         // 어댑터 설정
