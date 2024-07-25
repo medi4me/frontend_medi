@@ -19,6 +19,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     ): View? {
         binding = FragmentBottomSheetBinding.inflate(inflater, container, false)
 
+
         val dummyData = listOf(
             Medicine("부타정", "0.7mg"),
             Medicine("파프티정", "0.5mg"),
