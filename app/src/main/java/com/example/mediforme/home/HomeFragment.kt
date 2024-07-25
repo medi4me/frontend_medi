@@ -37,7 +37,6 @@ class HomeFragment : Fragment() {
         binding.homeBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         binding.homeBannerIndicator.setViewPager(binding.homeBannerVp)
         startAutoSlide(bannerAdapter)
-
         return binding.root
     }
 
@@ -52,14 +51,16 @@ class HomeFragment : Fragment() {
 
         // 더미 데이터 생성
         val routineDrugList = ArrayList<RoutineDrug>()
-        routineDrugList.add(RoutineDrug("오전 9시", "테스민정 0.1mg", "1정", true))
-        routineDrugList.add(RoutineDrug("오후 12시", "테스민 0.1mg", "2정", false))
-        routineDrugList.add(RoutineDrug("오후 12시", "테스민정 0.1mg", "2정", false))
-        routineDrugList.add(RoutineDrug("오후 12시", "테민정 0.1mg", "2정", false))
-        routineDrugList.add(RoutineDrug("오전 9시", "스민정 0.1mg", "1정", true))
-        routineDrugList.add(RoutineDrug("오후 12시", "테스민정 0.1mg", "2정", false))
 
-        // RecyclerView 설정
+        routineDrugList.add(RoutineDrug("오전 9시", "테스민정 0.1mg", "1정", true)) // 변경: Boolean 값 사용
+        routineDrugList.add(RoutineDrug("오후 12시", "테스민 0.1mg", "2정", false)) // 변경: Boolean 값 사용
+        routineDrugList.add(RoutineDrug("오후 12시", "테스민정 0.1mg", "2정", false)) // 변경: Boolean 값 사용
+        routineDrugList.add(RoutineDrug("오후 12시", "테민정 0.1mg", "2정", false)) // 변경: Boolean 값 사용
+        routineDrugList.add(RoutineDrug("오전 9시", "스민정 0.1mg", "1정", true)) // 변경: Boolean 값 사용
+        routineDrugList.add(RoutineDrug("오후 12시", "테스민정 0.1mg", "2정", false)) // 변경: Boolean 값 사용
+
+        // RecyclerView 설정 ==> 이 부분을 데이터 바인딩으로 사용할 수 도 있음,
+        // 데이터 바인딩으로 하는 방법, xml에 <data></data> 여기 안에
         binding.homeRoutineRV.adapter = RoutineDrugRVAdaptor(routineDrugList)
         binding.homeRoutineRV.layoutManager = LinearLayoutManager(requireContext())
     }

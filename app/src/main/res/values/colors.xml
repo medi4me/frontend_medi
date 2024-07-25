@@ -3,6 +3,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="back">#CBCDFF</color>
+    <color name="inactive_btn">#515059</color>
+    <color name="active_btn">#1A0A7D</color>
+
     <color name="backgroundGray">#D8D8D8</color>
     <color name="backgroundWhite">#F6F6F6</color>
 
@@ -26,10 +30,7 @@
 <!--today condition 프래그먼트-->
     <color name="stroke">#CDCBD3</color>
     <color name="btncolor">#1A1059</color>
-    
-    
-    
-    
+
 <!--    mypage 프래그먼트-->
     <color name="drugNum">#515059</color>
     <color name="drugRVback">#F7F7FB</color>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".join_phone">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="215dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="63dp"
+        android:src="@drawable/icon_main_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="131dp"
+        android:src="@drawable/back_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:src="@drawable/back_bar_purple"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="131dp"/>
+
+    <TextView
+        android:layout_width="280dp"
+        android:layout_height="26dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:textColor="@color/black"
+        android:text="휴대폰 번호를 입력해주세요."
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="180dp"/>
+
+    <EditText
+        android:id="@+id/phone_num_ET"
+        android:layout_width="352dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="245dp"
+        android:background="@drawable/background_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:hint="010-0000-0000"
+        android:paddingStart="30dp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/veri_btn"
+        android:layout_width="352dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="562dp"
+        android:background="@drawable/btn_select"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="인증번호 받기"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:fontFamily="@font/pretendard_regular"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
