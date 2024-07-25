@@ -15,6 +15,8 @@ import kotlin.concurrent.scheduleAtFixedRate
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import com.example.mediforme.mypage.MyPageFragment
 import java.util.Timer
 
@@ -24,6 +26,8 @@ class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     private val timer = Timer()
     private val handler = Handler(Looper.getMainLooper())
+    private lateinit var navController: NavController
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,11 +53,11 @@ class HomeFragment : Fragment() {
         // howTodayCV 클릭 리스너 설정
         binding.howTodayCV.setOnClickListener {
             // TodayConditionFragment로 교체
-//            binding.howTodayCV.setOnClickListener {
-//                // TodayConditionFragment로 교체
-//                val action = HomeFragmentDirections.actionHomeFragmentToTodayConditionFragment()
-//                findNavController().navigate(action)
-//            }
+            binding.howTodayCV.setOnClickListener {
+                // TodayConditionFragment로 교체
+                findNavController().navigate(R.id.action_homeFragment_to_todayConditionFragment)
+
+            }
 
         }
 
