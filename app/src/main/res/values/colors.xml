@@ -34,10 +34,7 @@
 <!--    mypage 프래그먼트-->
     <color name="drugNum">#515059</color>
     <color name="drugRVback">#F7F7FB</color>
-
-
-
-
+    <color name="deleteBtnColor">#1A0A7D</color>
 
 
 

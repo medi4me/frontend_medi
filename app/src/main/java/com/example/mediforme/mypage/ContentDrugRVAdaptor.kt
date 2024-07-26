@@ -19,11 +19,22 @@ class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>): Recycle
         holder.contnetDrugTime.text = contentDrug.contentDrugTime
         holder.contentDrugFrequency.text = contentDrug.contentDrugFrequency
         holder.contnetBell.setImageResource(contentDrug.contentDrugBell)
+
+        // Set delete button click listener
+        holder.itemDeleteCL.setOnClickListener {
+            removeItem(position)
+        }
     }
 
     override fun getItemCount(): Int {
         return contentDrugList.size
     }
+
+    fun removeItem(position: Int) {
+        contentDrugList.removeAt(position)
+        notifyItemRemoved(position)
+    }
+
 
     inner class Holder(val binding: ItemDrugContentBinding): RecyclerView.ViewHolder(binding.root) {
         val contentDrugImg = binding.myItemDrugImg
@@ -31,5 +42,6 @@ class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>): Recycle
         val contnetDrugTime = binding.myItemDrugTime
         val contentDrugFrequency = binding.myItemDrugFrequency
         val contnetBell = binding.myItemBellSwitch
+        val itemDeleteCL = binding.itemDeleteCL
     }
 }
