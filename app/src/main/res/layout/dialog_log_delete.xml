@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialog_log_delete"
+
     android:layout_width="250dp"
     android:layout_height="200dp">
 
@@ -57,6 +58,7 @@
         >
 
         <android.widget.Button
+            android:id="@+id/dialog_log_delete_BTN"
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:text="탈퇴"
@@ -66,6 +68,7 @@
             android:paddingRight="20dp"
             />
         <android.widget.Button
+            android:id="@+id/dialog_log_delete_back_BTN"
             android:layout_marginStart="10dp"
             android:layout_width="100dp"
             android:layout_height="40dp"
@@ -75,7 +78,6 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             />
-
 
     </LinearLayout>
 

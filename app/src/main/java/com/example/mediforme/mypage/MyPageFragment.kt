@@ -1,5 +1,6 @@
 package com.example.mediforme.mypage
 
+import android.app.AlertDialog
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -109,5 +111,47 @@ class MyPageFragment : Fragment() {
 
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(binding.myDrugRV)
+
+        // 회원탈퇴 버튼 클릭 시 다이얼로그 표시
+        binding.myTextDeleteTV.setOnClickListener {
+            showDeleteAccountDialog()
+        }
     }
+
+    //회원탈퇴 버튼 클릭 시 다이얼로그 표시 메소드
+    private fun showDeleteAccountDialog() {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_log_delete, null)
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(false)
+
+        val alertDialog = dialogBuilder.create()
+
+        // 다이얼로그 크기 조정
+        alertDialog.window?.setLayout(
+            (resources.displayMetrics.widthPixels * 0.8).toInt(), // 너비 80%
+            ConstraintLayout.LayoutParams.WRAP_CONTENT // 높이 내용에 따라 조정
+        )
+
+        val backBtn = dialogView.findViewById<Button>(R.id.dialog_log_delete_xBtn_IV)
+        val cancelBtn = dialogView.findViewById<Button>(R.id.dialog_log_delete_back_BTN)
+        val deleteBtn = dialogView.findViewById<Button>(R.id.dialog_log_delete_BTN)
+
+        backBtn.setOnClickListener{
+            alertDialog.dismiss()
+        }
+
+        cancelBtn.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        deleteBtn.setOnClickListener {
+            // 회원탈퇴 처리 로직 추가
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
+    }
+
+
 }
