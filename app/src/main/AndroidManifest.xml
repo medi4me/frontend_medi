@@ -21,6 +21,8 @@
         <activity
             android:name=".join_phone"
             android:exported="false" />
+        <activity android:name=".search.SearchResultActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true" >
