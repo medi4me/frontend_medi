@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -126,14 +127,11 @@ class MyPageFragment : Fragment() {
             .setCancelable(false)
 
         val alertDialog = dialogBuilder.create()
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) // 외부 배경을 투명하게 설정,둥글게 보이기 위해서
 
-        // 다이얼로그 크기 조정
-        alertDialog.window?.setLayout(
-            (resources.displayMetrics.widthPixels * 0.8).toInt(), // 너비 80%
-            ConstraintLayout.LayoutParams.WRAP_CONTENT // 높이 내용에 따라 조정
-        )
 
-        val backBtn = dialogView.findViewById<Button>(R.id.dialog_log_delete_xBtn_IV)
+
+        val backBtn = dialogView.findViewById<ImageView>(R.id.dialog_log_delete_xBtn_IV)
         val cancelBtn = dialogView.findViewById<Button>(R.id.dialog_log_delete_back_BTN)
         val deleteBtn = dialogView.findViewById<Button>(R.id.dialog_log_delete_BTN)
 
