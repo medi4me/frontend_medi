@@ -41,6 +41,7 @@
 
 
 
+
     <!--끄적이기, 채팅시작 클릭 버튼 색상-->
     <color name="boxButton">#ECECEC</color>
     <color name="boxText">#949494</color>
