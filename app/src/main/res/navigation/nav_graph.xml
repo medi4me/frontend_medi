@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/todayConditionFragment"
-        android:name="com.example.mediforme.home.TodayConditionFragment"
+        android:name="com.example.mediforme.home.todayCondition.TodayConditionFragment"
         android:label="fragment_today_condition"
         tools:layout="@layout/fragment_today_condition">
     </fragment>
