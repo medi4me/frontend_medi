@@ -68,6 +68,7 @@ class TodayConditionFragment : Fragment() {
 
         // 현재 날짜와 시간을 가져옴
         val currentCalendar = Calendar.getInstance()
+        currentCalendar.set(Calendar.MONTH, dateItem.month - 1) // Calendar.MONTH는 0부터 시작하므로 -1
         currentCalendar.set(Calendar.DAY_OF_MONTH, dateItem.date.toInt())
         val sdf = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
         val clickedDate = sdf.format(currentCalendar.time)
