@@ -13,16 +13,25 @@
         android:textSize="16sp"
         android:layout_gravity="center" />
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="@color/calenderDate"
-        android:layout_gravity="center"
-        android:layout_marginTop="10dp"/>
+    <LinearLayout
+        android:id="@+id/day_LL"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:background="@drawable/option_selected_date_background"> <!-- 둥근 배경 적용 -->
+
+        <TextView
+            android:id="@+id/date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/calenderDate"
+            />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/emoji"
