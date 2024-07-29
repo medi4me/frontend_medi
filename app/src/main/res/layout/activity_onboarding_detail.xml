@@ -97,7 +97,7 @@
         app:layout_constraintTop_toBottomOf="@+id/back_button" />
 
     <Spinner
-        android:id="@+id/doseTime"
+        android:id="@+id/doseTime_spinner"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
@@ -106,13 +106,13 @@
         app:layout_constraintTop_toBottomOf="@+id/doseTime_tv" />
 
     <Spinner
-        android:id="@+id/mealTime"
+        android:id="@+id/mealTime_spinner"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/doseTime"
+        app:layout_constraintTop_toBottomOf="@+id/doseTime_spinner"
         android:entries="@array/mealTime"/>
 
     <TextView
@@ -126,10 +126,10 @@
         android:textColor="@color/black"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mealTime" />
+        app:layout_constraintTop_toBottomOf="@+id/mealTime_spinner" />
 
     <EditText
-        android:id="@+id/dosage_onetime_tv"
+        android:id="@+id/dosage_onetime_EV"
         android:layout_width="350dp"
         android:layout_height="60dp"
         android:background="@drawable/background_input"

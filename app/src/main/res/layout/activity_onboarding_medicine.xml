@@ -70,12 +70,12 @@
         android:layout_marginStart="50dp"
         android:layout_marginTop="10dp"
         android:textSize="17sp"
-        app:layout_constraintBottom_toTopOf="@+id/medicine_name_tv"
+        app:layout_constraintBottom_toTopOf="@+id/medicine_name_EV"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/explain_tv" />
 
     <EditText
-        android:id="@+id/medicine_name_tv"
+        android:id="@+id/medicine_name_EV"
         android:layout_width="352dp"
         android:layout_height="68dp"
         android:background="@drawable/background_input"
@@ -104,7 +104,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/medicine_name_tv" />
+        app:layout_constraintTop_toBottomOf="@+id/medicine_name_EV" />
 
 
     <Button

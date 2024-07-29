@@ -21,10 +21,20 @@
         <activity
             android:name=".join_phone"
             android:exported="false" />
-        <activity android:name=".search.SearchResultActivity"
+        <activity
+            android:name=".search.SearchResultActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingMedicineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingAgeActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
