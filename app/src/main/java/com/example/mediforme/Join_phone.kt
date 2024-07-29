@@ -1,5 +1,6 @@
 package com.example.mediforme
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -25,11 +26,6 @@ class Join_phone : AppCompatActivity() {
 
         veri_btn.isEnabled = false
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         phone_num_ET.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -41,6 +37,11 @@ class Join_phone : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
+
+        veri_btn.setOnClickListener {
+            val intent = Intent(this@Join_phone, Join_vericode::class.java)
+            startActivity(intent)
+        }
 
     }
 }
