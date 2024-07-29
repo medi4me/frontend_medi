@@ -5,14 +5,16 @@ import java.util.*
 
 data class WeekDayItem(val dayOfWeek: String, val date: String, val month: Int, var imageUri: String? = null, var isSelected: Boolean = false)
 
-fun getWeekDates(): List<WeekDayItem> {
+fun getWeekDates(): Pair<List<WeekDayItem>, Int> {
     val dayOfWeekFormat = SimpleDateFormat("E", Locale("ko"))
     val dateFormat = SimpleDateFormat("d", Locale.getDefault())
     val monthFormat = SimpleDateFormat("M", Locale.getDefault())
     val calendar = Calendar.getInstance()
     val dates = mutableListOf<WeekDayItem>()
 
-    for (i in 0 until 40) {
+    // 이전 21일 (3주)
+    calendar.add(Calendar.DAY_OF_MONTH, -21)
+    for (i in 0 until 42) { // 42일 (6주)
         dates.add(WeekDayItem(
             dayOfWeek = dayOfWeekFormat.format(calendar.time),
             date = dateFormat.format(calendar.time),
@@ -20,5 +22,7 @@ fun getWeekDates(): List<WeekDayItem> {
         ))
         calendar.add(Calendar.DAY_OF_MONTH, 1)
     }
-    return dates
+    // 현재 날짜가 위치한 인덱스를 반환
+    val todayIndex = 21 // 오늘 날짜는 리스트의 중간에 위치
+    return Pair(dates, todayIndex)
 }
