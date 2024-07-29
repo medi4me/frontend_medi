@@ -8,16 +8,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class Join_id : AppCompatActivity() {
+class Join_password : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_join_id)
+        setContentView(R.layout.activity_join_password)
 
         val nextBtn: Button = findViewById(R.id.next_btn)
 
         nextBtn.setOnClickListener {
-            val intent = Intent(this@Join_id, Join_password::class.java)
+            val intent = Intent(this@Join_password, Join_name::class.java)
             startActivity(intent)
         }
     }

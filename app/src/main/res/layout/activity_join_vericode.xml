@@ -38,7 +38,7 @@
         app:layout_constraintTop_toTopOf="@+id/back_bar_IV" />
 
     <TextView
-        android:id="@+id/input_phone_TV"
+        android:id="@+id/input_TV"
         android:layout_width="280dp"
         android:layout_height="26dp"
         android:layout_marginStart="30dp"
@@ -61,7 +61,7 @@
         android:paddingStart="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_phone_TV" />
+        app:layout_constraintTop_toBottomOf="@+id/input_TV" />
 
     <TextView
         android:id="@+id/remain_TV"

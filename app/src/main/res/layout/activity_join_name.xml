@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Join_id">
+    tools:context=".Join_name">
 
     <ImageView
         android:id="@+id/main_logo_IV"
@@ -44,7 +44,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="52dp"
         android:fontFamily="@font/pretendard_medium"
-        android:text="아이디를 입력해주세요."
+        android:text="이름을 입력해주세요."
         android:textColor="@color/black"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,22 +69,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/pretendard_regular"
-        android:text="사용가능한 아이디 입니다."
+        android:text="메디포미는 본명사용을 권장해요."
         android:textColor="@color/red"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/phone_num_ET"
-        app:layout_constraintTop_toBottomOf="@+id/phone_num_ET" />
-
-    <TextView
-        android:id="@+id/condition_TV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:fontFamily="@font/pretendard_regular"
-        android:text="5~30자리 숫자, 영문"
-        android:textColor="@color/gray"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="@+id/phone_num_ET"
         app:layout_constraintTop_toBottomOf="@+id/phone_num_ET" />
 
     <Button
@@ -93,7 +81,7 @@
         android:layout_height="68dp"
         android:background="@drawable/btn_select"
         android:fontFamily="@font/pretendard_regular"
-        android:text="다음"
+        android:text="메디포미 시작하기"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
