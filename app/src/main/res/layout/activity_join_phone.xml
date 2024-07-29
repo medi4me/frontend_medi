@@ -9,7 +9,7 @@
     tools:context=".Join_phone">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/main_logo_btn"
         android:layout_width="215dp"
         android:layout_height="60dp"
         android:layout_marginTop="63dp"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/back_bar"
         android:layout_width="352dp"
         android:layout_height="3dp"
         android:layout_marginTop="131dp"
@@ -29,6 +29,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/point_bar"
         android:layout_width="352dp"
         android:layout_height="3dp"
         android:src="@drawable/back_bar_purple"
@@ -67,14 +68,14 @@
         android:id="@+id/veri_btn"
         android:layout_width="352dp"
         android:layout_height="68dp"
-        android:layout_marginTop="562dp"
         android:background="@drawable/btn_select"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/pretendard_regular"
         android:text="인증번호 받기"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:fontFamily="@font/pretendard_regular"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="91dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

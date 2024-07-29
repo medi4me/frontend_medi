@@ -10,6 +10,9 @@
     <color name="backgroundGray">#D8D8D8</color>
     <color name="backgroundWhite">#F6F6F6</color>
 
+    <!-- 회원가입-->
+    <color name="light_gray">#646464</color>
+
 
 <!--    홈 프레그먼트-->
     <!--이름 색상-->
