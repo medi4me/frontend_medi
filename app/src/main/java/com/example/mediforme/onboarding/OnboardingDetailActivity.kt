@@ -28,6 +28,10 @@ class OnboardingDetailActivity : AppCompatActivity() {
             showTimePickerDialog()
         }
 
+        binding.backButton.setOnClickListener {
+            onBackPressed()
+        }
+
         // 식사 시간 스피너에 아이템 선택 리스너를 설정
         binding.mealTimeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {

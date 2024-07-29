@@ -4,8 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.LayoutInflater
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class OnboardingMedicineActivity : AppCompatActivity() {
     lateinit var binding: ActivityOnboardingMedicineBinding
@@ -14,7 +21,6 @@ class OnboardingMedicineActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingMedicineBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         binding.veriBtn.isEnabled = false
 
@@ -30,7 +36,35 @@ class OnboardingMedicineActivity : AppCompatActivity() {
         })
 
         binding.veriBtn.setOnClickListener {
+            // Open the next activity
             startActivity(Intent(this, OnboardingDetailActivity::class.java))
         }
+
+        // Set up click listener for search_with_camera_tv TextView
+        binding.searchWithCameraTv.setOnClickListener {
+            showSearchResultsBottomSheet()
+        }
     }
+
+    private fun showSearchResultsBottomSheet() {
+        val bottomSheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_search_results, null)
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(bottomSheetView)
+
+        val recyclerView = bottomSheetView.findViewById<RecyclerView>(R.id.recyclerView)
+        if (recyclerView == null) {
+            Log.e("OnboardingMedicineActivity", "RecyclerView not found in bottom sheet layout")
+            return
+        }
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val searchResults = listOf("Medicine A", "Medicine B", "Medicine C")
+        val adapter = SearchResultAdapter(searchResults)
+        recyclerView.adapter = adapter
+
+        Log.d("OnboardingMedicineActivity", "Showing BottomSheetDialog")
+        bottomSheetDialog.show()
+    }
+
 }
