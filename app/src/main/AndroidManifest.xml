@@ -25,7 +25,7 @@
             android:name=".search.SearchResultActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".onboarding.OnboardingAgeActivity"
             android:exported="false" />
         <activity
             android:name=".onboarding.OnboardingMedicineActivity"
@@ -34,7 +34,7 @@
             android:name=".onboarding.OnboardingDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".onboarding.OnboardingAgeActivity"
+            android:name=".MainActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
