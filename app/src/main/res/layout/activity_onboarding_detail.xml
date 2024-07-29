@@ -59,7 +59,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/medicine_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="타이레놀정"
@@ -71,16 +71,17 @@
         app:layout_constraintTop_toTopOf="@+id/back_button" />
 
     <TextView
+        android:id="@+id/medicine_dosage_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:text="500mg"
+        android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
-        android:layout_marginStart="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        app:layout_constraintBottom_toBottomOf="@+id/medicine_name_tv"
+        app:layout_constraintStart_toEndOf="@+id/medicine_name_tv"
+        app:layout_constraintTop_toTopOf="@+id/medicine_name_tv" />
 
 
     <TextView
@@ -96,24 +97,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/back_button" />
 
-    <Spinner
+    <Button
         android:id="@+id/doseTime_spinner"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/option_background"
+        android:paddingStart="10dp"
+        android:text="00:00"
+        android:gravity="start|center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/doseTime_tv" />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_dropdown"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/doseTime_spinner"
+        app:layout_constraintEnd_toEndOf="@+id/doseTime_spinner"
+        app:layout_constraintTop_toTopOf="@+id/doseTime_spinner"
+        android:elevation="4dp" />
 
     <Spinner
         android:id="@+id/mealTime_spinner"
         android:layout_width="350dp"
         android:layout_height="50dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/option_background"
+        android:entries="@array/mealTime"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/doseTime_spinner"
-        android:entries="@array/mealTime"/>
+        app:layout_constraintTop_toBottomOf="@+id/doseTime_spinner" />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_dropdown"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mealTime_spinner"
+        app:layout_constraintEnd_toEndOf="@+id/mealTime_spinner"
+        app:layout_constraintTop_toTopOf="@+id/mealTime_spinner"
+        android:elevation="4dp" />
 
     <TextView
         android:id="@+id/dosage_tv"
@@ -146,24 +172,24 @@
         android:id="@+id/veri_btn"
         android:layout_width="352dp"
         android:layout_height="68dp"
-        android:layout_marginTop="562dp"
         android:background="@drawable/btn_select"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/pretendard_regular"
         android:text="저장하기"
+        android:layout_marginBottom="10dp"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:fontFamily="@font/pretendard_regular"/>
+        app:layout_constraintBottom_toTopOf="@+id/skipping_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/skipping_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="건너뛰기"
-        android:layout_marginTop="15dp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/veri_btn" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

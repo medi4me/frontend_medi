@@ -81,24 +81,24 @@
         android:id="@+id/veri_btn"
         android:layout_width="352dp"
         android:layout_height="68dp"
-        android:layout_marginTop="562dp"
         android:background="@drawable/btn_select"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/pretendard_regular"
         android:text="다음"
+        android:layout_marginBottom="10dp"
         android:textColor="@color/white"
         android:textSize="20sp"
-        android:fontFamily="@font/pretendard_regular"/>
+        app:layout_constraintBottom_toTopOf="@+id/skipping_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/skipping_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="건너뛰기"
-        android:layout_marginTop="15dp"
+        android:layout_marginBottom="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/veri_btn" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
