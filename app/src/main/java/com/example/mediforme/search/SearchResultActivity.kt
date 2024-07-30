@@ -47,6 +47,16 @@ class SearchResultActivity : AppCompatActivity() {
             bottomSheetFragment.show(supportFragmentManager, "BottomSheetDialog")
         }
 
+        val bottomSheetFragment2 = BottomSheetFragment2()
+        binding.moreInfoTv.setOnClickListener {
+            bottomSheetFragment2.show(supportFragmentManager, "BottomSheetDialog2")
+        }
+
+        val bottomSheetFragment3 = BottomSheetFragment3()
+        binding.checkCombinationButton.setOnClickListener {
+            bottomSheetFragment3.show(supportFragmentManager, "BottomSheetDialog2")
+        }
+
         binding.backButton.setOnClickListener {
             // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
             onBackPressed()
