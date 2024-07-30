@@ -8,10 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
-class Join_phone : AppCompatActivity() {
+class JoinPhoneActivity : AppCompatActivity() {
 
     private lateinit var phone_num_ET: EditText
     private lateinit var veri_btn: Button
@@ -39,7 +37,7 @@ class Join_phone : AppCompatActivity() {
         })
 
         veri_btn.setOnClickListener {
-            val intent = Intent(this@Join_phone, Join_vericode::class.java)
+            val intent = Intent(this@JoinPhoneActivity, JoinVericodeActivity::class.java)
             startActivity(intent)
         }
 

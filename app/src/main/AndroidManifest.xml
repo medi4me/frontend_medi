@@ -14,19 +14,19 @@
         tools:targetApi="31">
         
         <activity
-            android:name=".Join_name"
+            android:name=".JoinNameActivity"
             android:exported="false" />
         <activity
-            android:name=".Join_password"
+            android:name=".JoinPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".Join_service"
+            android:name=".JoinServiceActivity"
             android:exported="false" />
         <activity
-            android:name=".Join_id"
+            android:name=".JoinIdActivity"
             android:exported="false" />
         <activity
-            android:name=".Join_vericode"
+            android:name=".JoinVericodeActivity"
             android:exported="false" />
         <activity
             android:name=".Dialog_logout"
@@ -35,7 +35,7 @@
             android:name=".Dialog_warning"
             android:exported="false" />
         <activity
-            android:name=".Join_phone"
+            android:name=".JoinPhoneActivity"
             android:exported="false" />
         <activity
             android:name=".Splash"

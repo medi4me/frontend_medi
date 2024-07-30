@@ -5,20 +5,19 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 
-class Join_password : AppCompatActivity() {
+class JoinServiceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_join_password)
+        setContentView(R.layout.activity_join_service)
 
-        val nextBtn: Button = findViewById(R.id.next_btn)
+        val veriBtn : Button = findViewById(R.id.veri_btn)
 
-        nextBtn.setOnClickListener {
-            val intent = Intent(this@Join_password, Join_name::class.java)
+        veriBtn.setOnClickListener {
+            val intent = Intent(this@JoinServiceActivity, JoinPhoneActivity::class.java)
             startActivity(intent)
         }
+
     }
 }
