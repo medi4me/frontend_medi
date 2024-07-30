@@ -67,3 +67,22 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 }
+
+class BottomSheetFragment2 : BottomSheetDialogFragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_bottom_sheet2, container, false)
+    }
+}
+
+// BottomSheetFragment3.kt
+class BottomSheetFragment3 : BottomSheetDialogFragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_bottom_sheet3, container, false)
+    }
+}
