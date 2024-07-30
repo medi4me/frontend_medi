@@ -12,6 +12,7 @@ import android.widget.EditText
 import android.widget.TimePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingDetailBinding
 
@@ -59,6 +60,10 @@ class OnboardingDetailActivity : AppCompatActivity() {
 
         binding.veriBtn.setOnClickListener {
             startActivity(Intent(this, OnboardingMedicineActivity::class.java))
+        }
+
+        binding.skippingTv.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 

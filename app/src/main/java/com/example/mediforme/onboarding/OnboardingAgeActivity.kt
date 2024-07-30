@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mediforme.MainActivity
 import com.example.mediforme.databinding.ActivityOnboardingAgeBinding
 import com.example.mediforme.search.SearchResultActivity
 
@@ -31,6 +32,10 @@ class OnboardingAgeActivity : AppCompatActivity() {
 
         binding.veriBtn.setOnClickListener {
             startActivity(Intent(this, OnboardingMedicineActivity::class.java))
+        }
+
+        binding.skippingTv.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 }
