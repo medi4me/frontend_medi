@@ -50,9 +50,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/point_bar_IV" />
 
-    <ImageView
-        android:id="@+id/check_box_IV"
-        android:src="@drawable/icon_check_box"
+    <CheckBox
+        android:id="@+id/check_box"
+        android:background="@drawable/checkbox_selector"
+        android:button="@null"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="30dp"
@@ -71,9 +72,9 @@
         android:text="전체 약관 동의"
         android:textColor="@color/light_gray"
         android:textSize="17sp"
-        app:layout_constraintBottom_toBottomOf="@+id/check_box_IV"
-        app:layout_constraintStart_toEndOf="@+id/check_box_IV"
-        app:layout_constraintTop_toTopOf="@+id/check_box_IV" />
+        app:layout_constraintBottom_toBottomOf="@+id/check_box"
+        app:layout_constraintStart_toEndOf="@+id/check_box"
+        app:layout_constraintTop_toTopOf="@+id/check_box" />
 
     <View
         android:id="@+id/line_V"

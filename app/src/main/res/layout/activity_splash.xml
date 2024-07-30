@@ -19,16 +19,31 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/login_btn"
         android:layout_width="352dp"
         android:layout_height="68dp"
-        android:layout_marginBottom="91dp"
-        android:background="@drawable/background_rec"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@drawable/btn_select"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="로그인"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/join_TV"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-
+    <TextView
+        android:id="@+id/join_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="회원가입하고 시작하기"
+        android:textColor="@color/inactive_btn"
+        android:textSize="17sp"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/login_btn"
+        app:layout_constraintStart_toStartOf="@+id/login_btn" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
