@@ -6,12 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
 
-    lateinit var binding : FragmentBottomSheetBinding
+    lateinit var binding: FragmentBottomSheetBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,23 +24,13 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             Medicine("부타정", "0.7mg"),
             Medicine("파프티정", "0.5mg"),
             Medicine("타이레놀", "0.3mg"),
-            Medicine("부타정", "0.7mg"),
-            Medicine("파프티정", "0.5mg"),
-            Medicine("타이레놀", "0.3mg"),
-            Medicine("부타정", "0.7mg"),
-            Medicine("파프티정", "0.5mg"),
-            Medicine("타이레놀", "0.3mg"),
-            Medicine("부타정", "0.7mg"),
-            Medicine("파프티정", "0.5mg"),
-            Medicine("타이레놀", "0.3mg"),
-            Medicine("부타정", "0.7mg"),
-            Medicine("파프티정", "0.5mg"),
-            Medicine("타이레놀", "0.3mg")
-
+            Medicine("부타정", "0.7mg")
         )
 
         // 어댑터 설정
-        val adapter = MedicineAdapter(dummyData)
+        val adapter = MedicineAdapter(dummyData) { medicine ->
+            showAddMedicineFragment(medicine) // 클릭 시 호출될 콜백
+        }
         binding.medicineRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.medicineRecyclerView.adapter = adapter
 
@@ -49,6 +40,17 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 
         return binding.root
     }
+
+    private fun showAddMedicineFragment(medicine: Medicine) {
+        val addMedicineFragment = AddMedicineFragment(medicine)
+
+        // 현재 BottomSheetFragment의 내부 내용을 교체
+        childFragmentManager.beginTransaction()
+            .replace(R.id.bottom_sheet_container, addMedicineFragment) // R.id.bottom_sheet_container는 교체할 컨테이너의 ID
+            .addToBackStack(null) // 백스택에 추가하여 뒤로 가기 가능
+            .commit()
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -64,5 +66,23 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             }
         }
     }
+}
 
+class BottomSheetFragment2 : BottomSheetDialogFragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_bottom_sheet2, container, false)
+    }
+}
+
+// BottomSheetFragment3.kt
+class BottomSheetFragment3 : BottomSheetDialogFragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_bottom_sheet3, container, false)
+    }
 }

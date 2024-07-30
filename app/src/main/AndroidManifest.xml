@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:allowBackup="true"
@@ -11,17 +11,58 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MediForMe"
-        tools:targetApi="31" >
-        <activity android:name=".search.SearchResultActivity" />
+        tools:targetApi="31">
+        <activity
+            android:name=".login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JoinNameActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JoinPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JoinServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JoinIdActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JoinVericodeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Dialog_logout"
+            android:exported="false" />
+        <activity
+            android:name=".Dialog_warning"
+            android:exported="false" />
+        <activity
+            android:name=".JoinPhoneActivity"
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".search.SearchResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingAgeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingMedicineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Splash"
+            android:exported="true" />
     </application>
 
 </manifest>

@@ -7,27 +7,14 @@
 
     <ImageView
         android:id="@+id/search_logo_IV"
-        android:layout_width="180dp"
-        android:layout_height="30dp"
+        android:layout_width="215dp"
+        android:layout_height="60dp"
         android:src="@drawable/ic_mediformelogo"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        />
-
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="Search 프래그먼트"
-        android:textSize="30sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
+
 
     <Button
         android:id="@+id/search_with_camera"
