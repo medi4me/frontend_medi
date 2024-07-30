@@ -16,19 +16,17 @@
             android:name=".Join_name"
             android:exported="false" />
         <activity
-            android:name=".search.Join_name"
-            android:exported="false" />
-        <activity
             android:name=".Join_password"
             android:exported="false" />
+
+        <activity android:name=".Join_service"
+        android:exported="false" />
+
         <activity
             android:name=".Join_id"
             android:exported="false" />
         <activity
             android:name=".Join_vericode"
-            android:exported="false" />
-        <activity
-            android:name=".search.Join_service"
             android:exported="false" />
         <activity
             android:name=".Dialog_logout"

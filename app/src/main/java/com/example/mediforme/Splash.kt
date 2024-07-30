@@ -13,7 +13,7 @@ class Splash : AppCompatActivity() {
 
         // 3초 동안 대기한 후 join_phone 액티비티로 이동
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this@Splash, Join_phone::class.java)
+            val intent = Intent(this@Splash, Join_service::class.java)
             startActivity(intent)
             finish()
         }, 3000) // 3000ms = 3초
