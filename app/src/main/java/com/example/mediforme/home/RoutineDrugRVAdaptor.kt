@@ -37,7 +37,5 @@ class RoutineDrugRVAdaptor(val drougRoutineList: ArrayList<RoutineDrug>):Recycle
         val drugName = binding.homeDrugNameTV
         val drugNum = binding.homeDrugNumTV
         val drugCheckBtn = binding.homeRoutineCheckBtnIV
-
-
     }
 }

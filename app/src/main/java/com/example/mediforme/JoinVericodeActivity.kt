@@ -6,12 +6,9 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.mediforme.R.layout.activity_join_vericode
 import kotlin.concurrent.timer
 
-class Join_vericode : AppCompatActivity() {
+class JoinVericodeActivity : AppCompatActivity() {
 
     private var second = 0
     private var minute = 0
@@ -27,7 +24,7 @@ class Join_vericode : AppCompatActivity() {
         val veri_btn: Button = findViewById(R.id.veri_btn)
 
         veri_btn.setOnClickListener {
-            val intent = Intent(this@Join_vericode, Join_id::class.java)
+            val intent = Intent(this@JoinVericodeActivity, JoinIdActivity::class.java)
             startActivity(intent)
         }
     }

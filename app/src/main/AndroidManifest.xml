@@ -12,21 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MediForMe"
         tools:targetApi="31">
+        
         <activity
-            android:name=".Join_name"
+            android:name=".JoinNameActivity"
             android:exported="false" />
         <activity
-            android:name=".Join_password"
-            android:exported="false" />
-
-        <activity android:name=".Join_service"
-        android:exported="false" />
-
-        <activity
-            android:name=".Join_id"
+            android:name=".JoinPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".Join_vericode"
+            android:name=".JoinServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JoinIdActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JoinVericodeActivity"
             android:exported="false" />
         <activity
             android:name=".Dialog_logout"
@@ -35,20 +35,32 @@
             android:name=".Dialog_warning"
             android:exported="false" />
         <activity
-            android:name=".Join_phone"
+            android:name=".JoinPhoneActivity"
             android:exported="false" />
         <activity
             android:name=".Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
+            android:name=".search.SearchResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingAgeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingMedicineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true" />
+        
     </application>
 
 </manifest>
