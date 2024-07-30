@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Join_phone">
+    tools:context=".Join_name">
 
     <ImageView
         android:id="@+id/main_logo_IV"
@@ -38,13 +38,13 @@
         app:layout_constraintTop_toTopOf="@+id/back_bar_IV" />
 
     <TextView
-        android:id="@+id/input_phone_TV"
-        android:layout_width="280dp"
-        android:layout_height="26dp"
+        android:id="@+id/input_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="52dp"
         android:fontFamily="@font/pretendard_medium"
-        android:text="휴대폰 번호를 입력해주세요."
+        android:text="이름을 입력해주세요."
         android:textColor="@color/black"
         android:textSize="22sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,20 +57,43 @@
         android:layout_marginTop="33dp"
         android:background="@drawable/background_input"
         android:fontFamily="@font/pretendard_regular"
-        android:hint="010-0000-0000"
         android:inputType="number"
         android:paddingStart="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_phone_TV" />
+        app:layout_constraintTop_toBottomOf="@+id/input_TV" />
+
+    <TextView
+        android:id="@+id/id_check_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="메디포미는 본명사용을 권장해요."
+        android:textColor="@color/inactive_btn"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/phone_num_ET"
+        app:layout_constraintTop_toBottomOf="@+id/phone_num_ET" />
+
+    <TextView
+        android:id="@+id/id_check_TV2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="변경이 어려우니 신중하게 설정해주세요."
+        android:textColor="@color/inactive_btn"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/phone_num_ET"
+        app:layout_constraintTop_toBottomOf="@+id/id_check_TV" />
 
     <Button
-        android:id="@+id/veri_btn"
+        android:id="@+id/next_btn"
         android:layout_width="352dp"
         android:layout_height="68dp"
         android:background="@drawable/btn_select"
         android:fontFamily="@font/pretendard_regular"
-        android:text="인증번호 받기"
+        android:text="메디포미 시작하기"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"

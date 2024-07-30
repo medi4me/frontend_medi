@@ -12,15 +12,39 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MediForMe"
         tools:targetApi="31">
+        
         <activity
-            android:name=".dialog_logout"
+            android:name=".Join_name"
             android:exported="false" />
         <activity
-            android:name=".dialog_warning"
+            android:name=".Join_password"
             android:exported="false" />
         <activity
-            android:name=".join_phone"
+            android:name=".Join_service"
             android:exported="false" />
+        <activity
+            android:name=".Join_id"
+            android:exported="false" />
+        <activity
+            android:name=".Join_vericode"
+            android:exported="false" />
+        <activity
+            android:name=".Dialog_logout"
+            android:exported="false" />
+        <activity
+            android:name=".Dialog_warning"
+            android:exported="false" />
+        <activity
+            android:name=".Join_phone"
+            android:exported="false" />
+        <activity
+            android:name=".Splash"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".search.SearchResultActivity"
             android:exported="false" />
@@ -35,18 +59,8 @@
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".Splash"
-            android:exported="true">
-
-        </activity>
+            android:exported="true" />
+        
     </application>
 
 </manifest>

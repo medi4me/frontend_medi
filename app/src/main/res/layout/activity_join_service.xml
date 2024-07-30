@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".search.Join_service">
+
+    <ImageView
+        android:id="@+id/main_logo_IV"
+        android:layout_width="215dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="23dp"
+        android:src="@drawable/icon_main_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/back_bar_IV"
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/back_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_logo_IV" />
+
+    <ImageView
+        android:id="@+id/point_bar_IV"
+        android:layout_width="128dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/back_bar_purple"
+        app:layout_constraintStart_toStartOf="@+id/back_bar_IV"
+        app:layout_constraintTop_toBottomOf="@+id/main_logo_IV" />
+
+    <TextView
+        android:id="@+id/service_TV"
+        android:layout_width="154dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="52dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="서비스 이용약관에
+동의해주세요."
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/point_bar_IV" />
+
+    <ImageView
+        android:id="@+id/check_box_IV"
+        android:src="@drawable/icon_check_box"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="35dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/service_TV" />
+
+    <TextView
+        android:id="@+id/all_agree_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="전체 약관 동의"
+        android:textColor="@color/light_gray"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="@+id/check_box_IV"
+        app:layout_constraintStart_toEndOf="@+id/check_box_IV"
+        app:layout_constraintTop_toTopOf="@+id/check_box_IV" />
+
+    <View
+        android:id="@+id/line_V"
+        android:layout_width="352dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="18dp"
+        android:background="@color/light_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/all_agree_TV" />
+
+    <ImageView
+        android:id="@+id/small_check_IV1"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@drawable/icon_small_check"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="@+id/line_V"
+        app:layout_constraintTop_toBottomOf="@+id/line_V" />
+
+    <TextView
+        android:id="@+id/up_14_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="13dp"
+        android:layout_marginTop="23dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="[필수] 만 14세 이상"
+        android:textColor="@color/light_gray"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/small_check_IV1"
+        app:layout_constraintTop_toBottomOf="@+id/line_V" />
+
+    <ImageView
+        android:id="@+id/small_check_IV2"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@drawable/icon_small_check"
+        android:layout_marginTop="26dp"
+        app:layout_constraintStart_toStartOf="@+id/line_V"
+        app:layout_constraintTop_toBottomOf="@+id/up_14_TV" />
+
+    <TextView
+        android:id="@+id/small_service_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="13dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="[필수] 서비스 이용약관"
+        android:textColor="@color/light_gray"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/small_check_IV2"
+        app:layout_constraintTop_toBottomOf="@+id/up_14_TV" />
+
+    <ImageView
+        android:id="@+id/small_check_IV3"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@drawable/icon_small_check"
+        android:layout_marginTop="26dp"
+        app:layout_constraintStart_toStartOf="@+id/line_V"
+        app:layout_constraintTop_toBottomOf="@+id/small_service_TV" />
+
+    <TextView
+        android:id="@+id/private_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="13dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="[필수] 개인정보 처리방침"
+        android:textColor="@color/light_gray"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/small_check_IV3"
+        app:layout_constraintTop_toBottomOf="@+id/small_service_TV" />
+
+    <ImageView
+        android:id="@+id/small_check_IV4"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:src="@drawable/icon_small_check"
+        android:layout_marginTop="26dp"
+        app:layout_constraintStart_toStartOf="@+id/line_V"
+        app:layout_constraintTop_toBottomOf="@+id/private_TV" />
+
+    <TextView
+        android:id="@+id/advertise_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="13dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="[선택] 광고성 정보 수신 및 마케팅 활용 동의"
+        android:textColor="@color/light_gray"
+        android:textSize="15sp"
+        app:layout_constraintStart_toEndOf="@+id/small_check_IV4"
+        app:layout_constraintTop_toBottomOf="@+id/private_TV"/>
+
+    <Button
+        android:id="@+id/veri_btn"
+        android:layout_width="352dp"
+        android:layout_height="68dp"
+        android:background="@drawable/btn_select"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="회원가입"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="67dp"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

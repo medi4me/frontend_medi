@@ -7,7 +7,7 @@
     android:layout_width="248dp"
     android:layout_height="199dp"
     android:background="@drawable/background_dialog"
-    tools:context=".dialog_warning">
+    tools:context=".Dialog_warning">
 
     <TextView
         android:layout_width="135dp"
