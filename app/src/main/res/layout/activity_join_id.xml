@@ -6,7 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Join_id">
+    tools:context=".JoinIdActivity">
 
     <ImageView
         android:id="@+id/main_logo_IV"
