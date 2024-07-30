@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.mediforme.home.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/fragment_home"
+        >
+        <action
+            android:id="@+id/action_homeFragment_to_todayConditionFragment3"
+            app:destination="@id/todayConditionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/todayConditionFragment"
+        android:name="com.example.mediforme.home.todayCondition.TodayConditionFragment"
+        android:label="fragment_today_condition"
+        tools:layout="@layout/fragment_today_condition">
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.example.mediforme.search.SearchFragment"
+        android:label="SearchFragment"
+        tools:layout="@layout/fragment_search"/>
+
+
+    <fragment
+        android:id="@+id/navigation_mypage"
+        android:name="com.example.mediforme.mypage.MyPageFragment"
+        android:label="MyPageFragment"
+        tools:layout="@layout/fragment_mypage"
+        />
+
+
+
+</navigation>

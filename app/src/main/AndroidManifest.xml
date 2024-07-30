@@ -12,16 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MediForMe"
         tools:targetApi="31">
+        
         <activity
             android:name=".Join_name"
             android:exported="false" />
         <activity
             android:name=".Join_password"
             android:exported="false" />
-
-        <activity android:name=".Join_service"
-        android:exported="false" />
-
+        <activity
+            android:name=".Join_service"
+            android:exported="false" />
         <activity
             android:name=".Join_id"
             android:exported="false" />
@@ -42,13 +42,25 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
+            android:name=".search.SearchResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingAgeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingMedicineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".onboarding.OnboardingDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true" />
+        
     </application>
 
 </manifest>
