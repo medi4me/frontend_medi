@@ -16,7 +16,10 @@ class ChatFragment :Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentChatBinding.inflate(inflater,container,false)
-
+        binding.howTodayBackBtnIV.setOnClickListener {
+            // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
+            parentFragmentManager.popBackStack()
+        }
         return binding.root
     }
 }
