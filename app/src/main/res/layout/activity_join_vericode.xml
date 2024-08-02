@@ -99,6 +99,16 @@
         app:layout_constraintEnd_toEndOf="@+id/phone_num_ET"
         app:layout_constraintTop_toBottomOf="@+id/phone_num_ET" />
 
+    <View
+        android:id="@+id/line_V"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gray"
+        android:layout_marginTop="19dp"
+        app:layout_constraintEnd_toEndOf="@+id/reveri_TV"
+        app:layout_constraintStart_toStartOf="@+id/reveri_TV"
+        app:layout_constraintTop_toTopOf="@+id/reveri_TV" />
+
     <Button
         android:id="@+id/veri_btn"
         android:layout_width="352dp"

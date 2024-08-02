@@ -10,6 +10,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -36,13 +37,15 @@ class OnboardingMedicineActivity : AppCompatActivity() {
         })
 
         binding.veriBtn.setOnClickListener {
-            // Open the next activity
             startActivity(Intent(this, OnboardingDetailActivity::class.java))
         }
 
-        // Set up click listener for search_with_camera_tv TextView
         binding.searchWithCameraTv.setOnClickListener {
             showSearchResultsBottomSheet()
+        }
+
+        binding.skippingTv.setOnClickListener {
+            startActivity(Intent(this, MainActivity::class.java))
         }
     }
 
@@ -63,7 +66,6 @@ class OnboardingMedicineActivity : AppCompatActivity() {
         val adapter = SearchResultAdapter(searchResults)
         recyclerView.adapter = adapter
 
-        Log.d("OnboardingMedicineActivity", "Showing BottomSheetDialog")
         bottomSheetDialog.show()
     }
 
