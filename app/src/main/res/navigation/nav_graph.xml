@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_homeFragment_to_todayConditionFragment3"
             app:destination="@id/todayConditionFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
 
     <fragment
@@ -22,6 +25,12 @@
         android:label="fragment_today_condition"
         tools:layout="@layout/fragment_today_condition">
     </fragment>
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.example.mediforme.home.chat.ChatFragment"
+        android:label="ChatFragment"
+        tools:layout="@layout/fragment_chat"/>
 
     <fragment
         android:id="@+id/navigation_search"

@@ -120,9 +120,14 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Click listener for "howTodayCV"
+        // 오늘 어때요 클릭 시
         binding.howTodayCV.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToTodayConditionFragment3()
+            findNavController().navigate(action)
+        }
+        // 물어보기 클릭 시
+        binding.askMeCV.setOnClickListener{
+            val action = HomeFragmentDirections.actionHomeFragmentToChatFragment()
             findNavController().navigate(action)
         }
 
