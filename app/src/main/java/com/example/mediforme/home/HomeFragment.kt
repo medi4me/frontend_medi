@@ -1,5 +1,6 @@
 package com.example.mediforme.home
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +13,13 @@ import com.example.mediforme.databinding.FragmentHomeBinding
 import kotlin.concurrent.scheduleAtFixedRate
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.navigation.fragment.findNavController
+import com.example.mediforme.home.todayCondition.WeekDayAdapter
+import com.example.mediforme.home.todayCondition.WeekDayItem
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import java.util.Timer
 
 class HomeFragment : Fragment() {
@@ -20,6 +27,15 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val timer = Timer()
     private val handler = Handler(Looper.getMainLooper())
+    private lateinit var adapter: WeekDayAdapter2
+    private lateinit var items2: List<WeekDayItem2>
+    private var selectedDateItem2: WeekDayItem2? = null
+    private var todayIndex2: Int = 0
+
+    companion object {
+        private const val REQUEST_IMAGE_PICK = 1
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +52,69 @@ class HomeFragment : Fragment() {
         binding.homeBannerIndicator.setViewPager(binding.homeBannerVp)
         startAutoSlide(bannerAdapter)
 
+        // 날짜 데이터 초기화
+        val weekData2 = com.example.mediforme.home.getWeekDates()
+        items2 = weekData2.first
+        todayIndex2 = weekData2.second
+
+        // RecyclerView 설정
+        adapter = WeekDayAdapter2(items2) { dateItem ->
+            selectedDateItem2 = dateItem
+            onDateItemClick(dateItem)
+        }
+        binding.recyclerView2.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerView2.adapter = adapter
+
+        // 오늘 날짜 선택
+        selectTodayDate()
+
         return binding.root
+    }
+    private fun selectTodayDate() {
+        // 오늘 날짜 아이템을 선택 상태로 설정
+        val todayItem = items2[todayIndex2]
+        todayItem.isSelected = true
+        selectedDateItem2 = todayItem
+        adapter.notifyDataSetChanged()
+
+        // 오늘 날짜로 스크롤
+        binding.recyclerView2.scrollToPosition(todayIndex2)
+
+        // 현재 날짜와 시간을 가져옴
+        val currentCalendar = Calendar.getInstance()
+        currentCalendar.set(Calendar.DAY_OF_MONTH, todayItem.date.toInt())
+        val sdf = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+        val clickedDate = sdf.format(currentCalendar.time)
+        binding.homeDate.text = clickedDate
+
+        // 선택된 날짜에 해당하는 요일과 날짜로 업데이트
+        binding.homeDate.text = getString(R.string.date_format, currentCalendar.get(Calendar.YEAR), currentCalendar.get(
+            Calendar.MONTH) + 1, todayItem.date)
+    }
+
+    private fun onDateItemClick(dateItem: WeekDayItem2) {
+        // 날짜 아이템 클릭 시
+        Log.d(TAG, "Clicked on date: ${dateItem.date}")
+
+        // 모든 아이템의 isSelected 상태를 false로 설정
+        items2.forEach { it.isSelected = false }
+
+        // 클릭한 아이템의 isSelected 상태를 true로 설정
+        dateItem.isSelected = true
+
+        // 어댑터에 알림을 보냄
+        adapter.notifyDataSetChanged()
+
+        // 현재 날짜와 시간을 가져옴
+        val currentCalendar = Calendar.getInstance()
+        currentCalendar.set(Calendar.MONTH, dateItem.month - 1) // Calendar.MONTH는 0부터 시작하므로 -1
+        currentCalendar.set(Calendar.DAY_OF_MONTH, dateItem.date.toInt())
+        val sdf = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
+        val clickedDate = sdf.format(currentCalendar.time)
+        binding.homeDate.text = clickedDate
+
+        // 선택된 날짜에 해당하는 요일과 날짜로 업데이트
+        binding.homeDate.text = getString(R.string.date_format, currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH) + 1, dateItem.date)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
