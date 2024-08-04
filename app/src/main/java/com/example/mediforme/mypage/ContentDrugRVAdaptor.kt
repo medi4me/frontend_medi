@@ -22,6 +22,10 @@ class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>) :
         holder.contnetBell.setImageResource(contentDrug.contentDrugBell)
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun getItemCount(): Int {
         return contentDrugList.size
     }
