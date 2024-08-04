@@ -24,13 +24,11 @@ class MyPageFragment : Fragment() {
     lateinit var binding: FragmentMypageBinding
     lateinit var adapter: ContentDrugRVAdaptor
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         binding =FragmentMypageBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -48,10 +46,7 @@ class MyPageFragment : Fragment() {
             ContentDrug(R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", R.drawable.ic_bell_on),
             ContentDrug(R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일", R.drawable.ic_bell_off),
             ContentDrug(R.drawable.ic_drug_default, "타이레놀 500mg", "06:00 PM", "매일", R.drawable.ic_bell_on)
-
-
         )
-
 
         adapter = ContentDrugRVAdaptor(contentDrugList)
         binding.myDrugRV.adapter = adapter
@@ -59,59 +54,10 @@ class MyPageFragment : Fragment() {
         binding.myDrugRV.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
 
-        // ItemTouchHelper 설정
-        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // 스와이프 시 항목 삭제
-                val position = viewHolder.adapterPosition
-                adapter.removeItem(position)
-            }
-
-            override fun onChildDraw(
-                c: Canvas,
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                dX: Float,
-                dY: Float,
-                actionState: Int,
-                isCurrentlyActive: Boolean
-            ) {
-                // 스와이프 시 삭제 배경 그리기
-                val itemView = viewHolder.itemView
-                val paint = Paint()
-                paint.color = Color.RED
-                val icon = context?.let { ContextCompat.getDrawable(it, R.drawable.ic_delete) }
-
-                if (dX < 0) { // 스와이프 왼쪽
-                    // 배경 그리기
-                    c.drawRect(
-                        itemView.right.toFloat() + dX, itemView.top.toFloat(),
-                        itemView.right.toFloat(), itemView.bottom.toFloat(), paint
-                    )
-
-                    // 아이콘 그리기
-                    icon?.setBounds(
-                        itemView.right - icon.intrinsicWidth - 20,
-                        itemView.top + (itemView.height - icon.intrinsicHeight) / 2,
-                        itemView.right - 20,
-                        itemView.top + (itemView.height + icon.intrinsicHeight) / 2
-                    )
-                    icon?.draw(c)
-                }
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-            }
-        }
-
-        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        val swipeHelper = SwipeHelper()
+        val itemTouchHelper = ItemTouchHelper(swipeHelper)
         itemTouchHelper.attachToRecyclerView(binding.myDrugRV)
+
 
         // 회원탈퇴 버튼 클릭 시 다이얼로그 표시
         binding.myTextDeleteTV.setOnClickListener {
@@ -123,18 +69,14 @@ class MyPageFragment : Fragment() {
         }
     }
 
-
-
     //로그아웃 버튼 클릭 시 다이얼로그 표시 메소드
     private fun showLogoutAccountDialog() {
         val dialogView1 = LayoutInflater.from(context).inflate(R.layout.dialog_log_out, null)
         val dialogBuilder = AlertDialog.Builder(requireContext())
             .setView(dialogView1)
             .setCancelable(false)
-
         val alertDialog = dialogBuilder.create()
         alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) // 외부 배경을 투명하게 설정,둥글게 보이기 위해서
-
         val logoutBackBtn = dialogView1.findViewById<ImageView>(R.id.dialog_log_out_xBtn_IV)
         val loginBtn = dialogView1.findViewById<Button>(R.id.dialog_log_out_login_BTN)
         logoutBackBtn.setOnClickListener{
@@ -148,8 +90,6 @@ class MyPageFragment : Fragment() {
 
         alertDialog.show()
     }
-
-
 
     //회원탈퇴 버튼 클릭 시 다이얼로그 표시 메소드
     private fun showDeleteAccountDialog() {
@@ -177,6 +117,4 @@ class MyPageFragment : Fragment() {
         }
         alertDialog.show()
     }
-
-
 }
