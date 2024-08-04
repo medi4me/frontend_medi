@@ -5,17 +5,16 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 
 class TabPagerAdapter(
     fragment: Fragment,
-    private val tabTitles: List<String>
+    private val medicineInfoList: List<BottomSheetFragment2.MedicineInfo>
 ) : FragmentStateAdapter(fragment) {
 
-    override fun getItemCount(): Int = tabTitles.size
+    override fun getItemCount(): Int = medicineInfoList.size
 
     override fun createFragment(position: Int): Fragment {
-        // 각 페이지에 표시할 프래그먼트를 반환합니다.
-        return TabItemFragment.newInstance(tabTitles[position])
+        return TabItemFragment.newInstance(medicineInfoList[position])
     }
 
     fun getTabTitle(position: Int): String {
-        return tabTitles[position]
+        return medicineInfoList[position].title
     }
 }

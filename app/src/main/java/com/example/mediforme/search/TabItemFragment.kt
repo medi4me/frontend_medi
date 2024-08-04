@@ -11,14 +11,24 @@ import com.example.mediforme.R
 class TabItemFragment : Fragment() {
 
     companion object {
-        private const val ARG_TITLE = "title"
+        private const val ARG_MEDICINE_INFO = "medicine_info"
 
-        fun newInstance(title: String): TabItemFragment {
+        fun newInstance(medicineInfo: BottomSheetFragment2.MedicineInfo): TabItemFragment {
             val fragment = TabItemFragment()
-            val args = Bundle()
-            args.putString(ARG_TITLE, title)
+            val args = Bundle().apply {
+                putParcelable(ARG_MEDICINE_INFO, medicineInfo)
+            }
             fragment.arguments = args
             return fragment
+        }
+    }
+
+    private lateinit var medicineInfo: BottomSheetFragment2.MedicineInfo
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            medicineInfo = it.getParcelable(ARG_MEDICINE_INFO)!!
         }
     }
 
@@ -27,8 +37,13 @@ class TabItemFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_tab_item, container, false)
-        val title = arguments?.getString(ARG_TITLE)
-        view.findViewById<TextView>(R.id.ingredients_contents_tv).text = title
+
+        val ingredientsTextView: TextView = view.findViewById(R.id.ingredients_contents_tv)
+        val amountTextView: TextView = view.findViewById(R.id.amount_tv)
+
+        ingredientsTextView.text = medicineInfo.ingredient
+        amountTextView.text = medicineInfo.amount
+
         return view
     }
 }
