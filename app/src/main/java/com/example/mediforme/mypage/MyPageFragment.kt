@@ -54,7 +54,7 @@ class MyPageFragment : Fragment() {
         binding.myDrugRV.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
 
-        val swipeHelper = SwipeHelper(adapter)
+        val swipeHelper = SwipeHelper(requireContext(),adapter)
         val itemTouchHelper = ItemTouchHelper(swipeHelper)
         itemTouchHelper.attachToRecyclerView(binding.myDrugRV)
 
@@ -67,6 +67,7 @@ class MyPageFragment : Fragment() {
         binding.myTextLogoutTV.setOnClickListener {
             showLogoutAccountDialog()
         }
+
 
     }
 

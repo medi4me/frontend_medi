@@ -1,8 +1,13 @@
 package com.example.mediforme.mypage
 
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Canvas
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +16,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class SwipeHelper(
+    private val context: Context, // Context 추가
     private val adapter: ContentDrugRVAdaptor
 ) : ItemTouchHelper.Callback() {
 
@@ -81,7 +87,8 @@ class SwipeHelper(
                 Log.d("delete", "삭제 클릭")
                 val position = viewHolder.adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    adapter.removeItem(position)
+                    showDeleteAccountDialog(position)
+                    //adapter.removeItem(position)
                 }
             }
 
@@ -96,6 +103,35 @@ class SwipeHelper(
             )
         }
     }
+
+    //회원탈퇴 버튼 클릭 시 다이얼로그 표시 메소드
+    private fun showDeleteAccountDialog(position: Int) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_delete_drug, null)
+        val dialogBuilder = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setCancelable(false)
+
+        val alertDialog = dialogBuilder.create()
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) // 외부 배경을 투명하게 설정,둥글게 보이기 위해서
+
+        val backBtn = dialogView.findViewById<ImageView>(R.id.dialog_log_delete_xBtn_IV)
+        val cancelBtn = dialogView.findViewById<Button>(R.id.dialog_log_delete_back_BTN)
+        val deleteBtn = dialogView.findViewById<Button>(R.id.dialog_log_delete_BTN)
+
+        backBtn.setOnClickListener{
+            alertDialog.dismiss()
+        }
+        cancelBtn.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        deleteBtn.setOnClickListener {
+            // 삭제 버튼
+            adapter.removeItem(position)
+            alertDialog.dismiss()
+        }
+        alertDialog.show()
+    }
+
 
     private fun clampViewPositionHorizontal(
         view: View,
