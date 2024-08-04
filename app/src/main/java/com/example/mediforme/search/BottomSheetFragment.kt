@@ -1,14 +1,19 @@
 package com.example.mediforme.search
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.android.parcel.Parcelize
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -69,13 +74,49 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 }
 
 class BottomSheetFragment2 : BottomSheetDialogFragment() {
+
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager2
+    private lateinit var pagerAdapter: TabPagerAdapter
+
+    // 미디신 정보를 담은 리스트
+    private val medicineInfoList = listOf(
+        MedicineInfo("부타정", "아세트아미노펜과립", "0.7mg"),
+        MedicineInfo("피프티정", "이부프로펜", "0.5mg"),
+        MedicineInfo("타이레놀", "아세트아미노펜", "0.3mg")
+    )
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_bottom_sheet2, container, false)
+        val view = inflater.inflate(R.layout.fragment_bottom_sheet2, container, false)
+
+        tabLayout = view.findViewById(R.id.tab_layout)
+        viewPager = view.findViewById(R.id.view_pager)
+
+        // PagerAdapter 초기화 및 설정
+        pagerAdapter = TabPagerAdapter(this, medicineInfoList)
+        viewPager.adapter = pagerAdapter
+
+        // TabLayout과 ViewPager2를 연결합니다.
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = pagerAdapter.getTabTitle(position)
+        }.attach()
+
+        return view
     }
+
+    @Parcelize
+    data class MedicineInfo(
+        val title: String,
+        val ingredient: String,
+        val amount: String
+    ) : Parcelable
 }
+
+
+
 
 // BottomSheetFragment3.kt
 class BottomSheetFragment3 : BottomSheetDialogFragment() {
@@ -86,3 +127,5 @@ class BottomSheetFragment3 : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_bottom_sheet3, container, false)
     }
 }
+
+

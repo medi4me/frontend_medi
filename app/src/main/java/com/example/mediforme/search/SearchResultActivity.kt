@@ -1,9 +1,11 @@
 package com.example.mediforme.search
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivitySearchresultBinding
+import com.example.mediforme.onboarding.OnboardingMedicineActivity
 
 class SearchResultActivity : AppCompatActivity() {
     lateinit var binding: ActivitySearchresultBinding
@@ -42,16 +44,20 @@ class SearchResultActivity : AppCompatActivity() {
         val listAdapter = MedicineListAdapter(dummyData)
         binding.medicineInfoRecyclerView.adapter = listAdapter
 
+        // 복용 약에 추가하기 버튼을 눌렀을 시
         val bottomSheetFragment = BottomSheetFragment()
         binding.addToMedsButton.setOnClickListener {
             bottomSheetFragment.show(supportFragmentManager, "BottomSheetDialog")
+            //startActivity(Intent(this, AddMedicineActivity::class.java))
         }
 
+        // 정보 더 알아보기 버튼 눌렀을 시
         val bottomSheetFragment2 = BottomSheetFragment2()
         binding.moreInfoTv.setOnClickListener {
             bottomSheetFragment2.show(supportFragmentManager, "BottomSheetDialog2")
         }
 
+        // 약물 조합 확인하기 버튼 눌렀을 시
         val bottomSheetFragment3 = BottomSheetFragment3()
         binding.checkCombinationButton.setOnClickListener {
             bottomSheetFragment3.show(supportFragmentManager, "BottomSheetDialog2")

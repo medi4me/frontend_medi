@@ -32,11 +32,17 @@
         android:id="@+id/add_medicine_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:text="복용 약에 추가하기"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textSize="22sp"
+        android:textColor="@color/white"
+        android:background="@drawable/option_savebutton_background"
+        app:layout_constraintTop_toBottomOf="@+id/medicine_recycler_view"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="10dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Add a container for the child fragment -->
     <FrameLayout

@@ -1,4 +1,4 @@
-package com.example.mediforme.onboarding
+package com.example.mediforme.search
 
 import android.content.Intent
 import android.os.Bundle
@@ -15,7 +15,7 @@ import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class OnboardingMedicineActivity : AppCompatActivity() {
+class SearchWithNameActivity : AppCompatActivity() {
     lateinit var binding: ActivityOnboardingMedicineBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +37,7 @@ class OnboardingMedicineActivity : AppCompatActivity() {
         })
 
         binding.veriBtn.setOnClickListener {
-            startActivity(Intent(this, OnboardingDetailActivity::class.java))
+            //startActivity(Intent(this, OnboardingDetailActivity::class.java))
         }
 
         binding.searchMedicineIv.setOnClickListener {

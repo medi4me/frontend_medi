@@ -25,6 +25,11 @@ class SearchFragment : Fragment() {
             startActivity(Intent(requireContext(), SearchResultActivity::class.java))
         }
 
+        binding.searchWithName.setOnClickListener {
+            // Use requireContext() to get the context
+            startActivity(Intent(requireContext(), SearchWithNameActivity::class.java))
+        }
+
         return binding.root
     }
 }

@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -42,6 +43,16 @@
         android:layout_width="352dp"
         android:layout_height="3dp"
         android:src="@drawable/back_bar_purple"
+        android:layout_marginStart="220dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="131dp"/>
+
+    <ImageView
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:src="@drawable/back_bar_purple"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -53,26 +64,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="160dp"
         android:fontFamily="@font/pretendard_medium"
-        android:text="당신의 복용약\n정보를 입력해주세요."
+        android:text="궁금한 약을 검색해보세요."
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/pretendard_medium"
-        android:text="복용 중인 약"
-        android:textColor="@color/black"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
-        android:textSize="17sp"
-        app:layout_constraintBottom_toTopOf="@+id/medicine_name_EV"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/explain_tv" />
 
     <EditText
         android:id="@+id/medicine_name_EV"
@@ -96,25 +94,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/medicine_name_EV"
         app:layout_constraintEnd_toEndOf="@+id/medicine_name_EV"
         app:layout_constraintTop_toTopOf="@+id/medicine_name_EV" />
-
-    <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_camera"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/search_with_camera_tv"
-        app:layout_constraintEnd_toStartOf="@+id/search_with_camera_tv"
-        app:layout_constraintTop_toTopOf="@+id/search_with_camera_tv" />
-
-    <TextView
-        android:id="@+id/search_with_camera_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="카메라로 검색하기"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/medicine_name_EV" />
 
 
     <Button

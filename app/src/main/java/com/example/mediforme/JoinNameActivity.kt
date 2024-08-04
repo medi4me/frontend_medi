@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.mediforme.onboarding.OnboardingAgeActivity
 
 class JoinNameActivity : AppCompatActivity() {
 
@@ -23,7 +24,7 @@ class JoinNameActivity : AppCompatActivity() {
         val nextBtn: Button = findViewById(R.id.next_btn)
 
         nextBtn.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, OnboardingAgeActivity::class.java)
             startActivity(intent)
         }
 
