@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -69,13 +72,41 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
 }
 
 class BottomSheetFragment2 : BottomSheetDialogFragment() {
+
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager2
+    private lateinit var pagerAdapter: TabPagerAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_bottom_sheet2, container, false)
+        val view = inflater.inflate(R.layout.fragment_bottom_sheet2, container, false)
+
+        tabLayout = view.findViewById(R.id.tab_layout)
+        viewPager = view.findViewById(R.id.view_pager)
+
+        // 탭 제목을 동적으로 생성하거나 설정합니다.
+        val tabTitles = getTabTitles()
+
+        // PagerAdapter 초기화 및 설정
+        pagerAdapter = TabPagerAdapter(this, tabTitles)
+        viewPager.adapter = pagerAdapter
+
+        // TabLayout과 ViewPager2를 연결합니다.
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = pagerAdapter.getTabTitle(position)
+        }.attach()
+
+        return view
+    }
+
+    private fun getTabTitles(): List<String> {
+        // 유동적으로 탭 제목을 설정합니다. 예제 제목을 반환합니다.
+        return listOf("부타정", "피프티정", "타이레놀")
     }
 }
+
 
 // BottomSheetFragment3.kt
 class BottomSheetFragment3 : BottomSheetDialogFragment() {
@@ -86,3 +117,5 @@ class BottomSheetFragment3 : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_bottom_sheet3, container, false)
     }
 }
+
+
