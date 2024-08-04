@@ -29,7 +29,7 @@ class MyPageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding =FragmentMypageBinding.inflate(inflater,container,false)
+        binding = FragmentMypageBinding.inflate(inflater,container,false)
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -54,7 +54,7 @@ class MyPageFragment : Fragment() {
         binding.myDrugRV.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
 
-        val swipeHelper = SwipeHelper()
+        val swipeHelper = SwipeHelper(requireContext(),adapter)
         val itemTouchHelper = ItemTouchHelper(swipeHelper)
         itemTouchHelper.attachToRecyclerView(binding.myDrugRV)
 
@@ -67,6 +67,8 @@ class MyPageFragment : Fragment() {
         binding.myTextLogoutTV.setOnClickListener {
             showLogoutAccountDialog()
         }
+
+
     }
 
     //로그아웃 버튼 클릭 시 다이얼로그 표시 메소드
@@ -79,10 +81,11 @@ class MyPageFragment : Fragment() {
         alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) // 외부 배경을 투명하게 설정,둥글게 보이기 위해서
         val logoutBackBtn = dialogView1.findViewById<ImageView>(R.id.dialog_log_out_xBtn_IV)
         val loginBtn = dialogView1.findViewById<Button>(R.id.dialog_log_out_login_BTN)
+
+
         logoutBackBtn.setOnClickListener{
             alertDialog.dismiss()
         }
-
         loginBtn.setOnClickListener{
             //로그인 액티비티 뜨게 변경예정 !
             alertDialog.dismiss()

@@ -22,6 +22,12 @@ class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>) :
         holder.contnetBell.setImageResource(contentDrug.contentDrugBell)
     }
 
+
+    //리사이클러뷰 재사용 해결 코드, 아래 부분을 지웠다가 다시 하는 듯
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun getItemCount(): Int {
         return contentDrugList.size
     }
