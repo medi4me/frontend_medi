@@ -54,59 +54,10 @@ class MyPageFragment : Fragment() {
         binding.myDrugRV.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
 
-        // ItemTouchHelper 설정
-        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-            override fun onMove(
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // 스와이프 시 항목 삭제
-                val position = viewHolder.adapterPosition
-                adapter.removeItem(position)
-            }
-
-            override fun onChildDraw(
-                c: Canvas,
-                recyclerView: RecyclerView,
-                viewHolder: RecyclerView.ViewHolder,
-                dX: Float,
-                dY: Float,
-                actionState: Int,
-                isCurrentlyActive: Boolean
-            ) {
-                // 스와이프 시 삭제 배경 그리기
-                val itemView = viewHolder.itemView
-                val paint = Paint()
-                paint.color = Color.RED
-                val icon = context?.let { ContextCompat.getDrawable(it, R.drawable.ic_delete) }
-
-                if (dX < 0) { // 스와이프 왼쪽
-                    // 배경 그리기
-                    c.drawRect(
-                        itemView.right.toFloat() + dX, itemView.top.toFloat(),
-                        itemView.right.toFloat(), itemView.bottom.toFloat(), paint
-                    )
-
-                    // 아이콘 그리기
-                    icon?.setBounds(
-                        itemView.right - icon.intrinsicWidth - 20,
-                        itemView.top + (itemView.height - icon.intrinsicHeight) / 2,
-                        itemView.right - 20,
-                        itemView.top + (itemView.height + icon.intrinsicHeight) / 2
-                    )
-                    icon?.draw(c)
-                }
-                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-            }
-        }
-
-        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        val swipeHelper = SwipeHelper()
+        val itemTouchHelper = ItemTouchHelper(swipeHelper)
         itemTouchHelper.attachToRecyclerView(binding.myDrugRV)
+
 
         // 회원탈퇴 버튼 클릭 시 다이얼로그 표시
         binding.myTextDeleteTV.setOnClickListener {
