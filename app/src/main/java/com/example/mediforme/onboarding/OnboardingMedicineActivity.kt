@@ -40,7 +40,7 @@ class OnboardingMedicineActivity : AppCompatActivity() {
             startActivity(Intent(this, OnboardingDetailActivity::class.java))
         }
 
-        binding.searchWithCameraTv.setOnClickListener {
+        binding.searchMedicineIv.setOnClickListener {
             showSearchResultsBottomSheet()
         }
 
