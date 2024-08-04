@@ -95,4 +95,7 @@ dependencies {
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
+    //viewpager2를 위한 의존성 추가
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
+
 }
