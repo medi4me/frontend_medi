@@ -1,7 +1,6 @@
 package com.example.mediforme.mypage
 
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
@@ -11,8 +10,9 @@ import com.example.mediforme.R
 import kotlin.math.max
 import kotlin.math.min
 
-
-class SwipeHelper : ItemTouchHelper.Callback() {
+class SwipeHelper(
+    private val adapter: ContentDrugRVAdaptor
+) : ItemTouchHelper.Callback() {
 
     private var currentPosition: Int? = null
     private var previousPosition: Int? = null
@@ -39,8 +39,7 @@ class SwipeHelper : ItemTouchHelper.Callback() {
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
-        // 실제 아이템 삭제 로직
-        (viewHolder.itemView.context as? MyPageFragment)?.adapter?.removeItem(position)
+        adapter.removeItem(position)
     }
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
@@ -74,14 +73,17 @@ class SwipeHelper : ItemTouchHelper.Callback() {
             val x = clampViewPositionHorizontal(view, dX, isClamped, isCurrentlyActive)
             currentDx = x
 
-            // 상단 아이템 뷰(item_view)만 스와이프 이동
             itemView.translationX = x
-
-            // 하단 삭제 view(erase_item_view)는 움직이지 않고 고정
             eraseView.translationX = 0f
-
-            // 스와이프 시 erase_item_view 보이도록 설정
             eraseView.visibility = if (x < 0) View.VISIBLE else View.INVISIBLE
+
+            eraseView.setOnClickListener {
+                Log.d("delete", "삭제 클릭")
+                val position = viewHolder.adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    adapter.removeItem(position)
+                }
+            }
 
             getDefaultUIUtil().onDraw(
                 c,
