@@ -62,6 +62,9 @@
             android:name=".onboarding.OnboardingDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".search.SearchWithNameActivity"
+            android:exported="false" />
+        <activity
             android:name=".Splash"
             android:exported="true" />
     </application>
