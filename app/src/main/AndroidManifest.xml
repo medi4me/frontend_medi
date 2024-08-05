@@ -40,7 +40,7 @@
             android:name=".JoinPhoneActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".onboarding.OnboardingMedicineActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
@@ -56,7 +56,7 @@
             android:name=".onboarding.OnboardingAgeActivity"
             android:exported="false" />
         <activity
-            android:name=".onboarding.OnboardingMedicineActivity"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
             android:name=".onboarding.OnboardingDetailActivity"

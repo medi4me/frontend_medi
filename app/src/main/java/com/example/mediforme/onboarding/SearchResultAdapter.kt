@@ -7,10 +7,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mediforme.R
 
-class SearchResultAdapter(private val items: List<String>) : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
+class SearchResultAdapter(private val results: List<searchResults>) : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(R.id.textView)
+        val medicineNumber: TextView = itemView.findViewById(R.id.medicine_number_tv)
+        val medicineName: TextView = itemView.findViewById(R.id.medicine_results)
+
+        fun bind(result: searchResults, position: Int) {
+            medicineNumber.text = (position + 1).toString() // 1부터 시작하도록 설정
+            medicineName.text = result.name
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -19,9 +25,13 @@ class SearchResultAdapter(private val items: List<String>) : RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = items[position]
+        holder.bind(results[position], position)
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount() = results.size
 }
 
+data class searchResults(
+    val imageResId: Int, // 이미지 리소스 ID
+    val name: String
+)

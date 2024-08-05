@@ -14,6 +14,8 @@ import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
 import com.example.mediforme.databinding.ActivitySearchWithNameBinding
+import com.example.mediforme.onboarding.SearchResultAdapter
+import com.example.mediforme.onboarding.searchResults
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SearchWithNameActivity : AppCompatActivity() {
@@ -63,7 +65,17 @@ class SearchWithNameActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val searchResults = listOf("Medicine A", "Medicine B", "Medicine C")
+        val searchResults = listOf(
+            searchResults(
+                imageResId = R.drawable.medicine_ex,
+                name = "타이레놀정 500mg"),
+            searchResults(
+                imageResId = R.drawable.medicine_ex,
+                name = "우먼스타이레놀정"),
+            searchResults(
+                imageResId = R.drawable.medicine_ex,
+                name = "어린이 타이레놀")
+        )
         val adapter = SearchResultAdapter(searchResults)
         recyclerView.adapter = adapter
 
