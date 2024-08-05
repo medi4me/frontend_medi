@@ -39,8 +39,8 @@
 
     <TextView
         android:id="@+id/input_phone_TV"
-        android:layout_width="280dp"
-        android:layout_height="26dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
         android:layout_marginTop="52dp"
         android:fontFamily="@font/pretendard_medium"
@@ -57,7 +57,7 @@
         android:layout_marginTop="33dp"
         android:background="@drawable/background_input"
         android:fontFamily="@font/pretendard_regular"
-        android:hint="010-0000-0000"
+        android:hint="'-' 없이 번호만 입력"
         android:inputType="number"
         android:paddingStart="30dp"
         app:layout_constraintEnd_toEndOf="parent"
