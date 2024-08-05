@@ -15,7 +15,7 @@ import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class OnboardingMedicineActivity : AppCompatActivity() {
+class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickListener {
     lateinit var binding: ActivityOnboardingMedicineBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,21 +64,25 @@ class OnboardingMedicineActivity : AppCompatActivity() {
 
         val searchResults = listOf(
             searchResults(
-                imageResId = R.drawable.medicine_ex,
+                imageResId = R.drawable.ic_tylenol,
                 name = "타이레놀정 500mg"),
             searchResults(
-                imageResId = R.drawable.medicine_ex,
+                imageResId = R.drawable.ic_tylenol,
                 name = "우먼스타이레놀정"),
             searchResults(
-                imageResId = R.drawable.medicine_ex,
+                imageResId = R.drawable.ic_tylenol,
                 name = "어린이 타이레놀")
-            )
-        val adapter = SearchResultAdapter(searchResults)
+        )
+        val adapter = SearchResultAdapter(searchResults, this)
         recyclerView.adapter = adapter
 
         bottomSheetDialog.show()
     }
 
-
-
+    override fun onItemClick(name: String) {
+        val intent = Intent(this, OnboardingDetailActivity::class.java).apply {
+            putExtra("medicine_name", name)
+        }
+        startActivity(intent)
+    }
 }

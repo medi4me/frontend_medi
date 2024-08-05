@@ -24,6 +24,11 @@ class OnboardingDetailActivity : AppCompatActivity() {
         binding = ActivityOnboardingDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val medicineName = intent.getStringExtra("medicine_name")
+        if (medicineName != null) {
+            binding.medicineNameTv.text = medicineName
+        }
+
         // 복용 시간 버튼 클릭 리스너 설정
         binding.doseTimeSpinner.setOnClickListener {
             showTimePickerDialog()
