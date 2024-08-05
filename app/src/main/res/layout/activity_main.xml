@@ -26,16 +26,20 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/main_bnv"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
         app:menu="@menu/bottom_nav_menu"
-        app:itemIconSize="40dp"
+        app:itemIconSize="24dp"
         app:itemIconTint="@drawable/btm_color_selector"
         app:itemTextColor="@drawable/btm_color_selector"
         app:labelVisibilityMode="labeled"
         android:background="@color/white"
         app:itemActiveIndicatorStyle="@null"
+        app:itemBackground="@drawable/my_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
