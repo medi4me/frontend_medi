@@ -1,9 +1,13 @@
 package com.example.mediforme.mypage
 
+import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Paint
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -11,8 +15,10 @@ import com.example.mediforme.R
 import kotlin.math.max
 import kotlin.math.min
 
-
-class SwipeHelper : ItemTouchHelper.Callback() {
+class SwipeHelper(
+    private val context: Context, // Context 추가
+    private val adapter: ContentDrugRVAdaptor
+) : ItemTouchHelper.Callback() {
 
     private var currentPosition: Int? = null
     private var previousPosition: Int? = null
@@ -39,8 +45,7 @@ class SwipeHelper : ItemTouchHelper.Callback() {
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
-        // 실제 아이템 삭제 로직
-        (viewHolder.itemView.context as? MyPageFragment)?.adapter?.removeItem(position)
+        adapter.removeItem(position)
     }
 
     override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
@@ -74,14 +79,18 @@ class SwipeHelper : ItemTouchHelper.Callback() {
             val x = clampViewPositionHorizontal(view, dX, isClamped, isCurrentlyActive)
             currentDx = x
 
-            // 상단 아이템 뷰(item_view)만 스와이프 이동
             itemView.translationX = x
-
-            // 하단 삭제 view(erase_item_view)는 움직이지 않고 고정
             eraseView.translationX = 0f
-
-            // 스와이프 시 erase_item_view 보이도록 설정
             eraseView.visibility = if (x < 0) View.VISIBLE else View.INVISIBLE
+
+            eraseView.setOnClickListener {
+                Log.d("delete", "삭제 클릭")
+                val position = viewHolder.adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    showDeleteAccountDialog(position)
+                    //adapter.removeItem(position)
+                }
+            }
 
             getDefaultUIUtil().onDraw(
                 c,
@@ -94,6 +103,35 @@ class SwipeHelper : ItemTouchHelper.Callback() {
             )
         }
     }
+
+    //회원탈퇴 버튼 클릭 시 다이얼로그 표시 메소드
+    private fun showDeleteAccountDialog(position: Int) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_delete_drug, null)
+        val dialogBuilder = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setCancelable(false)
+
+        val alertDialog = dialogBuilder.create()
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) // 외부 배경을 투명하게 설정,둥글게 보이기 위해서
+
+        val backBtn = dialogView.findViewById<ImageView>(R.id.dialog_log_delete_xBtn_IV)
+        val cancelBtn = dialogView.findViewById<Button>(R.id.dialog_log_delete_back_BTN)
+        val deleteBtn = dialogView.findViewById<Button>(R.id.dialog_log_delete_BTN)
+
+        backBtn.setOnClickListener{
+            alertDialog.dismiss()
+        }
+        cancelBtn.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        deleteBtn.setOnClickListener {
+            // 삭제 버튼
+            adapter.removeItem(position)
+            alertDialog.dismiss()
+        }
+        alertDialog.show()
+    }
+
 
     private fun clampViewPositionHorizontal(
         view: View,
