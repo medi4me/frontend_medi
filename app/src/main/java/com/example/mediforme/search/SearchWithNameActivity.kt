@@ -6,13 +6,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
-import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
 import com.example.mediforme.databinding.ActivitySearchWithNameBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -57,17 +55,26 @@ class SearchWithNameActivity : AppCompatActivity() {
 
         val recyclerView = bottomSheetView.findViewById<RecyclerView>(R.id.recyclerView)
         if (recyclerView == null) {
-            Log.e("OnboardingMedicineActivity", "RecyclerView not found in bottom sheet layout")
+            Log.e("SearchWithNameActivity", "RecyclerView not found in bottom sheet layout")
             return
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val searchResults = listOf("Medicine A", "Medicine B", "Medicine C")
-        val adapter = SearchResultAdapter(searchResults)
+        val searchResults = listOf(
+            searchResult(
+                imageResId = R.drawable.ic_tylenol,
+                name = "타이레놀정 500mg"),
+            searchResult(
+                imageResId = R.drawable.ic_tylenol,
+                name = "우먼스타이레놀정"),
+            searchResult(
+                imageResId = R.drawable.ic_tylenol,
+                name = "어린이 타이레놀")
+        )
+        val adapter = SearchWithNameAdapter(searchResults)
         recyclerView.adapter = adapter
 
         bottomSheetDialog.show()
     }
-
 }

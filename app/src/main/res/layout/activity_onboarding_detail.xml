@@ -6,7 +6,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".join_phone">
+    android:background="@color/white"
+    >
 
     <ImageView
         android:id="@+id/imageView2"
@@ -62,26 +63,13 @@
         android:id="@+id/medicine_name_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="타이레놀정"
+        android:text="타이레놀정 500mg"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/back_button"
         app:layout_constraintStart_toEndOf="@+id/back_button"
         app:layout_constraintTop_toTopOf="@+id/back_button" />
-
-    <TextView
-        android:id="@+id/medicine_dosage_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="500mg"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/medicine_name_tv"
-        app:layout_constraintStart_toEndOf="@+id/medicine_name_tv"
-        app:layout_constraintTop_toTopOf="@+id/medicine_name_tv" />
 
 
     <TextView
@@ -158,7 +146,7 @@
         android:id="@+id/dosage_onetime_EV"
         android:layout_width="350dp"
         android:layout_height="60dp"
-        android:background="@drawable/background_input"
+        android:background="@drawable/option_background"
         android:fontFamily="@font/pretendard_regular"
         android:layout_marginTop="5dp"
         android:hint="예) 1정 또는 1포"

@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
+import com.example.mediforme.search.MedicineList
+import com.example.mediforme.search.MedicineListAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class OnboardingMedicineActivity : AppCompatActivity() {
+class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickListener {
     lateinit var binding: ActivityOnboardingMedicineBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,7 +39,7 @@ class OnboardingMedicineActivity : AppCompatActivity() {
         })
 
         binding.veriBtn.setOnClickListener {
-            startActivity(Intent(this, OnboardingDetailActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
 
         binding.searchMedicineIv.setOnClickListener {
@@ -47,6 +49,21 @@ class OnboardingMedicineActivity : AppCompatActivity() {
         binding.skippingTv.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
+
+        // 더미 데이터 생성
+        // RecyclerView에 더미 데이터 설정하기
+        val dummyData = listOf(
+            SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
+            SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
+            SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정"),
+            SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
+            SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
+            SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정")
+        )
+
+        val adapter = SearchAddResultAdapter(dummyData)
+        binding.searchAddResultsRecyclerview.layoutManager = LinearLayoutManager(this)
+        binding.searchAddResultsRecyclerview.adapter = adapter
     }
 
     private fun showSearchResultsBottomSheet() {
@@ -62,11 +79,27 @@ class OnboardingMedicineActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val searchResults = listOf("Medicine A", "Medicine B", "Medicine C")
-        val adapter = SearchResultAdapter(searchResults)
+        val searchResults = listOf(
+            searchResults(
+                imageResId = R.drawable.ic_tylenol,
+                name = "타이레놀정 500mg"),
+            searchResults(
+                imageResId = R.drawable.ic_tylenol,
+                name = "우먼스타이레놀정"),
+            searchResults(
+                imageResId = R.drawable.ic_tylenol,
+                name = "어린이 타이레놀")
+        )
+        val adapter = SearchResultAdapter(searchResults, this)
         recyclerView.adapter = adapter
 
         bottomSheetDialog.show()
     }
 
+    override fun onItemClick(name: String) {
+        val intent = Intent(this, OnboardingDetailActivity::class.java).apply {
+            putExtra("medicine_name", name)
+        }
+        startActivity(intent)
+    }
 }
