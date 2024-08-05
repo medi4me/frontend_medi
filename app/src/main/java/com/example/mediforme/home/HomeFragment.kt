@@ -133,11 +133,17 @@ class HomeFragment : Fragment() {
 
         // Dummy data for RecyclerView
         val routineDrugList = arrayListOf(
-            RoutineDrug("09:00", "테스민정 0.1mg", "1정", true),
+            RoutineDrug("09:00", "테스민정 0.1mg", "1정", false),
             RoutineDrug("12:00", "테스민 0.1mg", "2정", false),
             RoutineDrug("12:00", "테스민정 0.1mg", "2정", false),
             RoutineDrug("12:00", "테민정 0.1mg", "2정", false),
-            RoutineDrug("18:00", "스민정 0.1mg", "1정", true),
+            RoutineDrug("18:00", "스민정 0.1mg", "1정", false),
+            RoutineDrug("18:00", "테스민정 0.1mg", "2정", false),
+            RoutineDrug("12:00", "테민정 0.1mg", "2정", false),
+            RoutineDrug("18:00", "스민정 0.1mg", "1정", false),
+            RoutineDrug("18:00", "테스민정 0.1mg", "2정", false),
+            RoutineDrug("12:00", "테민정 0.1mg", "2정", false),
+            RoutineDrug("18:00", "스민정 0.1mg", "1정", false),
             RoutineDrug("18:00", "테스민정 0.1mg", "2정", false)
         )
 
