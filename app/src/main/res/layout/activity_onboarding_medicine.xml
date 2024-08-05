@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    >
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -62,13 +62,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/pretendard_medium"
         android:text="복용 중인 약"
         android:textColor="@color/black"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
         android:textSize="17sp"
         app:layout_constraintBottom_toTopOf="@+id/medicine_name_EV"
         app:layout_constraintStart_toStartOf="parent"
@@ -116,6 +117,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/medicine_name_EV" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_add_results_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_with_camera_tv"
+        app:layout_constraintBottom_toTopOf="@+id/veri_btn"
+        tools:listitem="@layout/item_search_add_result"/>
 
     <Button
         android:id="@+id/veri_btn"
@@ -139,6 +152,6 @@
         android:layout_marginBottom="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

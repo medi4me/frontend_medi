@@ -24,6 +24,11 @@ class OnboardingDetailActivity : AppCompatActivity() {
         binding = ActivityOnboardingDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val medicineName = intent.getStringExtra("medicine_name")
+        if (medicineName != null) {
+            binding.medicineNameTv.text = medicineName
+        }
+
         // 복용 시간 버튼 클릭 리스너 설정
         binding.doseTimeSpinner.setOnClickListener {
             showTimePickerDialog()
@@ -37,7 +42,7 @@ class OnboardingDetailActivity : AppCompatActivity() {
         binding.mealTimeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                 val selectedItem = parent.getItemAtPosition(position).toString()
-                Toast.makeText(this@OnboardingDetailActivity, "Selected: $selectedItem", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@OnboardingDetailActivity, "Selected: $selectedItem", Toast.LENGTH_SHORT).show()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
