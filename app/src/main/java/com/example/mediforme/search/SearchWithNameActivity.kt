@@ -13,14 +13,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
+import com.example.mediforme.databinding.ActivitySearchWithNameBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class SearchWithNameActivity : AppCompatActivity() {
-    lateinit var binding: ActivityOnboardingMedicineBinding
+    lateinit var binding: ActivitySearchWithNameBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityOnboardingMedicineBinding.inflate(layoutInflater)
+        binding = ActivitySearchWithNameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.veriBtn.isEnabled = false

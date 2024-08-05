@@ -88,6 +88,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+
 
     //circleindicator
     implementation("me.relex:circleindicator:2.1.6")

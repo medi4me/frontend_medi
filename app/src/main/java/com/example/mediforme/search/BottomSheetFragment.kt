@@ -73,13 +73,14 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     }
 }
 
+// BottomSheetFragment2.kt
 class BottomSheetFragment2 : BottomSheetDialogFragment() {
 
     private lateinit var tabLayout: TabLayout
     private lateinit var viewPager: ViewPager2
     private lateinit var pagerAdapter: TabPagerAdapter
 
-    // 미디신 정보를 담은 리스트
+    // 약 정보를 담은 리스트
     private val medicineInfoList = listOf(
         MedicineInfo("부타정", "아세트아미노펜과립", "0.7mg"),
         MedicineInfo("피프티정", "이부프로펜", "0.5mg"),
