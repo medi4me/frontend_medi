@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
+import com.example.mediforme.search.MedicineList
+import com.example.mediforme.search.MedicineListAdapter
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickListener {
@@ -47,6 +49,21 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
         binding.skippingTv.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
+
+        // 더미 데이터 생성
+        // RecyclerView에 더미 데이터 설정하기
+        val dummyData = listOf(
+            SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
+            SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
+            SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정"),
+            SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
+            SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
+            SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정")
+        )
+
+        val adapter = SearchAddResultAdapter(dummyData)
+        binding.searchAddResultsRecyclerview.layoutManager = LinearLayoutManager(this)
+        binding.searchAddResultsRecyclerview.adapter = adapter
     }
 
     private fun showSearchResultsBottomSheet() {
