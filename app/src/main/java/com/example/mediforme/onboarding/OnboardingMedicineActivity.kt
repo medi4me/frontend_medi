@@ -37,7 +37,7 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
         })
 
         binding.veriBtn.setOnClickListener {
-            startActivity(Intent(this, OnboardingDetailActivity::class.java))
+            startActivity(Intent(this, MainActivity::class.java))
         }
 
         binding.searchMedicineIv.setOnClickListener {

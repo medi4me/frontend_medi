@@ -1,6 +1,7 @@
 package com.example.mediforme.mypage
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -17,8 +18,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentMypageBinding
+import com.example.mediforme.onboarding.OnboardingMedicineActivity
 
 class MyPageFragment : Fragment() {
     lateinit var binding: FragmentMypageBinding
@@ -58,6 +61,10 @@ class MyPageFragment : Fragment() {
         val itemTouchHelper = ItemTouchHelper(swipeHelper)
         itemTouchHelper.attachToRecyclerView(binding.myDrugRV)
 
+        // 추가하기 버튼 클릭시 온보딩 화면으로 전환
+        binding.myPlusBtnBtn.setOnClickListener {
+            startActivity(Intent(requireContext(), OnboardingMedicineActivity::class.java))
+        }
 
         // 회원탈퇴 버튼 클릭 시 다이얼로그 표시
         binding.myTextDeleteTV.setOnClickListener {
