@@ -57,7 +57,7 @@
         android:layout_marginTop="33dp"
         android:background="@drawable/background_input"
         android:fontFamily="@font/pretendard_regular"
-        android:hint="010-0000-0000"
+        android:hint="'-' 없이 번호만 입력"
         android:inputType="number"
         android:paddingStart="30dp"
         app:layout_constraintEnd_toEndOf="parent"

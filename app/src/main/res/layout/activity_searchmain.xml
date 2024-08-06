@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".login.SearchmainActivity">
+
+    <ImageView
+        android:id="@+id/main_logo_IV"
+        android:layout_width="215dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="23dp"
+        android:src="@drawable/icon_main_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_logo_IV">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:text="아이디 찾기"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="16dp"
+            android:text="비밀번호 찾기"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <TextView
+        android:id="@+id/search_id_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="아이디 찾기"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="@+id/point_bar"
+        app:layout_constraintStart_toStartOf="@+id/back_bar_IV"
+        app:layout_constraintTop_toBottomOf="@+id/main_logo_IV" />
+
+    <TextView
+        android:id="@+id/search_pawd_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="비밀번호 찾기"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintEnd_toEndOf="@+id/back_bar_IV"
+        app:layout_constraintStart_toEndOf="@+id/point_bar"
+        app:layout_constraintTop_toBottomOf="@+id/main_logo_IV" />
+
+    <ImageView
+        android:id="@+id/back_bar_IV"
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:src="@drawable/back_bar"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_id_TV"/>
+
+    <ImageView
+        android:id="@+id/point_bar"
+        android:layout_width="176dp"
+        android:layout_height="3dp"
+        android:src="@drawable/point_bar_173"
+        app:layout_constraintStart_toStartOf="@+id/back_bar_IV"
+        app:layout_constraintTop_toTopOf="@+id/back_bar_IV" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
