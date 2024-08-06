@@ -6,6 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".JoinNameActivity">
 
     <ImageView
@@ -57,7 +58,9 @@
         android:layout_marginTop="33dp"
         android:background="@drawable/background_input"
         android:fontFamily="@font/pretendard_regular"
-        android:inputType="number"
+        android:inputType="text"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
         android:paddingStart="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

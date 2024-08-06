@@ -1,43 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/white">
 
-
-    <ImageView
-        android:id="@+id/medicine_image"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/medicine_ex"
+    <LinearLayout
+        android:id="@+id/medicine_info_layout"
+        android:layout_width="350dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/rounded_checked_background"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/medicine_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="medicine.name"
-        android:textSize="14sp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/medicine_image"
-        app:layout_constraintStart_toEndOf="@+id/medicine_image"
-        app:layout_constraintTop_toTopOf="@+id/medicine_image" />
+        <ImageView
+            android:id="@+id/medicine_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="30dp"
+            android:layout_gravity="center"
+            android:src="@drawable/medicine_ex" />
 
-    <TextView
-        android:id="@+id/medicine_dosage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="medicine.dosage"
-        android:textSize="14sp"
-        android:layout_marginStart="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/medicine_name"
-        app:layout_constraintStart_toEndOf="@+id/medicine_name"
-        app:layout_constraintTop_toTopOf="@+id/medicine_name" />
+        <TextView
+            android:id="@+id/medicine_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="8dp"
+            android:gravity="center_vertical"
+            android:text="medicine.name"
+            android:textColor="#1A0A7D"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/medicine_dosage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:text="medicine.dosage"
+            android:textColor="#1A0A7D"
+            android:textSize="17sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/doseTime_tv"
@@ -50,7 +60,7 @@
         android:textColor="@color/black"
         android:textSize="17sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/medicine_dosage" />
+        app:layout_constraintTop_toBottomOf="@+id/medicine_info_layout" />
 
     <Button
         android:id="@+id/doseTime_spinner"
@@ -118,10 +128,12 @@
         android:layout_marginTop="5dp"
         android:hint="예) 1정 또는 1포"
         android:paddingStart="30dp"
+        android:inputType="text"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dosage_tv" />
-
 
     <Button
         android:id="@+id/veri_btn"
@@ -129,8 +141,8 @@
         android:layout_height="68dp"
         android:background="@drawable/btn_select"
         android:fontFamily="@font/pretendard_regular"
-        android:text="저장하기"
-        android:layout_marginBottom="10dp"
+        android:text="복용 약에 추가하기"
+        android:layout_marginBottom="30dp"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"

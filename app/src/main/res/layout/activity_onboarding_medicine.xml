@@ -12,7 +12,7 @@
         android:id="@+id/imageView2"
         android:layout_width="215dp"
         android:layout_height="60dp"
-        android:layout_marginTop="63dp"
+        android:layout_marginTop="23dp"
         android:src="@drawable/icon_main_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,36 +22,36 @@
         android:id="@+id/imageView3"
         android:layout_width="352dp"
         android:layout_height="3dp"
-        android:layout_marginTop="131dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/back_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"/>
 
     <ImageView
         android:layout_width="352dp"
         android:layout_height="3dp"
         android:src="@drawable/back_bar_purple"
         android:layout_marginEnd="220dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="131dp"/>
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        android:layout_marginTop="8dp"/>
 
     <ImageView
         android:layout_width="352dp"
         android:layout_height="3dp"
         android:src="@drawable/back_bar_purple"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="131dp"/>
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        android:layout_marginTop="8dp"/>
 
     <TextView
         android:id="@+id/explain_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/pretendard_medium"
         android:text="당신의 복용약\n정보를 입력해주세요."
         android:gravity="center"
@@ -59,7 +59,7 @@
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"/>
 
     <TextView
         android:id="@+id/textView"
@@ -84,6 +84,9 @@
         android:layout_marginTop="50dp"
         android:hint="약 이름을 입력해주세요."
         android:paddingStart="30dp"
+        android:inputType="text"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/explain_tv" />
@@ -124,6 +127,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_with_camera_tv"
@@ -149,7 +153,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="건너뛰기"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>

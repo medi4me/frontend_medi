@@ -6,7 +6,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:background="@drawable/rounded_background"
+    android:padding="8dp"
+    android:layout_marginBottom="10dp">
 
     <ImageView
         android:id="@+id/medicine_image"
@@ -23,7 +25,8 @@
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:text="medicine.name"
-         android:textSize="14sp"
+         android:textSize="17sp"
+         android:textColor="@color/black"
          android:layout_marginStart="16dp"
          app:layout_constraintBottom_toBottomOf="@+id/medicine_image"
          app:layout_constraintStart_toEndOf="@+id/medicine_image"
@@ -34,7 +37,8 @@
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:text="medicine.dosage"
-         android:textSize="14sp"
+         android:textSize="17sp"
+         android:textColor="@color/black"
          android:layout_marginStart="16dp"
          app:layout_constraintBottom_toBottomOf="@+id/medicine_name"
          app:layout_constraintStart_toEndOf="@+id/medicine_name"
