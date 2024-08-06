@@ -47,8 +47,8 @@ class SearchResultActivity : AppCompatActivity() {
         // 복용 약에 추가하기 버튼을 눌렀을 시
         val bottomSheetFragment = BottomSheetFragment()
         binding.addToMedsButton.setOnClickListener {
-            bottomSheetFragment.show(supportFragmentManager, "BottomSheetDialog")
-            //startActivity(Intent(this, AddMedicineActivity::class.java))
+            //bottomSheetFragment.show(supportFragmentManager, "BottomSheetDialog")
+            startActivity(Intent(this, AddMedicineActivity::class.java))
         }
 
         // 정보 더 알아보기 버튼 눌렀을 시

@@ -1,13 +1,17 @@
 package com.example.mediforme.search
 
-import com.example.mediforme.R
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.R
+
 class MedicineAdapter(
+    private val context: Context,
     private val medicines: List<Medicine>,
     private val onMedicineClick: (Medicine) -> Unit // 클릭 리스너 추가
 ) : RecyclerView.Adapter<MedicineAdapter.MedicineViewHolder>() {
@@ -41,5 +45,6 @@ class MedicineAdapter(
         return medicines.size
     }
 }
+
 
 data class Medicine(val name: String, val dosage: String)

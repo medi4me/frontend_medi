@@ -40,6 +40,12 @@
             android:name=".JoinPhoneActivity"
             android:exported="false" />
         <activity
+            android:name=".search.AddMedicineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".search.AddMedicineResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".onboarding.OnboardingMedicineActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">

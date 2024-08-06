@@ -55,9 +55,6 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
         val dummyData = listOf(
             SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
             SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
-            SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정"),
-            SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
-            SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
             SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정")
         )
 
