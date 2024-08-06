@@ -55,6 +55,12 @@ class SearchmainActivity : AppCompatActivity() {
                 // 같은 탭이 다시 선택될 때 수행할 작업
             }
         })
+
+        if (tabLayout.tabCount > 0) {
+            tabLayout.getTabAt(0)?.select() // 첫 번째 탭 선택
+            loadFragment(SearchIDFragment()) // 기본적으로 아이디 찾기 프래그먼트 로드
+        }
+
     }
 
     private fun loadFragment(fragment: Fragment) {
