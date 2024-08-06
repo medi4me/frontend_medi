@@ -55,7 +55,7 @@
             android:name=".search.AddMedicineResultActivity"
             android:exported="false" />
         <activity
-            android:name=".Splash"
+            android:name=".SplashActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
@@ -82,6 +82,9 @@
         <activity
             android:name=".onboarding.OnboardingMedicineActivity"
             android:exported="true" />
+        <activity
+            android:name=".SplashChoiceActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
