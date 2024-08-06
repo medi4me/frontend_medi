@@ -2,6 +2,7 @@ package com.example.mediforme.search
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivitySearchresultBinding
@@ -14,6 +15,7 @@ class SearchResultActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchresultBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        enableEdgeToEdge()
 
         // 더미 데이터 생성
         val dummyData = listOf(
@@ -47,8 +49,8 @@ class SearchResultActivity : AppCompatActivity() {
         // 복용 약에 추가하기 버튼을 눌렀을 시
         val bottomSheetFragment = BottomSheetFragment()
         binding.addToMedsButton.setOnClickListener {
-            bottomSheetFragment.show(supportFragmentManager, "BottomSheetDialog")
-            //startActivity(Intent(this, AddMedicineActivity::class.java))
+            //bottomSheetFragment.show(supportFragmentManager, "BottomSheetDialog")
+            startActivity(Intent(this, AddMedicineActivity::class.java))
         }
 
         // 정보 더 알아보기 버튼 눌렀을 시
