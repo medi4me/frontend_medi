@@ -53,6 +53,16 @@ class SearchIDFragment : Fragment() {
         phoneNumET.addTextChangedListener(textWatcher)
         veriET.addTextChangedListener(textWatcher)
 
+        searchIdBtn.setOnClickListener {
+            if (searchIdBtn.isEnabled) {
+                // InfoIDFragment로 이동
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, InfoIDFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+
         return view
     }
 

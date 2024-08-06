@@ -54,6 +54,16 @@ class SearchpwdFragment : Fragment() {
         phoneNumET.addTextChangedListener(textWatcher)
         veriET.addTextChangedListener(textWatcher)
 
+        searchpwdBtn.setOnClickListener {
+            if (searchpwdBtn.isEnabled) {
+                // InfoPWDFragment로 이동
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, InfoPWDFragment())
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
+
         return view
     }
 
