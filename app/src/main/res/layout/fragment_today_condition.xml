@@ -64,7 +64,7 @@
             android:layout_marginTop="40dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:fontFamily="@font/pretendard_medium"
+            android:fontFamily="@font/pretendard_semibold"
             android:textStyle="bold"
             />
 
@@ -72,11 +72,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="님"
-            android:fontFamily="@font/pretendard_medium"
+            android:fontFamily="@font/pretendard_semibold"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="@+id/home_name_TV"
             app:layout_constraintStart_toEndOf="@+id/home_name_TV"
-            android:textStyle="bold"
             />
 
         <TextView
@@ -84,8 +83,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="오늘 하루 컨디션은 어떠신가요?"
-            android:fontFamily="@font/pretendard_medium"
-            android:textStyle="bold"
+            android:fontFamily="@font/pretendard_semibold"
             android:textSize="15sp"
             app:layout_constraintTop_toBottomOf="@+id/home_name_TV"
             app:layout_constraintStart_toStartOf="@+id/home_name_TV"
@@ -95,14 +93,14 @@
 
         <TextView
             android:id="@+id/home_date"
+            android:text="2024.00.00"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/pretendard_medium"
+            android:fontFamily="@font/pretendard_semibold"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@id/home_name_TV"
             app:layout_constraintTop_toBottomOf="@+id/home_text1_TV"
             android:layout_marginTop="30dp"
-            android:layout_marginStart="10dp"
             />
         <View
             android:id="@+id/my_view_V"
@@ -217,6 +215,7 @@
                             android:textStyle="bold"
                             android:fontFamily="@font/pretendard_medium"
                             android:text="좋아요"
+                            android:textColor="@color/text_selector"
                             android:layout_marginTop="8dp" />
                     </LinearLayout>
 
@@ -244,6 +243,7 @@
                             android:textStyle="bold"
                             android:fontFamily="@font/pretendard_medium"
                             android:text="그럭저럭"
+                            android:textColor="@color/text_selector"
                             android:layout_marginTop="8dp" />
                     </LinearLayout>
 
@@ -271,6 +271,7 @@
                             android:textStyle="bold"
                             android:fontFamily="@font/pretendard_medium"
                             android:text="나빠요"
+                            android:textColor="@color/text_selector"
                             android:layout_marginTop="8dp" />
                     </LinearLayout>
 
@@ -298,13 +299,12 @@
                         android:layout_height="wrap_content"
                         android:text="오늘 음주를 하였나요?"
                         android:textSize="18sp"
-                        android:fontFamily="@font/pretendard_medium"
+                        android:fontFamily="@font/pretendard_semibold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/statusOptions_LL"
                         android:layout_marginTop="35dp"
                         android:layout_marginStart="20dp"
                         android:textColor="@color/textStyle"
-                        android:textStyle="bold"
                         />
 
                     <LinearLayout
@@ -322,8 +322,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="아니요"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/pretendard_medium"
+                            android:fontFamily="@font/pretendard_semibold"
                             android:textColor="@drawable/text_color_selector"
                             android:background="@drawable/option_button_background"
                             android:layout_margin="8dp"
@@ -335,8 +334,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="마셨어요"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/pretendard_medium"
+                            android:fontFamily="@font/pretendard_semibold"
                             android:textColor="@drawable/text_color_selector"
                             android:background="@drawable/option_button_background"
                             android:layout_margin="8dp"
@@ -370,9 +368,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginEnd="16dp"
                         android:textColor="@color/textStyle"
-                        android:textStyle="bold"
-                        android:fontFamily="@font/pretendard_medium"
-
+                        android:fontFamily="@font/pretendard_semibold"
                         />
 
                     <LinearLayout
@@ -392,8 +388,7 @@
                             android:paddingLeft="20dp"
                             android:paddingRight="20dp"
                             android:text="아주 좋아요"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/pretendard_medium"
+                            android:fontFamily="@font/pretendard_semibold"
                             android:textColor="@drawable/text_color_selector"
                             android:background="@drawable/option_button_background"
                             android:layout_margin="8dp"/>
@@ -402,8 +397,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="그럭저럭"
-                            android:textStyle="bold"
-                            android:fontFamily="@font/pretendard_medium"
+                            android:fontFamily="@font/pretendard_semibold"
                             android:paddingLeft="20dp"
                             android:paddingRight="20dp"
                             android:textColor="@drawable/text_color_selector"
@@ -419,8 +413,7 @@
                             android:textColor="@drawable/text_color_selector"
                             android:background="@drawable/option_button_background"
                             android:layout_margin="8dp"
-                            android:fontFamily="@font/pretendard_medium"
-                            android:textStyle="bold"
+                            android:fontFamily="@font/pretendard_semibold"
                             />
                     </LinearLayout>
 
@@ -448,8 +441,7 @@
                         android:layout_marginTop="35dp"
                         android:layout_marginStart="20dp"
                         android:textColor="@color/textStyle"
-                        android:fontFamily="@font/pretendard_medium"
-                        android:textStyle="bold"
+                        android:fontFamily="@font/pretendard_semibold"
                         />
 
 
@@ -467,7 +459,7 @@
                     android:layout_marginTop="8dp"
                     android:padding="30dp"
                     android:hint="오늘의 상태를 입력하세요"
-                    android:fontFamily="@font/pretendard_medium"
+                    android:fontFamily="@font/pretendard_semibold"
                     />
 
                 <android.widget.Button
@@ -485,6 +477,7 @@
                     android:textSize="25dp"
                     android:textColor="@color/white"
                     android:background="@drawable/option_savebutton_background"
+                    android:fontFamily="@font/pretendard_semibold"
                     />
 
 
