@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TimePicker
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
@@ -23,6 +24,7 @@ class OnboardingDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        enableEdgeToEdge()
 
         val medicineName = intent.getStringExtra("medicine_name")
         if (medicineName != null) {

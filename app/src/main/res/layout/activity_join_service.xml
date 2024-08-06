@@ -38,12 +38,11 @@
 
     <TextView
         android:id="@+id/service_TV"
-        android:layout_width="154dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
         android:fontFamily="@font/pretendard_medium"
-        android:text="서비스 이용약관에
-동의해주세요."
+        android:text="서비스 이용약관에\n동의해주세요."
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/back_bar_IV"

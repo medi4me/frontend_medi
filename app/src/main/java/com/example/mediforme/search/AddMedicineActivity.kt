@@ -3,6 +3,7 @@ package com.example.mediforme.search
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mediforme.R
@@ -15,6 +16,7 @@ class AddMedicineActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = FragmentBottomSheetBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        enableEdgeToEdge()
 
         val dummyData = listOf(
             Medicine("부타정", "0.7mg"),

@@ -2,6 +2,7 @@ package com.example.mediforme.search
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivitySearchresultBinding
@@ -14,6 +15,7 @@ class SearchResultActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchresultBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        enableEdgeToEdge()
 
         // 더미 데이터 생성
         val dummyData = listOf(

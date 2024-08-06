@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.EditText
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,7 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingMedicineBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        enableEdgeToEdge()
 
         binding.veriBtn.isEnabled = false
 
@@ -53,6 +55,9 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
         // 더미 데이터 생성
         // RecyclerView에 더미 데이터 설정하기
         val dummyData = listOf(
+            SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
+            SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
+            SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정"),
             SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
             SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
             SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정")
