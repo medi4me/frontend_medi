@@ -33,11 +33,11 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         )
 
         // 어댑터 설정
-        val adapter = MedicineAdapter(dummyData) { medicine ->
-            showAddMedicineFragment(medicine) // 클릭 시 호출될 콜백
-        }
+        //val adapter = MedicineAdapter(dummyData) { medicine ->
+          //  showAddMedicineFragment(medicine) // 클릭 시 호출될 콜백
+        //}
         binding.medicineRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.medicineRecyclerView.adapter = adapter
+        //binding.medicineRecyclerView.adapter = adapter
 
         binding.addMedicineButton.setOnClickListener {
             Toast.makeText(requireActivity(), "버튼 클릭", Toast.LENGTH_SHORT).show()
