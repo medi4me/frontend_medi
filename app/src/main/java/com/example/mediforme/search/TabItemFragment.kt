@@ -28,7 +28,7 @@ class TabItemFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            medicineInfo = it.getParcelable(ARG_MEDICINE_INFO)!!
+            medicineInfo = it.getParcelable(ARG_MEDICINE_INFO) ?: throw IllegalArgumentException("MedicineInfo must not be null")
         }
     }
 
