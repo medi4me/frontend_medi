@@ -5,11 +5,30 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back_btn"
+        android:layout_marginTop="40dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+        android:id="@+id/home_logo_IV"
+        android:layout_width="215dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_mediformelogo"
+        app:layout_constraintBottom_toBottomOf="@+id/back_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/back_button" />
+
     <LinearLayout
         android:id="@+id/medicine_info_layout"
         android:layout_width="350dp"
         android:layout_height="50dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="120dp"
         android:background="@drawable/rounded_checked_background"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"

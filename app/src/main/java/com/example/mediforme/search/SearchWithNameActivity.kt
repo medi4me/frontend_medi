@@ -68,6 +68,11 @@ class SearchWithNameActivity : AppCompatActivity() {
         binding.skippingTv.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
+
+        binding.backButton.setOnClickListener {
+            // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
+            onBackPressed()
+        }
     }
 
     private fun showSearchResultsBottomSheet() {
