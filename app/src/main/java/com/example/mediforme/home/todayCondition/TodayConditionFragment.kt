@@ -24,11 +24,9 @@ class TodayConditionFragment : Fragment() {
     private var selectedDateItem: WeekDayItem? = null
     private var todayIndex: Int = 0
 
-
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +34,6 @@ class TodayConditionFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentTodayConditionBinding.inflate(inflater,container,false)
-
         binding.howTodayBackBtnIV.setOnClickListener {
             // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
             parentFragmentManager.popBackStack()
@@ -59,6 +56,7 @@ class TodayConditionFragment : Fragment() {
 
         return binding.root
     }
+
     private fun selectTodayDate() {
         // 오늘 날짜 아이템을 선택 상태로 설정
         val todayItem = items[todayIndex]
@@ -104,5 +102,4 @@ class TodayConditionFragment : Fragment() {
         // 선택된 날짜에 해당하는 요일과 날짜로 업데이트
         binding.homeDate.text = getString(R.string.date_format, currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH) + 1, dateItem.date)
     }
-
 }

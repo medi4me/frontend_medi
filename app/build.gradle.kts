@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     id ("androidx.navigation.safeargs.kotlin")
+    id ("kotlin-parcelize")
 }
 
 
@@ -47,7 +48,9 @@ android {
     buildFeatures{
         viewBinding = true
         compose = true
+        dataBinding = true
     }
+
 
 
     composeOptions {
@@ -84,6 +87,8 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation ("androidx.viewpager2:viewpager2:1.0.0")
+
 
     //circleindicator
     implementation("me.relex:circleindicator:2.1.6")
@@ -94,5 +99,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
     implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
+
+    //viewpager2를 위한 의존성 추가
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
 
 }

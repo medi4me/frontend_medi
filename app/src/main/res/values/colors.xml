@@ -5,7 +5,7 @@
     <color name="red">#FF0000</color>
     <color name="gray">#888694</color>
 
-    <color name="back">#CBCDFF</color>
+    <color name="back">#EBECFF</color>
     <color name="inactive_btn">#515059</color>
     <color name="active_btn">#1A0A7D</color>
 
@@ -31,12 +31,17 @@
     <color name="select_color">#3f3fff</color>
     <color name="gray_color">#424242</color>
 
+<!--    아이템 약이름텍스트-->
+    <color name="itemText">#515059</color>
+    <color name="viewUnSelect">#532CEC</color>
+    <color name="viewSelect">#1A0A7D</color>
+
 
 <!--today condition 프래그먼트-->
     <color name="stroke">#CDCBD3</color>
     <color name="btncolor">#1A1059</color>
     <color name="calenderDate">#1A0A7D</color>
-
+    <color name="textStyle">#515059</color>
 
 
 <!--    mypage 프래그먼트-->
@@ -45,14 +50,11 @@
     <color name="deleteBtnColor">#1A0A7D</color>
 
 
-
-
-
-
-
     <!--끄적이기, 채팅시작 클릭 버튼 색상-->
     <color name="boxButton">#ECECEC</color>
     <color name="boxText">#949494</color>
+
+
 
 
 </resources>

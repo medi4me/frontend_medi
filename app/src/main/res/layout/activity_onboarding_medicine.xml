@@ -6,13 +6,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".join_phone">
+    android:background="@color/white">
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="215dp"
         android:layout_height="60dp"
-        android:layout_marginTop="63dp"
+        android:layout_marginTop="23dp"
         android:src="@drawable/icon_main_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,36 +22,36 @@
         android:id="@+id/imageView3"
         android:layout_width="352dp"
         android:layout_height="3dp"
-        android:layout_marginTop="131dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/back_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"/>
 
     <ImageView
         android:layout_width="352dp"
         android:layout_height="3dp"
         android:src="@drawable/back_bar_purple"
         android:layout_marginEnd="220dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="131dp"/>
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        android:layout_marginTop="8dp"/>
 
     <ImageView
         android:layout_width="352dp"
         android:layout_height="3dp"
         android:src="@drawable/back_bar_purple"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="131dp"/>
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        android:layout_marginTop="8dp"/>
 
     <TextView
         android:id="@+id/explain_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="30dp"
         android:fontFamily="@font/pretendard_medium"
         android:text="당신의 복용약\n정보를 입력해주세요."
         android:gravity="center"
@@ -59,16 +59,17 @@
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"/>
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/pretendard_medium"
         android:text="복용 중인 약"
         android:textColor="@color/black"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="10dp"
         android:textSize="17sp"
         app:layout_constraintBottom_toTopOf="@+id/medicine_name_EV"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,13 +80,26 @@
         android:layout_width="352dp"
         android:layout_height="68dp"
         android:background="@drawable/background_input"
-        android:fontFamily="@font/pretendard_regular"
+        android:fontFamily="@font/pretendard_semibold"
         android:layout_marginTop="50dp"
         android:hint="약 이름을 입력해주세요."
         android:paddingStart="30dp"
+        android:inputType="text"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/explain_tv" />
+
+    <ImageView
+        android:id="@+id/search_medicine_iv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_search_medicine"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/medicine_name_EV"
+        app:layout_constraintEnd_toEndOf="@+id/medicine_name_EV"
+        app:layout_constraintTop_toTopOf="@+id/medicine_name_EV" />
 
     <ImageView
         android:layout_width="20dp"
@@ -100,19 +114,33 @@
         android:id="@+id/search_with_camera_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
         android:text="카메라로 검색하기"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/medicine_name_EV" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_add_results_recyclerview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_with_camera_tv"
+        app:layout_constraintBottom_toTopOf="@+id/veri_btn"
+        tools:listitem="@layout/item_search_add_result"/>
 
     <Button
         android:id="@+id/veri_btn"
         android:layout_width="352dp"
         android:layout_height="68dp"
         android:background="@drawable/btn_select"
-        android:fontFamily="@font/pretendard_regular"
+        android:fontFamily="@font/pretendard_medium"
         android:text="다음"
         android:layout_marginBottom="10dp"
         android:textColor="@color/white"
@@ -125,10 +153,11 @@
         android:id="@+id/skipping_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
         android:text="건너뛰기"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

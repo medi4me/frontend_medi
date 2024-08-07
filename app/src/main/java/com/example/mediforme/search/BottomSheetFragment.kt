@@ -1,14 +1,20 @@
 package com.example.mediforme.search
 
 import android.os.Bundle
+import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.android.parcel.Parcelize
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -28,11 +34,11 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
         )
 
         // 어댑터 설정
-        val adapter = MedicineAdapter(dummyData) { medicine ->
-            showAddMedicineFragment(medicine) // 클릭 시 호출될 콜백
-        }
+        //val adapter = MedicineAdapter(dummyData) { medicine ->
+          //  showAddMedicineFragment(medicine) // 클릭 시 호출될 콜백
+        //}
         binding.medicineRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.medicineRecyclerView.adapter = adapter
+        //binding.medicineRecyclerView.adapter = adapter
 
         binding.addMedicineButton.setOnClickListener {
             Toast.makeText(requireActivity(), "버튼 클릭", Toast.LENGTH_SHORT).show()
@@ -68,14 +74,70 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     }
 }
 
+// BottomSheetFragment2.kt
 class BottomSheetFragment2 : BottomSheetDialogFragment() {
+
+    private lateinit var tabLayout: TabLayout
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var tabAdapter: TabAdapter
+
+    // 약 정보를 담은 리스트
+    private val medicineInfoList = listOf(
+        MedicineInfo("부타정", "아세트아미노펜과립", "0.7mg"),
+        MedicineInfo("피프티정", "이부프로펜", "0.5mg"),
+        MedicineInfo("타이레놀", "아세트아미노펜", "0.3mg")
+    )
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_bottom_sheet2, container, false)
+        val view = inflater.inflate(R.layout.fragment_bottom_sheet2, container, false)
+
+        tabLayout = view.findViewById(R.id.tab_layout)
+        recyclerView = view.findViewById(R.id.recycler_view)
+
+        // RecyclerView 초기화 및 설정
+        tabAdapter = TabAdapter(medicineInfoList)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = tabAdapter
+
+        // TabLayout과 RecyclerView를 연결합니다.
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.let {
+                    val position = it.position
+                    recyclerView.scrollToPosition(position)
+                }
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // Do nothing
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // Do nothing
+            }
+        })
+
+        // TabLayout의 탭을 설정합니다.
+        for (i in medicineInfoList.indices) {
+            tabLayout.addTab(tabLayout.newTab().setText(medicineInfoList[i].title))
+        }
+
+        return view
     }
+
+    @Parcelize
+    data class MedicineInfo(
+        val title: String,
+        val ingredient: String,
+        val amount: String
+    ) : Parcelable
 }
+
+
+
 
 // BottomSheetFragment3.kt
 class BottomSheetFragment3 : BottomSheetDialogFragment() {
@@ -86,3 +148,5 @@ class BottomSheetFragment3 : BottomSheetDialogFragment() {
         return inflater.inflate(R.layout.fragment_bottom_sheet3, container, false)
     }
 }
+
+
