@@ -18,7 +18,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            >
 
             <!-- Header and Warning Boxes -->
             <ImageView
@@ -55,6 +55,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
                 android:background="@drawable/rounded_red_background"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -78,10 +80,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="10dp"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="부타정"
                     android:textColor="@android:color/black"
                     android:textSize="17sp"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/warning_icon_1"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -89,10 +91,10 @@
                     android:id="@+id/warning_black_1_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="0.7mg"
                     android:textColor="@android:color/black"
                     android:textSize="17sp"
-                    android:textStyle="bold"
                     android:layout_marginStart="10dp"
                     app:layout_constraintStart_toEndOf="@+id/warning_name_tv"
                     app:layout_constraintTop_toTopOf="@id/warning_name_tv" />
@@ -101,10 +103,10 @@
                     android:id="@+id/warning_black_1.1_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="는"
                     android:textColor="@android:color/black"
                     android:textSize="17sp"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@+id/warning_black_1_tv"
                     app:layout_constraintTop_toTopOf="@id/warning_black_1_tv" />
 
@@ -113,10 +115,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/pretendard_bold"
                     android:text="음주 후 복용하면 안됩니다!"
                     android:textColor="@android:color/holo_red_dark"
                     android:textSize="17sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@id/warning_box_1"
                     app:layout_constraintStart_toStartOf="@+id/warning_name_tv"
                     app:layout_constraintTop_toBottomOf="@+id/warning_black_1_tv" />
@@ -128,7 +130,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
                 android:orientation="vertical"
                 android:overScrollMode="never"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -143,7 +146,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/search_button_CL"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="0dp"
+        android:paddingTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -153,34 +157,40 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
+            android:fontFamily="@font/pretendard_regular"
             android:text="정보 더 알아보기"
+            android:textSize="17sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/add_to_meds_button" />
 
         <Button
             android:id="@+id/add_to_meds_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="352dp"
+            android:layout_height="68dp"
             android:background="@drawable/btn_select"
             android:layout_marginBottom="16dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
+            android:fontFamily="@font/pretendard_semibold"
             android:text="복용 약에 추가하기"
             android:textColor="@color/white"
+            android:textSize="22sp"
             app:layout_constraintBottom_toTopOf="@+id/check_combination_button"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
         <Button
             android:id="@+id/check_combination_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="352dp"
+            android:layout_height="68dp"
             android:layout_marginStart="32dp"
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="50dp"
             android:background="@drawable/option_background_noncolor"
+            android:fontFamily="@font/pretendard_medium"
             android:text="약물 조합 확인하기"
+            android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />

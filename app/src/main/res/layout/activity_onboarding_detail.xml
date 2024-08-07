@@ -149,6 +149,9 @@
         android:layout_marginTop="5dp"
         android:hint="예) 1정 또는 1포"
         android:paddingStart="30dp"
+        android:inputType="text"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dosage_tv" />
@@ -173,7 +176,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="건너뛰기"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />

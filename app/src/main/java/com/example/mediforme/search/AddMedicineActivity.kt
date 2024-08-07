@@ -35,6 +35,11 @@ class AddMedicineActivity : AppCompatActivity() {
         binding.addMedicineButton.setOnClickListener {
             Toast.makeText(this, "버튼 클릭", Toast.LENGTH_SHORT).show()
         }
+
+        binding.backButton.setOnClickListener {
+            // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
+            onBackPressed()
+        }
     }
 
     private fun showAddMedicineActivity(medicine: Medicine) {

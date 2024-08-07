@@ -35,6 +35,11 @@ class AddMedicineResultActivity : AppCompatActivity() {
             showTimePickerDialog()
         }
 
+        binding.backButton.setOnClickListener {
+            // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
+            onBackPressed()
+        }
+
         binding.dosageOnetimeEV.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 

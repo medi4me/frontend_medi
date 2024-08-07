@@ -25,5 +25,8 @@ class SplashChoiceActivity : AppCompatActivity() {
             startActivity(Intent(this, JoinServiceActivity::class.java))
         }
 
+        binding.logoTxtIV.setOnClickListener{
+            startActivity(Intent(this, MainActivity::class.java))
+        }
     }
 }
