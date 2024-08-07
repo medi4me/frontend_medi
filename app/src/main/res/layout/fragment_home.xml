@@ -103,14 +103,14 @@
                 android:id="@+id/notforget_TV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="잊지말고 챙겨드세요."
-                android:textSize="15dp"
+                android:layout_marginStart="20dp"
                 android:fontFamily="@font/pretendard_medium"
+                android:text="잊지말고 챙겨드세요."
                 android:textColor="@color/black"
-                android:layout_marginTop="10dp"
+                android:textSize="15dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="20dp"
+                android:layout_marginBottom="10dp"
                 />
 
             <ImageView
