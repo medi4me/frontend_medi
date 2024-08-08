@@ -9,6 +9,17 @@
         android:background="@color/btncolor"
         tools:context=".ui.stepper.CameraActivity">
 
+        <Button
+            android:layout_width="70dp"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="30dp"
+            android:text="다음"
+            />
+
+
         <androidx.camera.view.PreviewView
             android:id="@+id/viewFinder"
             android:layout_width="0dp"
@@ -74,11 +85,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/activity_camera_capture_iv" />
 
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
