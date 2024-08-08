@@ -3,6 +3,7 @@ package com.example.mediforme.search
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -84,6 +85,17 @@ class CameraActivity : AppCompatActivity() {
         binding.activityCameraCaptureIv.setOnClickListener {
             takePhoto(this)
         }
+        binding.activityCameraCancelIv.setOnClickListener {
+            //finish()했더니 앱이 종료됨
+            finish() // Activity 종료
+        }
+        binding.nextCameraBtn.setOnClickListener {
+            // SearchResultActivity로 전환
+            val intent = Intent(this, SearchResultActivity::class.java)
+            startActivity(intent)
+
+        }
+
     }
 
 

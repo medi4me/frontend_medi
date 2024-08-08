@@ -65,7 +65,7 @@
             android:name=".Splash"
             android:exported="false" />
         <activity
-            android:name=".search.CameraActivity"
+            android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
@@ -81,7 +81,7 @@
             android:name=".onboarding.OnboardingAgeActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".search.CameraActivity"
             android:exported="false" />
         <activity
             android:name=".onboarding.OnboardingDetailActivity"

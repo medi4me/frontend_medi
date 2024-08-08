@@ -22,7 +22,8 @@ class SearchFragment : Fragment() {
 
         binding.searchWithCamera.setOnClickListener {
             // Use requireContext() to get the context
-            startActivity(Intent(requireContext(), SearchResultActivity::class.java))
+            //startActivity(Intent(requireContext(), SearchResultActivity::class.java))
+            startActivity(Intent(requireContext(), CameraActivity::class.java))
         }
 
         binding.searchWithName.setOnClickListener {

@@ -10,6 +10,7 @@
         tools:context=".ui.stepper.CameraActivity">
 
         <Button
+            android:id="@+id/next_camera_Btn"
             android:layout_width="70dp"
             android:layout_height="50dp"
             app:layout_constraintStart_toStartOf="parent"
