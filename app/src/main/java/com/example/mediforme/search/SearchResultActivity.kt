@@ -1,21 +1,46 @@
 package com.example.mediforme.search
 
+import android.net.Uri
+import android.provider.MediaStore
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import android.content.pm.PackageManager
+import android.content.ContentResolver
+import android.Manifest
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivitySearchresultBinding
-import com.example.mediforme.onboarding.OnboardingMedicineActivity
 
 class SearchResultActivity : AppCompatActivity() {
     lateinit var binding: ActivitySearchresultBinding
+
+    // Define request codes
+    private val REQUEST_PERMISSIONS = 1
+    private val REQUEST_IMAGE_CAPTURE = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchresultBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
+
+        // Check for permissions and set up listeners
+        checkPermissions()
+
+        //이미지 뷰에 클릭 리스너 달고, 사진찍게 함
+        binding.medicineIv.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                dispatchTakePictureIntent()
+            } else {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), REQUEST_PERMISSIONS)
+            }
+        }
 
         // 더미 데이터 생성
         val dummyData = listOf(
@@ -68,6 +93,43 @@ class SearchResultActivity : AppCompatActivity() {
         binding.backButton.setOnClickListener {
             // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
             onBackPressed()
+        }
+    }
+    private fun checkPermissions() {
+        val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+        if (permissions.any { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }) {
+            ActivityCompat.requestPermissions(this, permissions, REQUEST_PERMISSIONS)
+        }
+    }
+
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (takePictureIntent.resolveActivity(packageManager) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_PERMISSIONS) {
+            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+                dispatchTakePictureIntent()
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
+            val imageUri: Uri? = data.data
+            if (imageUri == null) {
+                // If there's no data (might happen on some devices), try getting the image from the intent
+                val extras = data.extras
+                val imageBitmap = extras?.get("data") as? Bitmap
+                binding.medicineIv.setImageBitmap(imageBitmap)
+            } else {
+                binding.medicineIv.setImageURI(imageUri)
+            }
         }
     }
 }
