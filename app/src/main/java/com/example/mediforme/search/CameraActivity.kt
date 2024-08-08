@@ -87,7 +87,10 @@ class CameraActivity : AppCompatActivity() {
         }
         binding.activityCameraCancelIv.setOnClickListener {
             //finish()했더니 앱이 종료됨
-            finish() // Activity 종료
+            //finish() // Activity 종료
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("START_FRAGMENT", "SEARCH")
+            startActivity(intent)
         }
         binding.nextCameraBtn.setOnClickListener {
             // SearchResultActivity로 전환
