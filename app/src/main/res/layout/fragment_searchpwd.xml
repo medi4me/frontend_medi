@@ -6,7 +6,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login.SearchIDFragment">
+    tools:context=".login.SearchpwdFragment">
+    android:background="@color/white"
 
     <EditText
         android:id="@+id/phone_num_ET"
@@ -36,9 +37,11 @@
         android:id="@+id/veri_send_btn"
         android:layout_width="120dp"
         android:layout_height="40dp"
-        android:background="@drawable/background_search_button"
+        android:background="@drawable/search_btn_selector"
         android:text="인증번호 전송"
         android:textSize="17sp"
+        android:textColor="@drawable/search_text_select"
+        android:fontFamily="@font/pretendard_medium"
         app:layout_constraintStart_toEndOf="@+id/phone_num_ET"
         app:layout_constraintTop_toTopOf="@+id/phone_num_ET" />
 
@@ -46,14 +49,16 @@
         android:id="@+id/enter_Btn"
         android:layout_width="120dp"
         android:layout_height="40dp"
-        android:background="@drawable/background_search_button"
+        android:background="@drawable/search_btn_selector"
         android:text="확인"
         android:textSize="17sp"
+        android:textColor="@drawable/search_text_select"
+        android:fontFamily="@font/pretendard_medium"
         app:layout_constraintStart_toEndOf="@+id/veri_ET"
         app:layout_constraintTop_toTopOf="@+id/veri_ET" />
 
     <Button
-        android:id="@+id/saerch_id_Btn"
+        android:id="@+id/search_pwd_Btn"
         android:layout_width="352dp"
         android:layout_height="68dp"
         android:background="@drawable/btn_select"
