@@ -8,15 +8,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mediforme.R
 
-class SearchResultAdapter(private val results: List<searchResults>, private val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
+class SearchResultAdapter(private var results: List<SearchResult>, private val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val medicineNumber: TextView = itemView.findViewById(R.id.medicine_number_tv)
         val medicineName: TextView = itemView.findViewById(R.id.medicine_results)
-        val medicineImage: ImageView = itemView.findViewById(R.id.imageView5) // assuming imageView5 is the ID for the image
+        val medicineImage: ImageView = itemView.findViewById(R.id.imageView5)
 
-        fun bind(result: searchResults, position: Int) {
-            medicineNumber.text = (position + 1).toString() // 1부터 시작하도록 설정
+        fun bind(result: SearchResult, position: Int) {
+            medicineNumber.text = (position + 1).toString()
             medicineName.text = result.name
             medicineImage.setImageResource(result.imageResId)
             itemView.setOnClickListener {
@@ -39,9 +39,14 @@ class SearchResultAdapter(private val results: List<searchResults>, private val 
     }
 
     override fun getItemCount() = results.size
+
+    fun updateList(newList: List<SearchResult>) {
+        results = newList
+        notifyDataSetChanged()
+    }
 }
 
-data class searchResults(
+data class SearchResult(
     val imageResId: Int, // 이미지 리소스 ID
     val name: String
 )

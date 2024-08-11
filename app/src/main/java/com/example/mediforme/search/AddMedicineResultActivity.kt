@@ -1,11 +1,15 @@
 package com.example.mediforme.search
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Button
 import android.widget.TimePicker
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentAddMedicineBinding
 
@@ -29,6 +33,26 @@ class AddMedicineResultActivity : AppCompatActivity() {
         // 복용 시간 버튼 클릭 리스너 설정
         binding.doseTimeSpinner.setOnClickListener {
             showTimePickerDialog()
+        }
+
+        binding.backButton.setOnClickListener {
+            // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
+            onBackPressed()
+        }
+
+        binding.dosageOnetimeEV.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val message = binding.dosageOnetimeEV.text.toString()
+                binding.veriBtn.isEnabled = message.isNotEmpty()
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        binding.veriBtn.setOnClickListener {
+            startActivity(Intent(this, AddMedicineActivity::class.java))
         }
 
     }

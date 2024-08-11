@@ -9,15 +9,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_semibold"
         android:text="성분명"
-        android:textStyle="bold"
         android:textSize="20sp"
+        android:textColor="@color/black"
         android:layout_marginBottom="5dp" />
 
     <TextView
         android:id="@+id/ingredients_contents_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
         android:text="아세트아미노펜과립"
         android:textSize="17sp"
         android:layout_marginBottom="15dp" />
@@ -31,15 +33,18 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_semibold"
         android:text="함량"
         android:textStyle="bold"
         android:textSize="20sp"
+        android:textColor="@color/black"
         android:layout_marginBottom="5dp" />
 
     <TextView
         android:id="@+id/amount_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
         android:text="177mg"
         android:textSize="17sp" />
 </LinearLayout>

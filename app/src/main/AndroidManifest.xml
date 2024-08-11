@@ -65,7 +65,7 @@
             android:name=".search.AddMedicineResultActivity"
             android:exported="false" />
         <activity
-            android:name=".Splash"
+            android:name=".SplashActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -95,6 +95,9 @@
         <activity
             android:name=".onboarding.OnboardingMedicineActivity"
             android:exported="true" />
+        <activity
+            android:name=".SplashChoiceActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
