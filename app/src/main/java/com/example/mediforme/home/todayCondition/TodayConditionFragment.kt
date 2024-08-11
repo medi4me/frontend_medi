@@ -2,13 +2,16 @@ package com.example.mediforme.home.todayCondition
 
 import android.app.Activity.RESULT_OK
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -75,7 +78,8 @@ class TodayConditionFragment : Fragment() {
         val BtnConditionGood = binding.condtionGoodBtn
         val BtnConditionSoso = binding.condtionSosoBtn
         val BtnConditionBad= binding.condtionBadBtn
-
+        val editTextStatus = binding.editTextStatus
+        val textViewStatus = binding.textViewStatus
 
 
 
@@ -94,12 +98,61 @@ class TodayConditionFragment : Fragment() {
 
         // 저장 버튼 클릭 이벤트 설정
         binding.saveBtn.setOnClickListener {
+            updateTextViewStatus()
             onSaveButtonClick()
+        }
+
+        // EditText가 포커스를 잃었을 때 TextView로 전환
+        editTextStatus.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                updateTextViewStatus()
+            }
+        }
+        // TextView 클릭 시 EditText로 전환
+        textViewStatus.setOnClickListener {
+            textViewStatus.visibility = View.INVISIBLE
+            editTextStatus.visibility = View.VISIBLE
+            editTextStatus.requestFocus()
+            showKeyboard(editTextStatus)
+        }
+
+        // EditText에서 엔터를 눌렀을 때 키보드 내리기 및 TextView로 전환
+        editTextStatus.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE ||
+                event.action == android.view.KeyEvent.ACTION_DOWN) {
+                updateTextViewStatus()
+                true
+            } else {
+                false
+            }
         }
 
 
         return binding.root
     }
+
+
+    // TextView에 EditText의 내용을 설정하고 전환
+    private fun updateTextViewStatus() {
+        binding.textViewStatus.visibility = View.VISIBLE
+        binding.editTextStatus.visibility = View.INVISIBLE
+        binding.textViewStatus.text = binding.editTextStatus.text.toString()
+        hideKeyboard()
+    }
+
+    // 키보드 숨기기
+    private fun hideKeyboard() {
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
+
+    // 키보드 보이기
+    private fun showKeyboard(editText: EditText) {
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+
 
     private fun selectOptionFeel(selected: LinearLayout, vararg others: LinearLayout) {
         // 선택된 옵션의 배경 및 텍스트 색상 변경
@@ -171,6 +224,11 @@ class TodayConditionFragment : Fragment() {
         } ?: run {
             Log.d("TodayConditionFragment", "No Condition Selected")
         }
+
+        // TextView에 있는 상태 메시지 전송
+        val statusText = binding.textViewStatus.text.toString()
+        Log.d("TodayConditionFragment", "Status Text: $statusText")
+        // TODO: 상태 메시지 데이터를 서버로 전송하거나 저장하는 코드 추가
 
     }
 
