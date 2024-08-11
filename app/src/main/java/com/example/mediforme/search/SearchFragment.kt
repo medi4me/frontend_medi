@@ -21,7 +21,11 @@ class SearchFragment : Fragment() {
         binding = FragmentSearchWithBackgroundBinding.inflate(inflater, container, false)
 
         binding.searchWithCamera.setOnClickListener {
-            startActivity(Intent(requireContext(), SearchResultActivity::class.java))
+
+            // Use requireContext() to get the context
+            //startActivity(Intent(requireContext(), SearchResultActivity::class.java))
+            startActivity(Intent(requireContext(), CameraActivity::class.java))
+
         }
 
         binding.searchWithName.setOnClickListener {

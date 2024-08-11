@@ -11,6 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
+import com.example.mediforme.search.CameraActivity
+import com.example.mediforme.search.MedicineList
+import com.example.mediforme.search.MedicineListAdapter
+import com.example.mediforme.search.SearchResultActivity
+
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickListener {
@@ -31,6 +36,10 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
 
         binding.skippingTv.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
+        }
+        binding.searchWithCameraTv.setOnClickListener {
+            val intent = Intent(this, CameraActivity::class.java)
+            startActivity(intent)
         }
 
         // 더미 데이터 생성

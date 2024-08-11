@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- 외부 저장소 읽기 권한 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 카메라 권한 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 외부 저장소 쓰기 권한 (필요할 경우) -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 읽기권한 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
 
     <application
         android:allowBackup="true"
@@ -56,6 +66,9 @@
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
@@ -71,7 +84,7 @@
             android:name=".onboarding.OnboardingAgeActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".search.CameraActivity"
             android:exported="false" />
         <activity
             android:name=".onboarding.OnboardingDetailActivity"
