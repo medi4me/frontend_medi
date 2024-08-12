@@ -48,6 +48,7 @@
     <color name="drugNum">#515059</color>
     <color name="drugRVback">#F7F7FB</color>
     <color name="deleteBtnColor">#1A0A7D</color>
+    <color name="itemColor">#F7F7FB</color>
 
 
     <!--끄적이기, 채팅시작 클릭 버튼 색상-->
