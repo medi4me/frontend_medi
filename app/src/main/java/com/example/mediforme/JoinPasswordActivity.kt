@@ -32,6 +32,8 @@ class JoinPasswordActivity : AppCompatActivity() {
         criteriaSpecial = findViewById(R.id.criteria_special)
         nextBtn = findViewById(R.id.next_btn)
 
+        nextBtn.isEnabled = false // 초기 상태에서 버튼 비활성화
+
         passwordET.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -88,6 +90,11 @@ class JoinPasswordActivity : AppCompatActivity() {
         } else {
             criteriaSpecial.background = ContextCompat.getDrawable(this, R.drawable.background_pwwrong)
             criteriaSpecial.setTextColor(resources.getColor(R.color.light_gray))
+            isValid = false
+        }
+
+        // Check if the password is empty
+        if (password.isEmpty()) {
             isValid = false
         }
 
