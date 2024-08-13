@@ -45,7 +45,7 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
         // 더미 데이터 생성
         // RecyclerView에 더미 데이터 설정하기
         val dummyDatas = listOf(
-            SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
+            SearchAddResult("타이레놀정 슈퍼우먼 플러스 울트라 500mg", "14 : 20 / 식후 / 2정"),
             SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
             SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정"),
             SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
@@ -59,7 +59,7 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
 
         // 더미 데이터
         val dummyData = listOf(
-            SearchResult(R.drawable.ic_tylenol, "타이레놀정 500mg"),
+            SearchResult(R.drawable.ic_tylenol, "타이레놀정 슈퍼우먼 플러스 울트라 500mg"),
             SearchResult(R.drawable.ic_tylenol, "우먼스타이레놀정"),
             SearchResult(R.drawable.ic_tylenol, "어린이 타이레놀"),
             SearchResult(R.drawable.ic_tylenol, "아스피린정 100mg"),
