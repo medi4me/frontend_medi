@@ -32,6 +32,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="복약내용"
+        android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@+id/my_name_TV"
         app:layout_constraintStart_toStartOf="@+id/my_name_TV"
         android:layout_marginTop="30dp"
@@ -125,6 +126,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         android:layout_marginTop="20dp"
         android:layout_marginBottom="10dp"
         android:textColor="@color/drugNum"
+        android:fontFamily="@font/pretendard_semibold"
 
         />
     <TextView
@@ -132,6 +134,7 @@ xmlns:app="http://schemas.android.com/apk/res-auto">
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="회원탈퇴"
+        android:fontFamily="@font/pretendard_semibold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginBottom="30dp"
