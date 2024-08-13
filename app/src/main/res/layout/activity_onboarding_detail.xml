@@ -86,7 +86,7 @@
     <Button
         android:id="@+id/doseTime_spinner"
         android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_height="68dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/option_background"
         android:paddingStart="10dp"
@@ -109,7 +109,7 @@
     <Spinner
         android:id="@+id/mealTime_spinner"
         android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_height="68dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/option_background"
         android:entries="@array/mealTime"
@@ -143,7 +143,7 @@
     <EditText
         android:id="@+id/dosage_onetime_EV"
         android:layout_width="350dp"
-        android:layout_height="60dp"
+        android:layout_height="68dp"
         android:background="@drawable/option_background"
         android:fontFamily="@font/pretendard_regular"
         android:layout_marginTop="5dp"

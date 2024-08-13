@@ -35,11 +35,13 @@ class RoutineDrugRVAdaptor(private val drugRoutineList: ArrayList<RoutineDrug>) 
             drugName.text = routineDrug.drugName
             drugNum.text = routineDrug.drugNum
 
+            // 리스너를 설정하기 전에 이전 리스너를 제거
+            drugCheckBtn.setOnCheckedChangeListener(null)
+
             // CheckBox의 상태 설정
             drugCheckBtn.isChecked = routineDrug.drugCheckBtn
 
-            // 리스너를 설정하기 전에 이전 리스너를 제거
-            drugCheckBtn.setOnCheckedChangeListener(null)
+
 
             // CheckBox 상태에 따른 선택바 보이기/숨기기
             if (routineDrug.drugCheckBtn) {
