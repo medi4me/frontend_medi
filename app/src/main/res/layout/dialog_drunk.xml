@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialog_log_delete"
+    android:background="@drawable/dialog_background"
+    android:layout_width="250dp"
+    android:layout_height="200dp"
+    >
+
+    <ImageView
+        android:id="@+id/dialog_drunk_xBtn_IV"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/icon_x"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="13dp"/>
+
+
+    <TextView
+        android:id="@+id/dialog_drunk_text1_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="섭취하신 약은"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/dialog_drunk_text2_TV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/dialog_drunk_text2_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_bold"
+        android:text="음주 후 섭취하시면 안됩니다!"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_drunk_text1_TV"
+        app:layout_constraintBottom_toTopOf="@+id/dialog_drunk_ok_BTN"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+       />
+
+    <android.widget.Button
+        android:id="@+id/dialog_drunk_ok_BTN"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="로그인"
+        android:textColor="@drawable/text_color_selector2"
+        android:background="@drawable/option_button_background2"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
