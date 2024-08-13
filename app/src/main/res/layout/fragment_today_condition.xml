@@ -320,6 +320,7 @@
                         android:gravity="center">
 
                         <android.widget.Button
+                            android:id="@+id/btnNo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="아니요"
@@ -332,6 +333,7 @@
                             />
 
                         <android.widget.Button
+                            android:id="@+id/btnYes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="마셨어요"
@@ -384,6 +386,7 @@
                         android:gravity="center">
 
                         <android.widget.Button
+                            android:id="@+id/condtion_good_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="20dp"
@@ -395,6 +398,7 @@
                             android:layout_margin="8dp"/>
 
                         <android.widget.Button
+                            android:id="@+id/condtion_soso_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="그럭저럭"
@@ -406,6 +410,7 @@
                             android:layout_margin="8dp"/>
 
                         <android.widget.Button
+                            android:id="@+id/condtion_bad_btn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingLeft="20dp"
@@ -461,9 +466,26 @@
                     android:padding="30dp"
                     android:hint="오늘의 상태를 입력하세요"
                     android:fontFamily="@font/pretendard_semibold"
-                    />
+                    android:visibility="visible" />
+<!--                초기상태에 보이게하고 저장 버튼 누르면 textView가 보이게 한다-->
+
+                <TextView
+                    android:id="@+id/textViewStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/textQuestion3"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:background="@drawable/option_background"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="8dp"
+                    android:padding="30dp"
+                    android:fontFamily="@font/pretendard_semibold"
+                    android:visibility="gone" />
 
                 <android.widget.Button
+                    android:id="@+id/saveBtn"
                     android:layout_width="match_parent"
                     android:layout_height="75dp"
                     app:layout_constraintTop_toBottomOf="@id/editTextStatus"

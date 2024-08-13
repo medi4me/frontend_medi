@@ -153,8 +153,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun startAutoSlide(adapter: BannerVPAdapter) {
-        // Auto slide banners every 3 seconds
-        timer.scheduleAtFixedRate(3000, 3000) {
+        // Auto slide banners every 5 seconds
+        timer.scheduleAtFixedRate(5000, 5000) {
             handler.post {
                 val nextItem = binding.homeBannerVp.currentItem + 1
                 if (nextItem < adapter.itemCount) {
