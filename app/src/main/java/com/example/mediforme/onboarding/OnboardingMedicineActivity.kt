@@ -75,7 +75,6 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
             SearchResult(R.drawable.ic_tylenol, "로펜 600mg"),
             SearchResult(R.drawable.ic_tylenol, "스펙트린 500mg"),
             SearchResult(R.drawable.ic_tylenol, "다이조날 650mg")
-
         )
 
         searchResults.addAll(dummyData)
