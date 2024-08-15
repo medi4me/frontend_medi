@@ -102,6 +102,12 @@ class TodayConditionFragment : Fragment() {
             onSaveButtonClick()
         }
 
+        // 수정하기 버튼 클릭 이벤트 설정
+        binding.editBtn.setOnClickListener {
+            updateTextViewStatus()
+            onEditButtonClick()
+        }
+
         // EditText가 포커스를 잃었을 때 TextView로 전환
         editTextStatus.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
@@ -126,8 +132,6 @@ class TodayConditionFragment : Fragment() {
                 false
             }
         }
-
-
         return binding.root
     }
 
@@ -211,7 +215,44 @@ class TodayConditionFragment : Fragment() {
         // 선택된 답변 버튼이 있는지 확인
         selectedAnswerButton?.let { button ->
             val answerText = button.text.toString()
-            Log.d("TodayConditionFragment", "Selected Answer: $answerText")
+            Log.d("TodayConditionFragment", "Selected Save Answer: $answerText")
+            // TODO: 선택된 데이터를 서버로 전송하거나 저장하는 코드 추가
+        } ?: run {
+            Log.d("TodayConditionFragment", "No Answer Save Selected")
+        }
+        // 선택된 컨디션 버튼이 있는지 확인
+        selectedConditionButton?.let { button ->
+            val conditionText = button.text.toString()
+            Log.d("TodayConditionFragment", "Selected Save Condition: $conditionText")
+            // TODO: 선택된 데이터를 서버로 전송하거나 저장하는 코드 추가
+        } ?: run {
+            Log.d("TodayConditionFragment", "No Condition Save Selected")
+        }
+
+        // TextView에 있는 상태 메시지 전송
+        val statusText = binding.textViewStatus.text.toString()
+        Log.d("TodayConditionFragment", "Status Save Text: $statusText")
+        // TODO: 상태 메시지 데이터를 서버로 전송하거나 저장하는 코드 추가
+
+        binding.saveBtn.visibility = View.GONE
+        binding.editBtn.visibility = View.VISIBLE
+    }
+
+
+    // Method to handle Edit button click (optional functionality)
+    private fun onEditButtonClick() {
+        selectedOption?.let { option ->
+            val selectedText = (option.getChildAt(1) as TextView).text.toString()
+            Log.d("TodayConditionFragment", "Selected Edit Option: $selectedText")
+            // TODO: 선택된 데이터를 서버로 전송하거나 저장하는 코드 추가
+        } ?: run {
+            Log.d("TodayConditionFragment", "No Option Selected")
+        }
+
+        // 선택된 답변 버튼이 있는지 확인
+        selectedAnswerButton?.let { button ->
+            val answerText = button.text.toString()
+            Log.d("TodayConditionFragment", "Selected Edit Answer: $answerText")
             // TODO: 선택된 데이터를 서버로 전송하거나 저장하는 코드 추가
         } ?: run {
             Log.d("TodayConditionFragment", "No Answer Selected")
@@ -219,16 +260,19 @@ class TodayConditionFragment : Fragment() {
         // 선택된 컨디션 버튼이 있는지 확인
         selectedConditionButton?.let { button ->
             val conditionText = button.text.toString()
-            Log.d("TodayConditionFragment", "Selected Condition: $conditionText")
+            Log.d("TodayConditionFragment", "Selected Edit Condition: $conditionText")
             // TODO: 선택된 데이터를 서버로 전송하거나 저장하는 코드 추가
         } ?: run {
-            Log.d("TodayConditionFragment", "No Condition Selected")
+            Log.d("TodayConditionFragment", "No Condition Edit Selected")
         }
 
         // TextView에 있는 상태 메시지 전송
         val statusText = binding.textViewStatus.text.toString()
-        Log.d("TodayConditionFragment", "Status Text: $statusText")
+        Log.d("TodayConditionFragment", "Status Edit Text: $statusText")
         // TODO: 상태 메시지 데이터를 서버로 전송하거나 저장하는 코드 추가
+
+        binding.textViewStatus.visibility = View.INVISIBLE
+        binding.editTextStatus.visibility = View.VISIBLE
 
     }
 
