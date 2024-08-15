@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- 외부 저장소 읽기 권한 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 카메라 권한 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 외부 저장소 쓰기 권한 (필요할 경우) -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 읽기권한 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+
+    <!-- 명시적으로 전화 기능이 필요하지 않음을 선언 -->
+    <uses-feature android:name="android.hardware.telephony" android:required="false" />
 
     <application
         android:allowBackup="true"
@@ -13,16 +29,7 @@
         android:theme="@style/Theme.MediForMe"
         tools:targetApi="31">
         <activity
-            android:name=".SplashInit"
-            android:exported="false" />
-        <activity
-            android:name=".login.InfoPWDFragment"
-            android:exported="false" />
-        <activity
-            android:name=".login.InfoIDFragment"
-            android:exported="false" />
-        <activity
-            android:name=".onboarding.OnboardingMedicineActivity"
+            android:name=".login.SearchmainActivity"
             android:exported="false" />
         <activity
             android:name=".login.SearchpwdFragment"
@@ -58,9 +65,18 @@
             android:name=".JoinPhoneActivity"
             android:exported="false" />
         <activity
-            android:name=".Splash"
-            android:exported="true"
-            android:windowSoftInputMode="adjustPan">
+            android:name=".search.AddMedicineActivity"
+            android:exported="false" />
+        <activity
+            android:name=".search.AddMedicineResultActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SplashActivity"
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -74,7 +90,7 @@
             android:name=".onboarding.OnboardingAgeActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".search.CameraActivity"
             android:exported="false" />
         <activity
             android:name=".onboarding.OnboardingDetailActivity"
@@ -83,8 +99,11 @@
             android:name=".search.SearchWithNameActivity"
             android:exported="false" />
         <activity
-            android:name=".login.SearchmainActivity"
+            android:name=".onboarding.OnboardingMedicineActivity"
             android:exported="true" />
+        <activity
+            android:name=".SplashChoiceActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
