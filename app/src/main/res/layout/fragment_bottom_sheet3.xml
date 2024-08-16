@@ -134,7 +134,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <Button
-        android:id="@+id/veri_btn"
+        android:id="@+id/veri_btn_combination"
         android:layout_width="352dp"
         android:layout_height="68dp"
         android:layout_marginBottom="20dp"
