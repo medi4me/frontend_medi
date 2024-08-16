@@ -5,5 +5,6 @@ data class ContentDrug(
     val contentDrugName: String,
     val contentDrugTime: String,
     val contentDrugFrequency: String,
-    val contentDrugBell :Int
+    var isBellOn: Boolean // 알림 상태를 나타내는 boolean 값
 )
+

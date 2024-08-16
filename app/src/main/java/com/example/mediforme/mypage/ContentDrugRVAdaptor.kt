@@ -2,7 +2,9 @@ package com.example.mediforme.mypage
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.R
 import com.example.mediforme.databinding.ItemDrugContentBinding
 
 class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>) :
@@ -19,7 +21,18 @@ class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>) :
         holder.contnetDrugName.text = contentDrug.contentDrugName
         holder.contnetDrugTime.text = contentDrug.contentDrugTime
         holder.contentDrugFrequency.text = contentDrug.contentDrugFrequency
-        holder.contnetBell.setImageResource(contentDrug.contentDrugBell)
+        // boolean 값에 따라 아이콘 설정
+        val bellIcon = if (contentDrug.isBellOn) R.drawable.ic_bell_on else R.drawable.ic_bell_off
+        holder.contentDrugBell.setImageResource(bellIcon)
+
+        // 알림 아이콘에 클릭 리스너 설정
+        holder.contentDrugBell.setOnClickListener {
+            contentDrug.isBellOn = !contentDrug.isBellOn // 상태 토글
+            val newBellIcon = if (contentDrug.isBellOn) R.drawable.ic_bell_on else R.drawable.ic_bell_off
+            holder.contentDrugBell.setImageResource(newBellIcon)
+            val toastMessage = if (contentDrug.isBellOn) "알림 On" else "알림 Off"
+            Toast.makeText(holder.itemView.context, toastMessage, Toast.LENGTH_SHORT).show()
+        }
     }
 
 
@@ -42,6 +55,7 @@ class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>) :
         val contnetDrugName = binding.myItemDrugName
         val contnetDrugTime = binding.myItemDrugTime
         val contentDrugFrequency = binding.myItemDrugFrequency
-        val contnetBell = binding.myItemBellSwitch
+        val contentDrugBell = binding.myItemBellSwitch
+
     }
 }
