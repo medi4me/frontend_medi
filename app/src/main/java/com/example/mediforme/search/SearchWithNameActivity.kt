@@ -20,7 +20,7 @@ class SearchWithNameActivity : AppCompatActivity() {
 
     // 더미 데이터
     private val allSearchResults = listOf(
-        SearchResult(R.drawable.ic_tylenol, "타이레놀정 500mg"),
+        SearchResult(R.drawable.ic_tylenol, "타이레놀정 슈퍼우먼 플러스 울트라 500mg"),
         SearchResult(R.drawable.ic_tylenol, "우먼스타이레놀정"),
         SearchResult(R.drawable.ic_tylenol, "어린이 타이레놀"),
         SearchResult(R.drawable.ic_tylenol, "아스피린정 100mg"),
