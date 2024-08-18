@@ -98,13 +98,11 @@ class TodayConditionFragment : Fragment() {
 
         // 저장 버튼 클릭 이벤트 설정
         binding.saveBtn.setOnClickListener {
-            updateTextViewStatus()
             onSaveButtonClick()
         }
 
         // 수정하기 버튼 클릭 이벤트 설정
         binding.editBtn.setOnClickListener {
-            updateTextViewStatus()
             onEditButtonClick()
         }
 
@@ -236,6 +234,8 @@ class TodayConditionFragment : Fragment() {
 
         binding.saveBtn.visibility = View.GONE
         binding.editBtn.visibility = View.VISIBLE
+
+        updateTextViewStatus()
     }
 
 
@@ -273,6 +273,7 @@ class TodayConditionFragment : Fragment() {
 
         binding.textViewStatus.visibility = View.INVISIBLE
         binding.editTextStatus.visibility = View.VISIBLE
+        updateTextViewStatus()
 
     }
 
@@ -320,5 +321,46 @@ class TodayConditionFragment : Fragment() {
 
         // 선택된 날짜에 해당하는 요일과 날짜로 업데이트
         binding.homeDate.text = getString(R.string.date_format, currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH) + 1, dateItem.date)
+
+        // 화면을 초기 상태로 되돌리기
+        resetViewToInitialState()
     }
+
+    private fun resetViewToInitialState() {
+        // 옵션 선택 초기화
+        val options = listOf(binding.optionGoodLL, binding.optionSosoLL, binding.optionBadLL)
+        options.forEach {
+            it.setBackgroundResource(R.drawable.option_background)
+            val text = it.getChildAt(1) as TextView
+            text.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+        selectedOption = null
+
+        // 답변 버튼 초기화
+        val answerButtons = listOf(binding.btnNo, binding.btnYes)
+        answerButtons.forEach {
+            it.setBackgroundResource(R.drawable.option_button_background)
+            it.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+        selectedAnswerButton = null
+
+        // 컨디션 버튼 초기화
+        val conditionButtons = listOf(binding.condtionGoodBtn, binding.condtionSosoBtn, binding.condtionBadBtn)
+        conditionButtons.forEach {
+            it.setBackgroundResource(R.drawable.option_button_background)
+            it.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+        selectedConditionButton = null
+
+        // 텍스트 필드 초기화
+        binding.editTextStatus.text = null
+        binding.textViewStatus.visibility = View.GONE
+        binding.editTextStatus.visibility = View.VISIBLE
+
+        // 저장 버튼 보이기 및 수정 버튼 숨기기
+        binding.saveBtn.visibility = View.VISIBLE
+        binding.editBtn.visibility = View.GONE
+    }
+
+
 }

@@ -21,9 +21,15 @@ class JoinPasswordActivity : AppCompatActivity() {
     private lateinit var nextBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_join_password)
+
+        //이전 화면에서 받아온 인텐트
+        val phoneNumber = intent.getStringExtra("user_phoneNumber")
+        val user_id = intent.getStringExtra("user_id")
 
         passwordET = findViewById(R.id.password_ET)
         criteriaLength = findViewById(R.id.criteria_length)
@@ -45,7 +51,13 @@ class JoinPasswordActivity : AppCompatActivity() {
         })
 
         nextBtn.setOnClickListener {
-            val intent = Intent(this@JoinPasswordActivity, JoinNameActivity::class.java)
+            val user_password = passwordET.text.toString().trim()
+
+            val intent = Intent(this@JoinPasswordActivity, JoinNameActivity::class.java).apply {
+                putExtra("user_id",user_id)
+                putExtra("user_phoneNumber",phoneNumber)
+                putExtra("user_password",user_password)
+            }
             startActivity(intent)
         }
     }
