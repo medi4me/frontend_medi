@@ -27,8 +27,8 @@ class JoinNameActivity : AppCompatActivity() {
 
         val confirm = findViewById<TextView>(R.id.confirm)
 
-        //인텐트 값 넘어왔는지 확인
-        confirm.text = "폰 넘버: $phoneNumber\n유저 아이디: $user_id\n유저 비밀번호: $user_password"
+//        //인텐트 값 넘어왔는지 확인
+//        confirm.text = "폰 넘버: $phoneNumber\n유저 아이디: $user_id\n유저 비밀번호: $user_password"
 
 
         val nextBtn: Button = findViewById(R.id.next_btn)
