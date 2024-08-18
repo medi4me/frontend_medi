@@ -1,4 +1,3 @@
-package com.example.mediforme
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

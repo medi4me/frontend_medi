@@ -98,8 +98,12 @@ class TodayConditionFragment : Fragment() {
 
         // 저장 버튼 클릭 이벤트 설정
         binding.saveBtn.setOnClickListener {
-            updateTextViewStatus()
             onSaveButtonClick()
+        }
+
+        // 수정하기 버튼 클릭 이벤트 설정
+        binding.editBtn.setOnClickListener {
+            onEditButtonClick()
         }
 
         // EditText가 포커스를 잃었을 때 TextView로 전환
@@ -126,8 +130,6 @@ class TodayConditionFragment : Fragment() {
                 false
             }
         }
-
-
         return binding.root
     }
 
@@ -211,7 +213,46 @@ class TodayConditionFragment : Fragment() {
         // 선택된 답변 버튼이 있는지 확인
         selectedAnswerButton?.let { button ->
             val answerText = button.text.toString()
-            Log.d("TodayConditionFragment", "Selected Answer: $answerText")
+            Log.d("TodayConditionFragment", "Selected Save Answer: $answerText")
+            // TODO: 선택된 데이터를 서버로 전송하거나 저장하는 코드 추가
+        } ?: run {
+            Log.d("TodayConditionFragment", "No Answer Save Selected")
+        }
+        // 선택된 컨디션 버튼이 있는지 확인
+        selectedConditionButton?.let { button ->
+            val conditionText = button.text.toString()
+            Log.d("TodayConditionFragment", "Selected Save Condition: $conditionText")
+            // TODO: 선택된 데이터를 서버로 전송하거나 저장하는 코드 추가
+        } ?: run {
+            Log.d("TodayConditionFragment", "No Condition Save Selected")
+        }
+
+        // TextView에 있는 상태 메시지 전송
+        val statusText = binding.textViewStatus.text.toString()
+        Log.d("TodayConditionFragment", "Status Save Text: $statusText")
+        // TODO: 상태 메시지 데이터를 서버로 전송하거나 저장하는 코드 추가
+
+        binding.saveBtn.visibility = View.GONE
+        binding.editBtn.visibility = View.VISIBLE
+
+        updateTextViewStatus()
+    }
+
+
+    // Method to handle Edit button click (optional functionality)
+    private fun onEditButtonClick() {
+        selectedOption?.let { option ->
+            val selectedText = (option.getChildAt(1) as TextView).text.toString()
+            Log.d("TodayConditionFragment", "Selected Edit Option: $selectedText")
+            // TODO: 선택된 데이터를 서버로 전송하거나 저장하는 코드 추가
+        } ?: run {
+            Log.d("TodayConditionFragment", "No Option Selected")
+        }
+
+        // 선택된 답변 버튼이 있는지 확인
+        selectedAnswerButton?.let { button ->
+            val answerText = button.text.toString()
+            Log.d("TodayConditionFragment", "Selected Edit Answer: $answerText")
             // TODO: 선택된 데이터를 서버로 전송하거나 저장하는 코드 추가
         } ?: run {
             Log.d("TodayConditionFragment", "No Answer Selected")
@@ -219,16 +260,20 @@ class TodayConditionFragment : Fragment() {
         // 선택된 컨디션 버튼이 있는지 확인
         selectedConditionButton?.let { button ->
             val conditionText = button.text.toString()
-            Log.d("TodayConditionFragment", "Selected Condition: $conditionText")
+            Log.d("TodayConditionFragment", "Selected Edit Condition: $conditionText")
             // TODO: 선택된 데이터를 서버로 전송하거나 저장하는 코드 추가
         } ?: run {
-            Log.d("TodayConditionFragment", "No Condition Selected")
+            Log.d("TodayConditionFragment", "No Condition Edit Selected")
         }
 
         // TextView에 있는 상태 메시지 전송
         val statusText = binding.textViewStatus.text.toString()
-        Log.d("TodayConditionFragment", "Status Text: $statusText")
+        Log.d("TodayConditionFragment", "Status Edit Text: $statusText")
         // TODO: 상태 메시지 데이터를 서버로 전송하거나 저장하는 코드 추가
+
+        binding.textViewStatus.visibility = View.INVISIBLE
+        binding.editTextStatus.visibility = View.VISIBLE
+        updateTextViewStatus()
 
     }
 
@@ -276,5 +321,46 @@ class TodayConditionFragment : Fragment() {
 
         // 선택된 날짜에 해당하는 요일과 날짜로 업데이트
         binding.homeDate.text = getString(R.string.date_format, currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH) + 1, dateItem.date)
+
+        // 화면을 초기 상태로 되돌리기
+        resetViewToInitialState()
     }
+
+    private fun resetViewToInitialState() {
+        // 옵션 선택 초기화
+        val options = listOf(binding.optionGoodLL, binding.optionSosoLL, binding.optionBadLL)
+        options.forEach {
+            it.setBackgroundResource(R.drawable.option_background)
+            val text = it.getChildAt(1) as TextView
+            text.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+        selectedOption = null
+
+        // 답변 버튼 초기화
+        val answerButtons = listOf(binding.btnNo, binding.btnYes)
+        answerButtons.forEach {
+            it.setBackgroundResource(R.drawable.option_button_background)
+            it.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+        selectedAnswerButton = null
+
+        // 컨디션 버튼 초기화
+        val conditionButtons = listOf(binding.condtionGoodBtn, binding.condtionSosoBtn, binding.condtionBadBtn)
+        conditionButtons.forEach {
+            it.setBackgroundResource(R.drawable.option_button_background)
+            it.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+        selectedConditionButton = null
+
+        // 텍스트 필드 초기화
+        binding.editTextStatus.text = null
+        binding.textViewStatus.visibility = View.GONE
+        binding.editTextStatus.visibility = View.VISIBLE
+
+        // 저장 버튼 보이기 및 수정 버튼 숨기기
+        binding.saveBtn.visibility = View.VISIBLE
+        binding.editBtn.visibility = View.GONE
+    }
+
+
 }

@@ -40,15 +40,16 @@ class MyPageFragment : Fragment() {
 
         // 더미 데이터 생성
         val contentDrugList = arrayListOf(
-            ContentDrug(R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", R.drawable.ic_bell_on),
-            ContentDrug(R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일", R.drawable.ic_bell_off),
-            ContentDrug(R.drawable.ic_drug_default, "타이레놀 500mg", "06:00 PM", "매일", R.drawable.ic_bell_on),
-            ContentDrug(R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", R.drawable.ic_bell_on),
-            ContentDrug(R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일", R.drawable.ic_bell_off),
-            ContentDrug(R.drawable.ic_drug_default, "타이레놀 500mg", "06:00 PM", "매일", R.drawable.ic_bell_on),
-            ContentDrug(R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", R.drawable.ic_bell_on),
-            ContentDrug(R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일", R.drawable.ic_bell_off),
-            ContentDrug(R.drawable.ic_drug_default, "타이레놀 500mg", "06:00 PM", "매일", R.drawable.ic_bell_on)
+            ContentDrug(R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", true),
+            ContentDrug(R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일", true),
+            ContentDrug(R.drawable.ic_drug_default, "타이레놀 500mg", "06:00 PM", "매일",true),
+            ContentDrug(R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", false),
+            ContentDrug(R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일",false),
+            ContentDrug(R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", true),
+            ContentDrug(R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일", true),
+            ContentDrug(R.drawable.ic_drug_default, "타이레놀 500mg", "06:00 PM", "매일",true),
+            ContentDrug(R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", false),
+            ContentDrug(R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일",false),
         )
 
         adapter = ContentDrugRVAdaptor(contentDrugList)
