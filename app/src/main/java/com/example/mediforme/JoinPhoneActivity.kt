@@ -50,8 +50,9 @@ class JoinPhoneActivity : AppCompatActivity() {
                 Toast.makeText(this, "인증번호가 발송되었습니다.", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(this@JoinPhoneActivity, JoinVericodeActivity::class.java)
+                //인텐트에 정보를 담아서 다음 화면(액티비티로 정보 전달)
                 intent.putExtra("generatedCode", generatedCode)
-                intent.putExtra("phoneNumber", phoneNumber)
+                intent.putExtra("user_phoneNumber", phoneNumber)
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "전화번호를 입력하세요.", Toast.LENGTH_SHORT).show()
