@@ -27,13 +27,9 @@ class JoinNameActivity : AppCompatActivity() {
         val user_password = intent.getStringExtra("user_password").toString()
         val consent = intent.getStringExtra("consent").toString()
 
-
-
-//
 ////        //인텐트 값 넘어왔는지 확인
 //       val confirm = findViewById<TextView>(R.id.confirm)
 //       confirm.text = "폰 넘버: $phoneNumber\n유저 아이디: $user_id\n유저 비밀번호: $user_password\n필수 동의여부: $consent"
-
 
         val nextBtn: Button = findViewById(R.id.next_btn)
         user_name_ET = findViewById(R.id.user_name_ET)
