@@ -34,15 +34,16 @@ class JoinVericodeActivity : AppCompatActivity() {
 
         veri_btn.setOnClickListener {
             val userCode = veri_code_ET.text.toString().trim()
-            if (userCode.isNotEmpty() && userCode == generatedCode) {
-                Toast.makeText(this, "인증 성공", Toast.LENGTH_SHORT).show()
+//            if (userCode.isNotEmpty() && userCode == generatedCode) {
+//                Toast.makeText(this, "인증 성공", Toast.LENGTH_SHORT).show()
 
                 val intent = Intent(this@JoinVericodeActivity, JoinIdActivity::class.java)
                 intent.putExtra("user_phoneNumber",phoneNumber)
+                intent.putExtra("consent","AGREE")
                 startActivity(intent)
-            } else {
-                Toast.makeText(this, "인증 실패", Toast.LENGTH_SHORT).show()
-            }
+//            } else {
+//                Toast.makeText(this, "인증 실패", Toast.LENGTH_SHORT).show()
+//            }
         }
     }
 
