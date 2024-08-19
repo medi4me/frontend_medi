@@ -42,6 +42,11 @@ class SearchResultActivity : AppCompatActivity() {
             }
         }
 
+        val imageBitmap = intent.getParcelableExtra<Bitmap>("imageBitmap")
+        imageBitmap?.let {
+            binding.medicineIv.setImageBitmap(it)
+        }
+
         // 더미 데이터 생성
         val dummyData = listOf(
             MedicineList(

@@ -5,12 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TimePicker
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.MainActivity
@@ -19,6 +18,8 @@ import com.example.mediforme.databinding.ActivityOnboardingDetailBinding
 
 class OnboardingDetailActivity : AppCompatActivity() {
     lateinit var binding: ActivityOnboardingDetailBinding
+    private var selectedTime: String? = null // 선택된 시간 저장 변수
+    private var selectedMealTime: String? = null // 선택된 식사 시간 저장 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,15 +41,14 @@ class OnboardingDetailActivity : AppCompatActivity() {
             onBackPressed()
         }
 
-        // 식사 시간 스피너에 아이템 선택 리스너를 설정
+        // 식사 시간 스피너에 아이템 선택 리스너 설정
         binding.mealTimeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-                val selectedItem = parent.getItemAtPosition(position).toString()
-                //Toast.makeText(this@OnboardingDetailActivity, "Selected: $selectedItem", Toast.LENGTH_SHORT).show()
+                selectedMealTime = parent.getItemAtPosition(position).toString() // 선택된 식사 시간 저장
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // 선택되지 않았을 때의 동작 (여기서는 아무것도 하지 않음)
+                selectedMealTime = null
             }
         }
 
@@ -66,6 +66,12 @@ class OnboardingDetailActivity : AppCompatActivity() {
         })
 
         binding.veriBtn.setOnClickListener {
+            // 선택된 시간, 식사 시간, 복용량을 로그로 출력
+            val dosageOnetime = binding.dosageOnetimeEV.text.toString()
+            Log.d("OnboardingDetailActivity", "Selected Time: $selectedTime")
+            Log.d("OnboardingDetailActivity", "Selected Meal Time: $selectedMealTime")
+            Log.d("OnboardingDetailActivity", "Dosage One-time: $dosageOnetime")
+
             startActivity(Intent(this, OnboardingMedicineActivity::class.java))
         }
 
@@ -86,7 +92,8 @@ class OnboardingDetailActivity : AppCompatActivity() {
         dialogView.findViewById<Button>(R.id.btnOk).setOnClickListener {
             val hour = timePicker.hour
             val minute = timePicker.minute
-            binding.doseTimeSpinner.text = String.format("%02d:%02d", hour, minute)
+            selectedTime = String.format("%02d:%02d", hour, minute) // 선택된 시간을 변수에 저장
+            binding.doseTimeSpinner.text = selectedTime
             alertDialog.dismiss()
         }
 
