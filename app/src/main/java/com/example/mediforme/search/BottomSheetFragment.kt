@@ -1,5 +1,6 @@
 package com.example.mediforme.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.mediforme.R
+import com.example.mediforme.databinding.FragmentBottomSheet3Binding
 import com.example.mediforme.databinding.FragmentBottomSheetBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayout
@@ -141,12 +143,23 @@ class BottomSheetFragment2 : BottomSheetDialogFragment() {
 
 // BottomSheetFragment3.kt
 class BottomSheetFragment3 : BottomSheetDialogFragment() {
+    lateinit var binding: FragmentBottomSheet3Binding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_bottom_sheet3, container, false)
+        binding = FragmentBottomSheet3Binding.inflate(inflater, container, false)
+
+        binding.veriBtnCombination.setOnClickListener {
+            val intent = Intent(requireContext(), CheckMedicineActivity::class.java)
+            startActivity(intent)
+        }
+
+        return binding.root
     }
 }
+
+
 
 

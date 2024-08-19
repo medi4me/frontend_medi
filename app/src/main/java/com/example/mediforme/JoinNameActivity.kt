@@ -2,6 +2,7 @@ package com.example.mediforme
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -24,11 +25,14 @@ class JoinNameActivity : AppCompatActivity() {
         val phoneNumber = intent.getStringExtra("user_phoneNumber").toString()
         val user_id = intent.getStringExtra("user_id").toString()
         val user_password = intent.getStringExtra("user_password").toString()
+        val consent = intent.getStringExtra("consent").toString()
 
-        val confirm = findViewById<TextView>(R.id.confirm)
 
-//        //인텐트 값 넘어왔는지 확인
-//        confirm.text = "폰 넘버: $phoneNumber\n유저 아이디: $user_id\n유저 비밀번호: $user_password"
+
+//
+////        //인텐트 값 넘어왔는지 확인
+//       val confirm = findViewById<TextView>(R.id.confirm)
+//       confirm.text = "폰 넘버: $phoneNumber\n유저 아이디: $user_id\n유저 비밀번호: $user_password\n필수 동의여부: $consent"
 
 
         val nextBtn: Button = findViewById(R.id.next_btn)
@@ -40,16 +44,19 @@ class JoinNameActivity : AppCompatActivity() {
             val user_name = user_name_ET.text.toString()
 
             //회원가입 처리함수 호출, (API 연결 함수)!!
-            registerUser(phoneNumber,user_id,user_password,user_name)
+            registerUser(user_name,user_password,phoneNumber,user_id,consent)
 
             val intent = Intent(this, OnboardingMedicineActivity::class.java)
             startActivity(intent)
         }
     }
     //회원가입 처리함수
-    private fun registerUser(phoneNumber: String?, id: String?, password: String?, name: String) {
+    private fun registerUser(name: String?, password: String?, phone: String?, memberID: String, consent: String) {
+        Log.d("Register", "이름: $name\n비번: $password\n전번: $phone,\n아이디: $memberID,\n동의 여부: $consent  ")
+
         // 여기서 서버로 회원가입 요청을 보낼 수 있습니다.
         // 예: Retrofit을 사용하여 API 호출 등
+
     }
 
 }

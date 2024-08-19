@@ -59,7 +59,7 @@
 
     <TextView
         android:id="@+id/medicine_name_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:text="타이레놀정 500mg"
         android:textColor="@color/black"
