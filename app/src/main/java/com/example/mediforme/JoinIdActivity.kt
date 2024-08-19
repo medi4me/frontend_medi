@@ -30,8 +30,10 @@ class JoinIdActivity : AppCompatActivity() {
             val intent = Intent(this@JoinIdActivity, JoinPasswordActivity::class.java).apply {
                 putExtra("user_id",user_id)
                 putExtra("user_phoneNumber",phoneNumber)
+                putExtra("consent","AGREE")
             }
             startActivity(intent)
         }
     }
 }
+
