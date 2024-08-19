@@ -29,6 +29,7 @@ class JoinServiceActivity : AppCompatActivity() {
         veriBtn.setOnClickListener {
             if (smallCheck1.isChecked && smallCheck2.isChecked && smallCheck3.isChecked) {
                 val intent = Intent(this@JoinServiceActivity, JoinPhoneActivity::class.java)
+                intent.putExtra("consent","AGREE")
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "필수 약관에 모두 동의해주세요.", Toast.LENGTH_SHORT).show()

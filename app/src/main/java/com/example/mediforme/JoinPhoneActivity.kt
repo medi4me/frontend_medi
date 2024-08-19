@@ -53,6 +53,7 @@ class JoinPhoneActivity : AppCompatActivity() {
                 //인텐트에 정보를 담아서 다음 화면(액티비티로 정보 전달)
                 intent.putExtra("generatedCode", generatedCode)
                 intent.putExtra("user_phoneNumber", phoneNumber)
+                intent.putExtra("consent","AGREE")
                 startActivity(intent)
             } else {
                 Toast.makeText(this, "전화번호를 입력하세요.", Toast.LENGTH_SHORT).show()

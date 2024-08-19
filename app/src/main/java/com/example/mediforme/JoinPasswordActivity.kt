@@ -57,6 +57,8 @@ class JoinPasswordActivity : AppCompatActivity() {
                 putExtra("user_id",user_id)
                 putExtra("user_phoneNumber",phoneNumber)
                 putExtra("user_password",user_password)
+                putExtra("consent","AGREE")
+
             }
             startActivity(intent)
         }
