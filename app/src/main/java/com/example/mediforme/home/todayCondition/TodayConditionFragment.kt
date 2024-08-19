@@ -32,7 +32,7 @@ class TodayConditionFragment : Fragment() {
     private var selectedOption: LinearLayout? = null //선택된 기분 버튼 저장변수
     private var selectedAnswerButton: Button? = null //선택된 음주여부 버튼 저장 변수
     private var selectedConditionButton: Button? = null  //선택된 컨디션 버튼 저장 변수
-
+    private lateinit var clickedDate: String // 체크된 날짜
 
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
@@ -43,6 +43,12 @@ class TodayConditionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
+        // clickedDate 초기화
+        val currentCalendar = Calendar.getInstance()
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        clickedDate = sdf.format(currentCalendar.time)
+
         binding = FragmentTodayConditionBinding.inflate(inflater,container,false)
 
         binding.howTodayBackBtnIV.setOnClickListener {
@@ -238,6 +244,8 @@ class TodayConditionFragment : Fragment() {
         Log.d("TodayConditionFragment", "Selected Save Answer2: $answerText")
         Log.d("TodayConditionFragment", "Selected Save Condition2: $conditionText")
         Log.d("TodayConditionFragment", "Status Save Text2: $statusText")
+        Log.d("TodayConditionFragment", "Today Save Date2 $clickedDate")
+
 
 
         binding.saveBtn.visibility = View.GONE
@@ -286,7 +294,7 @@ class TodayConditionFragment : Fragment() {
         Log.d("TodayConditionFragment", "Selected Edit Answer2: $answerText")
         Log.d("TodayConditionFragment", "Selected Edit Condition2: $conditionText")
         Log.d("TodayConditionFragment", "Status Edit Text2: $statusText")
-
+        Log.d("TodayConditionFragment", "Today Edit Date2 $clickedDate")
         // EditText의 내용을 TextView로 전환
         updateTextViewStatus()
 
@@ -330,8 +338,10 @@ class TodayConditionFragment : Fragment() {
         val currentCalendar = Calendar.getInstance()
         currentCalendar.set(Calendar.MONTH, dateItem.month - 1) // Calendar.MONTH는 0부터 시작하므로 -1
         currentCalendar.set(Calendar.DAY_OF_MONTH, dateItem.date.toInt())
-        val sdf = SimpleDateFormat("yyyy.MM.dd", Locale.getDefault())
-        val clickedDate = sdf.format(currentCalendar.time)
+
+        val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        clickedDate = sdf.format(currentCalendar.time)
+
         binding.homeDate.text = clickedDate
 
         // 선택된 날짜에 해당하는 요일과 날짜로 업데이트
