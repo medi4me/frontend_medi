@@ -1,21 +1,36 @@
 package com.example.mediforme.login
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import com.example.mediforme.R
+import com.example.mediforme.JoinServiceActivity
+import com.example.mediforme.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
+
+    private lateinit var binding: ActivityLoginBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
-        setContentView(R.layout.activity_login)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        // View Binding 초기화
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // 아이디 찾기 텍스트뷰 클릭 리스너
+        binding.searchIdTV.setOnClickListener {
+            startActivity(Intent(this, SearchmainActivity::class.java))
+        }
+
+        // 비밀번호 찾기 텍스트뷰 클릭 리스너
+        binding.searchPasswordTV.setOnClickListener {
+            startActivity(Intent(this, SearchmainActivity::class.java))
+        }
+
+        binding.joinTV.setOnClickListener {
+            startActivity(Intent(this,JoinServiceActivity::class.java))
         }
     }
 }
