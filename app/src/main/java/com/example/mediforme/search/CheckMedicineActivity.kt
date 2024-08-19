@@ -77,6 +77,11 @@ class CheckMedicineActivity : AppCompatActivity() {
             // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
             onBackPressed()
         }
+
+        binding.searchWithCameraTv.setOnClickListener {
+            val intent = Intent(this, CameraActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun showSearchResultsBottomSheet() {

@@ -5,6 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Button
 import android.widget.TimePicker
 import androidx.activity.enableEdgeToEdge
@@ -15,6 +18,8 @@ import com.example.mediforme.databinding.FragmentAddMedicineBinding
 
 class AddMedicineResultActivity : AppCompatActivity() {
     private lateinit var binding: FragmentAddMedicineBinding
+    private var selectedTime: String? = null // 선택된 시간 저장 변수
+    private var selectedMealTime: String? = null // 선택된 식사 시간 저장 변수
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +56,22 @@ class AddMedicineResultActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        // 식사 시간 스피너에 아이템 선택 리스너 설정
+        binding.mealTimeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                selectedMealTime = parent.getItemAtPosition(position).toString() // 선택된 식사 시간 저장
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                selectedMealTime = null
+            }
+        }
+
         binding.veriBtn.setOnClickListener {
+            val dosageOnetime = binding.dosageOnetimeEV.text.toString()
+            Log.d("AddMedicineResultActivity", "Selected Time: $selectedTime")
+            Log.d("AddMedicineResultActivity", "Selected Meal Time: $selectedMealTime")
+            Log.d("AddMedicineResultActivity", "Dosage One-time: $dosageOnetime")
             startActivity(Intent(this, AddMedicineActivity::class.java))
         }
 
@@ -69,12 +89,11 @@ class AddMedicineResultActivity : AppCompatActivity() {
         dialogView.findViewById<Button>(R.id.btnOk).setOnClickListener {
             val hour = timePicker.hour
             val minute = timePicker.minute
-            binding.doseTimeSpinner.text = String.format("%02d:%02d", hour, minute)
+            selectedTime = String.format("%02d:%02d", hour, minute) // 선택된 시간을 변수에 저장
+            binding.doseTimeSpinner.text = selectedTime
             alertDialog.dismiss()
         }
 
         alertDialog.show()
     }
 }
-
-
