@@ -59,12 +59,6 @@
             android:name=".JoinVericodeActivity"
             android:exported="false" />
         <activity
-            android:name=".Dialog_logout"
-            android:exported="false" />
-        <activity
-            android:name=".Dialog_warning"
-            android:exported="false" />
-        <activity
             android:name=".JoinPhoneActivity"
             android:exported="false" />
         <activity
@@ -106,6 +100,9 @@
             android:exported="true" />
         <activity
             android:name=".SplashChoiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".search.CheckMedicineActivity"
             android:exported="false" />
     </application>
 

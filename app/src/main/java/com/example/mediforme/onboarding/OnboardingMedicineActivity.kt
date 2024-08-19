@@ -12,9 +12,6 @@ import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
 import com.example.mediforme.search.CameraActivity
-import com.example.mediforme.search.MedicineList
-import com.example.mediforme.search.MedicineListAdapter
-import com.example.mediforme.search.SearchResultActivity
 
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
