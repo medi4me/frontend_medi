@@ -345,8 +345,6 @@ class TodayConditionFragment : Fragment() {
         // TextView에 있는 상태 메시지 전송
         statusText = binding.editTextStatus.text.toString()
 
-
-        // TODO: 상태 메시지 데이터를 서버로 전송하거나 저장하는 코드 추가
         Log.d("TodayConditionFragment", "Selected Edit Option2: $selectedText")
         Log.d("TodayConditionFragment", "Selected Edit Answer2: $answerText")
         Log.d("TodayConditionFragment", "Selected Edit Condition2: $conditionText")
@@ -415,7 +413,7 @@ class TodayConditionFragment : Fragment() {
         fetchDataForDate(clickedDate) /// 이부분은 api연결할 때 저 함수 안에서 호출되게 설정해야함
     }
 
-    //옵션 선택 초기화 api연결하면 사용 안함 ..
+    //옵션 선택 초기화
     private fun resetViewToInitialState() {
         // 옵션 선택 초기화
         val options = listOf(binding.optionGoodLL, binding.optionSosoLL, binding.optionBadLL)
@@ -452,8 +450,6 @@ class TodayConditionFragment : Fragment() {
         binding.editBtn.visibility = View.GONE
     }
 
-
-
     // 다른 날짜 아이템 버튼 눌렀을 때, 정보 가져와서 밑에 프래그먼트에 저장된 값들 선택되어있게
     private fun fetchDataForDate(date: String) {
         // Retrofit를 사용하여 데이터를 가져온다
@@ -462,22 +458,28 @@ class TodayConditionFragment : Fragment() {
             override fun onResponse(call: Call<CalenderResponse>, response: Response<CalenderResponse>) {
                 if(response.isSuccessful){
                     val calenderResponse = response.body()
-                    calenderResponse?.let{
-                        updateUIWithFetchedData(it.status, it.drink, it.statusCondition, it.memo)
+                    if (calenderResponse != null) {
                         Log.d("TodayConditionFragment","Sucess fetch data for date: ${response.code()}")
+                        updateUIWithFetchedData(calenderResponse.status, calenderResponse.drink, calenderResponse.statusCondition, calenderResponse.memo)
+                    } else {
+                        // 빈 응답 처리
+                        Log.e("TodayConditionFragment", "No data found for the selected date")
+                        resetViewToInitialState()
                     }
                 }else{
+                    //빈 응답 처리, 데이터가 중복되어있으면 500 에러, 데이터가 비어있으면 response.code 값이 길게 나옴
                     Log.e("TodayConditionFragment","Failed to fetch data for date: ${response.code()}")
+                    resetViewToInitialState()
                 }
             }
 
             override fun onFailure(call: Call<CalenderResponse>, t: Throwable) {
                 Log.e("TodayConditionFragment", "Error fetching data for date", t)
+                resetViewToInitialState()
             }
 
         })
     }
-
 
     private fun updateUIWithFetchedData(status: String?, drink: String?, statusCondition: String?, memo: String?) {
         // 기분 옵션을 선택
