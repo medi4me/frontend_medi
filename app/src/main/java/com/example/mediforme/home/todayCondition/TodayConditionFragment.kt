@@ -145,6 +145,9 @@ class TodayConditionFragment : Fragment() {
                 false
             }
         }
+        //처음 화면 로드 시 오늘 날짜에 맞는 데이터 가져와서 화면에 출력
+        fetchDataForDate(clickedDate)
+
         return binding.root
     }
 
