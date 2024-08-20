@@ -1,15 +1,16 @@
 package com.example.mediforme.Data
 
+import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.*
 
 // TodayCondition 프레그먼트 캘린더
 
 interface CalendarApiService {
-    @GET("status/date/{date}")
+    @GET("/status/date/{date}")
     fun getStatusByDate(@Path("date") date: String): Call<Status>
 
-    @POST("calender")
+    @POST("/calender")
     fun addCalendarEntry(@Body calendarEntry: CalendarEntry): Call<CalendarEntry>
 }
 
@@ -30,17 +31,17 @@ data class CalendarEntry(
 
 
 // 온보딩 약 검색
-
 interface MedicineApi {
-    @GET("/api/medi/itemName")
+    @GET("/medi/itemName")
     fun searchMedicines(@Query("itemName") itemName: String): Call<MedicineResponse>
 }
 
 data class MedicineResponse(
-    val medicines: List<Medicine>
+    @SerializedName("medicines") val medicines: List<Medicine>
 )
 
 data class Medicine(
-    val itemName: String,
-    val itemImage: String?
+    @SerializedName("itemName") val itemName: String,
+
+    @SerializedName("itemImage") val itemImage: String?
 )
