@@ -7,7 +7,7 @@ import retrofit2.http.*
 //**************************************************************************//
 
 interface Status {
-    @POST("/status")
+    @POST("status")
     fun addStatus(
         @Body statusRequest: StatusRequest
     ): Call<StatusResponse>
@@ -33,7 +33,7 @@ data class StatusResponse(
 //**************************************************************************//
 
 interface CalendarApi {
-    @GET("/calender/date/{date}")
+    @GET("calender/date/{date}")
     fun getDateDetails(
         @Path("date") date: String
     ): Call<CalendarResponse>
@@ -53,7 +53,7 @@ data class CalendarResponse(
 // 온보딩 약 검색
 
 interface MedicineApi {
-    @GET("/api/medi/itemName")
+    @GET("api/medi/itemName")
     fun searchMedicines(@Query("itemName") itemName: String): Call<MedicineResponse>
 }
 

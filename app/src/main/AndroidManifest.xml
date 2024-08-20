@@ -5,7 +5,7 @@
     <!-- 외부 저장소 읽기 권한 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <!-- 카메라 권한 -->
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAMERA"/>
     <!-- 외부 저장소 쓰기 권한 (필요할 경우) -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 읽기권한 -->
@@ -21,7 +21,11 @@
     <!-- 명시적으로 전화 기능이 필요하지 않음을 선언 -->
     <uses-feature android:name="android.hardware.telephony" android:required="false" />
 
+    <!-- 맨위에 2줄 http접근 허용 -->
     <application
+        android:usesCleartextTraffic="true"
+        android:networkSecurityConfig="@xml/network_security_config"
+
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

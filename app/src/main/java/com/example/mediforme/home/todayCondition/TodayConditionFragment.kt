@@ -17,8 +17,15 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mediforme.Data.Status
+import com.example.mediforme.Data.StatusRequest
+import com.example.mediforme.Data.StatusResponse
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentTodayConditionBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -205,17 +212,17 @@ class TodayConditionFragment : Fragment() {
         selectedConditionButton = selected
     }
 
-
     private fun onSaveButtonClick() {
-        var selectedText : String? = null
-        var answerText : String? = null
-        var conditionText : String? = null
-        var statusText : String? = null
+        var selectedText: String? = null
+        var answerText: String? = null
+        var conditionText: String? = null
+        var statusText: String? = null
 
         // 선택된 옵션이 있는지 확인
         selectedOption?.let { option ->
             selectedText = (option.getChildAt(1) as TextView).text.toString()
-            //Log.d("TodayConditionFragment", "Selected Option: $selectedText")
+
+
         } ?: run {
             Log.d("TodayConditionFragment", "No Option Selected")
         }
@@ -223,36 +230,60 @@ class TodayConditionFragment : Fragment() {
         // 선택된 답변 버튼이 있는지 확인
         selectedAnswerButton?.let { button ->
             answerText = button.text.toString()
-            //Log.d("TodayConditionFragment", "Selected Save Answer: $answerText")
         } ?: run {
-            Log.d("TodayConditionFragment", "No Answer Save Selected")
+            Log.d("TodayConditionFragment", "No Answer Selected")
         }
+
         // 선택된 컨디션 버튼이 있는지 확인
         selectedConditionButton?.let { button ->
             conditionText = button.text.toString()
-           // Log.d("TodayConditionFragment", "Selected Save Condition: $conditionText")
         } ?: run {
-            Log.d("TodayConditionFragment", "No Condition Save Selected")
+            Log.d("TodayConditionFragment", "No Condition Selected")
         }
-        // TextView에 있는 상태 메시지 전송
+
+        // 상태 메시지 가져오기
         statusText = binding.editTextStatus.text.toString()
-       // Log.d("TodayConditionFragment", "Status Save Text: $statusText")
 
+        // 현재 날짜 가져오기
+        val date = clickedDate
 
-        // TODO: 상태 메시지 데이터를 서버로 전송하거나 저장하는 코드 추가
-        Log.d("TodayConditionFragment", "Selected Option2: $selectedText")
-        Log.d("TodayConditionFragment", "Selected Save Answer2: $answerText")
-        Log.d("TodayConditionFragment", "Selected Save Condition2: $conditionText")
-        Log.d("TodayConditionFragment", "Status Save Text2: $statusText")
-        Log.d("TodayConditionFragment", "Today Save Date2 $clickedDate")
+        // Retrofit 호출을 통해 서버로 데이터 전송
+        val statusRequest = StatusRequest(
+            status = selectedText ?: "GOOD",
+            drink = answerText ?: "NODRINK",
+            statusCondition = conditionText ?: "NOTBAD",
+            memo = statusText ?: "",
+            date = date
+        )
 
+        val retrofit = getRetrofit()
+        val statusService = retrofit.create(Status::class.java)
 
+        statusService.addStatus(statusRequest).enqueue(object : Callback<StatusResponse> {
+            override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
+                if (response.isSuccessful) {
+                    // 서버로부터 성공적인 응답을 받은 경우
+                    val statusResponse = response.body()
+                    Log.d("TodayConditionFragment", "Status saved: $statusResponse")
 
-        binding.saveBtn.visibility = View.GONE
-        binding.editBtn.visibility = View.VISIBLE
+                    // 저장 버튼 비활성화 및 수정 버튼 활성화
+                    binding.saveBtn.visibility = View.GONE
+                    binding.editBtn.visibility = View.VISIBLE
 
-        updateTextViewStatus()
+                    updateTextViewStatus()
+                } else {
+                    // 서버 응답이 실패한 경우
+                    Log.e("TodayConditionFragment", "Failed to save status: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
+                // 네트워크 오류 등의 실패 처리
+                Log.e("TodayConditionFragment", "Error saving status", t)
+            }
+        })
     }
+
 
 
     // Method to handle Edit button click (optional functionality)
