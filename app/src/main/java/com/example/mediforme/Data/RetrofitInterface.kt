@@ -19,7 +19,7 @@ data class StatusRequest(
     @SerializedName("drink") val drink: String?,
     @SerializedName("statusCondition") val statusCondition: String?,
     @SerializedName("memo") val memo: String?,
-    @SerializedName("date") val date: String?
+    @SerializedName("date") val date: String
 )
 //상태 조회 응답
 data class StatusResponse(
