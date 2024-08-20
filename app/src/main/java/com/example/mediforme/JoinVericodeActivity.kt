@@ -8,6 +8,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.startActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.concurrent.timer
 
 class JoinVericodeActivity : AppCompatActivity() {
@@ -16,19 +20,20 @@ class JoinVericodeActivity : AppCompatActivity() {
     private var minute = 0
     private var timeTick = 180 // 예를 들어 3분을 180초로 설정
     private var generatedCode: String? = null
+    private var phoneNumber: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_join_vericode)
 
-        //이전 화면에서 받아온 인텐트
-        val phoneNumber = intent.getStringExtra("user_phoneNumber")
 
         val veri_btn: Button = findViewById(R.id.veri_btn)
         val veri_code_ET: EditText = findViewById(R.id.veri_code_ET)
         val timer_TV: TextView = findViewById(R.id.timer_TV)
         generatedCode = intent.getStringExtra("generatedCode")
+        //이전 화면에서 받아온 인텐트
+        phoneNumber = intent.getStringExtra("user_phoneNumber")
 
         setTimer(timer_TV)
 
@@ -66,6 +71,36 @@ class JoinVericodeActivity : AppCompatActivity() {
             }
         }
     }
+}
+
+//0819 백연결 GPT 참고
+private fun verifyPhoneNumber(phone: String, verificationCode: String) {
+    val apiService = RetrofitClient.instance
+    val request = VerifyPhoneRequest(phone, verificationCode)
+
+    apiService.verifyPhone(request).enqueue(object : Callback<VerifyPhoneResponse> {
+        override fun onResponse(call: Call<VerifyPhoneResponse>, response: Response<VerifyPhoneResponse>) {
+            if (response.isSuccessful) {
+                val body = response.body()
+                if (body != null && body.isSuccess) {
+                    Toast.makeText(this, "인증 성공", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, JoinIdActivity::class.java)
+                    intent.putExtra("user_phoneNumber", phone)
+                    intent.putExtra("consent", "AGREE")
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(this, body?.message ?: "인증 실패", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(this, "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onFailure(call: Call<VerifyPhoneResponse>, t: Throwable) {
+            Toast.makeText(this, "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+        }
+    })
+}
 }
 
 //package com.example.mediforme
