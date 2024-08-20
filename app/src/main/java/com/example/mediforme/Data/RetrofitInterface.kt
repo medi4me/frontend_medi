@@ -13,13 +13,13 @@ interface Status {
     ): Call<StatusResponse>
 }
 
-//상태조회 요청
+//상태조회 요청(저장), //null값 허용
 data class StatusRequest(
-    @SerializedName("status") val status: String,
-    @SerializedName("drink") val drink: String,
-    @SerializedName("statusCondition") val statusCondition: String,
-    @SerializedName("memo") val memo: String,
-    @SerializedName("date") val date: String
+    @SerializedName("status") val status: String?,
+    @SerializedName("drink") val drink: String?,
+    @SerializedName("statusCondition") val statusCondition: String?,
+    @SerializedName("memo") val memo: String?,
+    @SerializedName("date") val date: String?
 )
 //상태 조회 응답
 data class StatusResponse(
