@@ -17,6 +17,8 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.mediforme.Data.CalenderResponse
+import com.example.mediforme.Data.CalenderStatus
 import com.example.mediforme.Data.Status
 import com.example.mediforme.Data.StatusRequest
 import com.example.mediforme.Data.StatusResponse
@@ -49,9 +51,8 @@ class TodayConditionFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        // 클릭된 날짜 초기화
 
-        // clickedDate 초기화
         val currentCalendar = Calendar.getInstance()
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         clickedDate = sdf.format(currentCalendar.time)
@@ -96,7 +97,7 @@ class TodayConditionFragment : Fragment() {
 
 
 
-        // 컨디션 리니어 버튼클릭 이벤트 설정
+        // 기분 리니어 버튼클릭 이벤트 설정
         optionGood_LL.setOnClickListener { selectOptionFeel(optionGood_LL, optionSoso_LL, optionBad_LL) }
         optionSoso_LL.setOnClickListener { selectOptionFeel(optionSoso_LL, optionGood_LL, optionBad_LL) }
         optionBad_LL.setOnClickListener { selectOptionFeel(optionBad_LL, optionGood_LL, optionSoso_LL) }
@@ -105,6 +106,7 @@ class TodayConditionFragment : Fragment() {
         btnNo.setOnClickListener { selectAnswerButton(btnNo, btnYes) }
         btnYes.setOnClickListener { selectAnswerButton(btnYes, btnNo) }
 
+        //컨디션 버튼 클릭 이벤트 설정
         BtnConditionGood.setOnClickListener { selectConditionButton(BtnConditionGood,BtnConditionSoso,BtnConditionBad) }
         BtnConditionSoso.setOnClickListener {selectConditionButton(BtnConditionSoso,BtnConditionGood,BtnConditionBad)  }
         BtnConditionBad.setOnClickListener { selectConditionButton(BtnConditionBad,BtnConditionGood,BtnConditionSoso) }
@@ -168,7 +170,7 @@ class TodayConditionFragment : Fragment() {
     }
 
 
-
+    //오늘 기분 어때요, 리니어 버튼 부분 함수
     private fun selectOptionFeel(selected: LinearLayout, vararg others: LinearLayout) {
         // 선택된 옵션의 배경 및 텍스트 색상 변경
         selected.setBackgroundResource(R.drawable.option_background_select)
@@ -185,6 +187,7 @@ class TodayConditionFragment : Fragment() {
         selectedOption = selected
     }
 
+    //음주 여부 버튼 부분 함수
     private fun selectAnswerButton(selected: Button, other: Button) {
         // 선택된 버튼의 배경 및 텍스트 색상 변경
         selected.setBackgroundResource(R.drawable.option_button_background_select)
@@ -198,6 +201,7 @@ class TodayConditionFragment : Fragment() {
         selectedAnswerButton = selected
     }
 
+    //컨디션 버튼 부분 함수
     private fun selectConditionButton(selected:Button, vararg others:Button){
         //선택된 버튼 배경 및 텍스트 색상변경
         selected.setBackgroundResource(R.drawable.option_button_background_select)
@@ -279,8 +283,7 @@ class TodayConditionFragment : Fragment() {
             date = date
         )
 
-        val retrofit = getRetrofit()
-        val statusService = retrofit.create(Status::class.java)
+        val statusService = getRetrofit().create(Status::class.java)
 
         statusService.addStatus(statusRequest).enqueue(object : Callback<StatusResponse> {
             override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
@@ -396,17 +399,20 @@ class TodayConditionFragment : Fragment() {
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         clickedDate = sdf.format(currentCalendar.time)
 
-        binding.homeDate.text = clickedDate
+        //클릭 날짜 데이터 포멧확인
+        Log.d("TodayConditionFragment", "Formatted Date:$clickedDate")
 
-        // 선택된 날짜에 해당하는 요일과 날짜로 업데이트
+        //binding.homeDate.text = clickedDate //yyyy-mm-dd
+
+        // 선택된 날짜에 해당하는 요일과 날짜로 업데이트 //yyyy.mm.dd
         binding.homeDate.text = getString(R.string.date_format, currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH) + 1, dateItem.date)
 
         // 화면을 초기 상태로 되돌리기... api 연결되면 삭제할 예정 이부분은
-        resetViewToInitialState()
+        //resetViewToInitialState()
 
         // api연결해서 선택된 날짜 정보들 가져와서 선택(저장 되어있던 애들 선택)
         // 선택한 날짜에 해당하는 데이터 가져오기
-        //fetchDataForDate(clickedDate) /// 이부분은 api연결할 때 저 함수 안에서 호출되게 설정해야함
+        fetchDataForDate(clickedDate) /// 이부분은 api연결할 때 저 함수 안에서 호출되게 설정해야함
     }
 
     //옵션 선택 초기화 api연결하면 사용 안함 ..
@@ -450,42 +456,53 @@ class TodayConditionFragment : Fragment() {
 
     // 다른 날짜 아이템 버튼 눌렀을 때, 정보 가져와서 밑에 프래그먼트에 저장된 값들 선택되어있게
     private fun fetchDataForDate(date: String) {
-        // TODO: 여기에 서버 API 호출 코드를 추가예정
         // Retrofit를 사용하여 데이터를 가져온다
+        val calendarService = getRetrofit().create(CalenderStatus::class.java)
+        calendarService.getDateDetails(date).enqueue(object : Callback<CalenderResponse>{
+            override fun onResponse(call: Call<CalenderResponse>, response: Response<CalenderResponse>) {
+                if(response.isSuccessful){
+                    val calenderResponse = response.body()
+                    calenderResponse?.let{
+                        updateUIWithFetchedData(it.status, it.drink, it.statusCondition, it.memo)
+                        Log.d("TodayConditionFragment","Sucess fetch data for date: ${response.code()}")
+                    }
+                }else{
+                    Log.e("TodayConditionFragment","Failed to fetch data for date: ${response.code()}")
+                }
+            }
 
-        // 가정: 서버에서 받아온 데이터를 아래와 같이 가정
-        val fetchedOption = "GOOD" // 서버에서 받아온 기분 (GOOD, NOTBAD, BAD)
-        val fetchedAnswer = "NODRINK" // 서버에서 받아온 음주 여부 (DRINK, NODRINK)
-        val fetchedCondition = "NOTBAD" // 서버에서 받아온 컨디션 (GOOD, NOTBAD, BAD)
-        val fetchedStatusText = "오늘은 좋은 날입니다." // 서버에서 받아온 상태 메시지
+            override fun onFailure(call: Call<CalenderResponse>, t: Throwable) {
+                Log.e("TodayConditionFragment", "Error fetching data for date", t)
+            }
 
-        // 데이터를 UI에 반영하는 함수 호출
-        updateUIWithFetchedData(fetchedOption, fetchedAnswer, fetchedCondition, fetchedStatusText)
+        })
     }
-    private fun updateUIWithFetchedData(option: String?, answer: String?, condition: String?, statusText: String?) {
+
+
+    private fun updateUIWithFetchedData(status: String?, drink: String?, statusCondition: String?, memo: String?) {
         // 기분 옵션을 선택
-        when (option) {
+        when (status) {
             "GOOD" -> selectOptionFeel(binding.optionGoodLL, binding.optionSosoLL, binding.optionBadLL)
             "NOTBAD" -> selectOptionFeel(binding.optionSosoLL, binding.optionGoodLL, binding.optionBadLL)
             "BAD" -> selectOptionFeel(binding.optionBadLL, binding.optionGoodLL, binding.optionSosoLL)
         }
 
         // 음주 여부 버튼 선택
-        when (answer) {
+        when (drink) {
             "DRINK" -> selectAnswerButton(binding.btnYes, binding.btnNo)
             "NODRINK" -> selectAnswerButton(binding.btnNo, binding.btnYes)
         }
 
         // 컨디션 버튼 선택
-        when (condition) {
+        when (statusCondition) {
             "GOOD" -> selectConditionButton(binding.condtionGoodBtn, binding.condtionSosoBtn, binding.condtionBadBtn)
             "NOTBAD" -> selectConditionButton(binding.condtionSosoBtn, binding.condtionGoodBtn, binding.condtionBadBtn)
             "BAD" -> selectConditionButton(binding.condtionBadBtn, binding.condtionGoodBtn, binding.condtionSosoBtn)
         }
 
         // 상태 메시지 업데이트
-        binding.editTextStatus.setText(statusText)
-        binding.textViewStatus.text = statusText
+        binding.editTextStatus.setText(memo)
+        binding.textViewStatus.text = memo
 
         // 상태 메시지 TextView를 보이도록 설정
         binding.textViewStatus.visibility = View.VISIBLE

@@ -32,15 +32,15 @@ data class StatusResponse(
 
 //**************************************************************************//
 
-interface CalendarApi {
-    @GET("calender/date/{date}")
+interface CalenderStatus {
+    @GET("status/date/{date}")
     fun getDateDetails(
         @Path("date") date: String
-    ): Call<CalendarResponse>
+    ): Call<CalenderResponse>
 }
 
 //날짜 선택 응답
-data class CalendarResponse(
+data class CalenderResponse(
     @SerializedName("status") val status: String,
     @SerializedName("drink") val drink: String,
     @SerializedName("statusCondition") val statusCondition: String,
