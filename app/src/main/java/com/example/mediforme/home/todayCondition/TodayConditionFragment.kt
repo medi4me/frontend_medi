@@ -222,7 +222,13 @@ class TodayConditionFragment : Fragment() {
         selectedOption?.let { option ->
             selectedText = (option.getChildAt(1) as TextView).text.toString()
 
-
+            // selectedText 값에 따라 변환
+            selectedText = when (selectedText) {
+                "좋아요" -> "GOOD"
+                "그럭저럭" -> "NOTBAD"
+                "나빠요" -> "BAD"
+                else -> null // 기본 값 설정
+            }
         } ?: run {
             Log.d("TodayConditionFragment", "No Option Selected")
         }
@@ -230,6 +236,14 @@ class TodayConditionFragment : Fragment() {
         // 선택된 답변 버튼이 있는지 확인
         selectedAnswerButton?.let { button ->
             answerText = button.text.toString()
+
+            // 아니요, 마셨어요 변환
+            answerText = when (answerText) {
+                "아니요" -> "NODRINK"
+                "마셨어요" -> "DRINK"
+                else -> null // 기본 값 설정
+            }
+
         } ?: run {
             Log.d("TodayConditionFragment", "No Answer Selected")
         }
@@ -237,6 +251,15 @@ class TodayConditionFragment : Fragment() {
         // 선택된 컨디션 버튼이 있는지 확인
         selectedConditionButton?.let { button ->
             conditionText = button.text.toString()
+
+            // selectedText 값에 따라 변환
+            conditionText = when (conditionText) {
+                "아주 좋아요" -> "GOOD"
+                "그럭저럭" -> "NOTBAD"
+                "별로에요" -> "BAD"
+                else -> null // 기본 값 설정
+            }
+
         } ?: run {
             Log.d("TodayConditionFragment", "No Condition Selected")
         }
@@ -249,10 +272,10 @@ class TodayConditionFragment : Fragment() {
 
         // Retrofit 호출을 통해 서버로 데이터 전송
         val statusRequest = StatusRequest(
-            status = selectedText ?: "GOOD",
-            drink = answerText ?: "NODRINK",
-            statusCondition = conditionText ?: "NOTBAD",
-            memo = statusText ?: "",
+            status = selectedText,
+            drink = answerText,
+            statusCondition = conditionText,
+            memo = statusText,
             date = date
         )
 
