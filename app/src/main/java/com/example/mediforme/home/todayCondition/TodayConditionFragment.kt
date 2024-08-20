@@ -347,10 +347,15 @@ class TodayConditionFragment : Fragment() {
         // 선택된 날짜에 해당하는 요일과 날짜로 업데이트
         binding.homeDate.text = getString(R.string.date_format, currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH) + 1, dateItem.date)
 
-        // 화면을 초기 상태로 되돌리기
+        // 화면을 초기 상태로 되돌리기... api 연결되면 삭제할 예정 이부분은
         resetViewToInitialState()
+
+        // api연결해서 선택된 날짜 정보들 가져와서 선택(저장 되어있던 애들 선택)
+        // 선택한 날짜에 해당하는 데이터 가져오기
+        //fetchDataForDate(clickedDate) /// 이부분은 api연결할 때 저 함수 안에서 호출되게 설정해야함
     }
 
+    //옵션 선택 초기화 api연결하면 사용 안함 ..
     private fun resetViewToInitialState() {
         // 옵션 선택 초기화
         val options = listOf(binding.optionGoodLL, binding.optionSosoLL, binding.optionBadLL)
@@ -385,5 +390,55 @@ class TodayConditionFragment : Fragment() {
         // 저장 버튼 보이기 및 수정 버튼 숨기기
         binding.saveBtn.visibility = View.VISIBLE
         binding.editBtn.visibility = View.GONE
+    }
+
+
+
+    // 다른 날짜 아이템 버튼 눌렀을 때, 정보 가져와서 밑에 프래그먼트에 저장된 값들 선택되어있게
+    private fun fetchDataForDate(date: String) {
+        // TODO: 여기에 서버 API 호출 코드를 추가예정
+        // Retrofit를 사용하여 데이터를 가져온다
+
+        // 가정: 서버에서 받아온 데이터를 아래와 같이 가정
+        val fetchedOption = "GOOD" // 서버에서 받아온 기분 (GOOD, NOTBAD, BAD)
+        val fetchedAnswer = "NODRINK" // 서버에서 받아온 음주 여부 (DRINK, NODRINK)
+        val fetchedCondition = "NOTBAD" // 서버에서 받아온 컨디션 (GOOD, NOTBAD, BAD)
+        val fetchedStatusText = "오늘은 좋은 날입니다." // 서버에서 받아온 상태 메시지
+
+        // 데이터를 UI에 반영하는 함수 호출
+        updateUIWithFetchedData(fetchedOption, fetchedAnswer, fetchedCondition, fetchedStatusText)
+    }
+    private fun updateUIWithFetchedData(option: String?, answer: String?, condition: String?, statusText: String?) {
+        // 기분 옵션을 선택
+        when (option) {
+            "GOOD" -> selectOptionFeel(binding.optionGoodLL, binding.optionSosoLL, binding.optionBadLL)
+            "NOTBAD" -> selectOptionFeel(binding.optionSosoLL, binding.optionGoodLL, binding.optionBadLL)
+            "BAD" -> selectOptionFeel(binding.optionBadLL, binding.optionGoodLL, binding.optionSosoLL)
+        }
+
+        // 음주 여부 버튼 선택
+        when (answer) {
+            "DRINK" -> selectAnswerButton(binding.btnYes, binding.btnNo)
+            "NODRINK" -> selectAnswerButton(binding.btnNo, binding.btnYes)
+        }
+
+        // 컨디션 버튼 선택
+        when (condition) {
+            "GOOD" -> selectConditionButton(binding.condtionGoodBtn, binding.condtionSosoBtn, binding.condtionBadBtn)
+            "NOTBAD" -> selectConditionButton(binding.condtionSosoBtn, binding.condtionGoodBtn, binding.condtionBadBtn)
+            "BAD" -> selectConditionButton(binding.condtionBadBtn, binding.condtionGoodBtn, binding.condtionSosoBtn)
+        }
+
+        // 상태 메시지 업데이트
+        binding.editTextStatus.setText(statusText)
+        binding.textViewStatus.text = statusText
+
+        // 상태 메시지 TextView를 보이도록 설정
+        binding.textViewStatus.visibility = View.VISIBLE
+        binding.editTextStatus.visibility = View.INVISIBLE
+
+        // 수정 모드로 변경
+        binding.saveBtn.visibility = View.GONE
+        binding.editBtn.visibility = View.VISIBLE
     }
 }

@@ -31,9 +31,9 @@ class JoinIdActivity : AppCompatActivity() {
                 putExtra("user_id",user_id)
                 putExtra("user_phoneNumber",phoneNumber)
                 putExtra("consent","AGREE")
-
             }
             startActivity(intent)
         }
     }
 }
+

@@ -66,17 +66,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_TV" />
 
+    <ImageView
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        app:layout_constraintEnd_toEndOf="@+id/user_id_ET"
+        app:layout_constraintTop_toTopOf="@id/user_id_ET"
+        app:layout_constraintBottom_toBottomOf="@id/user_id_ET"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/ic_alert"
+        android:visibility="gone"
+        />
+
     <TextView
-        android:id="@+id/id_check_TV"
+        android:id="@+id/id_check_impossible_TV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/pretendard_regular"
-        android:text="사용가능한 아이디 입니다."
+        android:text="이미 존재하는 아이디 입니다."
         android:textColor="@color/red"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="@+id/phone_num_ET"
-        app:layout_constraintTop_toBottomOf="@+id/phone_num_ET" />
+        app:layout_constraintStart_toStartOf="@+id/user_id_ET"
+        app:layout_constraintTop_toBottomOf="@+id/user_id_ET"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/id_check_poissible_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="사용가능한 아이디입니다."
+        android:textColor="@color/blue"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/user_id_ET"
+        app:layout_constraintTop_toBottomOf="@+id/user_id_ET"
+        android:visibility="gone"/>
 
     <TextView
         android:id="@+id/condition_TV"
@@ -87,8 +112,8 @@
         android:text="5~30자리 숫자, 영문"
         android:textColor="@color/gray"
         android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="@+id/phone_num_ET"
-        app:layout_constraintTop_toBottomOf="@+id/phone_num_ET" />
+        app:layout_constraintEnd_toEndOf="@+id/user_id_ET"
+        app:layout_constraintTop_toBottomOf="@+id/user_id_ET" />
 
     <Button
         android:id="@+id/next_btn"

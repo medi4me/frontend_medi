@@ -31,6 +31,7 @@ class JoinVericodeActivity : AppCompatActivity() {
         val veri_btn: Button = findViewById(R.id.veri_btn)
         val veri_code_ET: EditText = findViewById(R.id.veri_code_ET)
         val timer_TV: TextView = findViewById(R.id.timer_TV)
+        val reveri_TV: TextView = findViewById(R.id.reveri_TV)
         generatedCode = intent.getStringExtra("generatedCode")
         //이전 화면에서 받아온 인텐트
         phoneNumber = intent.getStringExtra("user_phoneNumber")
@@ -50,6 +51,12 @@ class JoinVericodeActivity : AppCompatActivity() {
 //                Toast.makeText(this, "인증 실패", Toast.LENGTH_SHORT).show()
 //            }
         }
+
+        reveri_TV.setOnClickListener {
+            finish()
+        }
+
+
     }
 
     private fun setTimer(textView: TextView) {
