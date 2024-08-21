@@ -16,8 +16,6 @@ class JoinIdActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_join_id)
 
-        //이전 화면에서 받아온 인텐트
-        val phoneNumber = intent.getStringExtra("user_phoneNumber")
 
         user_id_ET = findViewById(R.id.user_id_ET)
 
@@ -29,7 +27,6 @@ class JoinIdActivity : AppCompatActivity() {
 
             val intent = Intent(this@JoinIdActivity, JoinPasswordActivity::class.java).apply {
                 putExtra("user_id",user_id)
-                putExtra("user_phoneNumber",phoneNumber)
                 putExtra("consent","AGREE")
             }
             startActivity(intent)

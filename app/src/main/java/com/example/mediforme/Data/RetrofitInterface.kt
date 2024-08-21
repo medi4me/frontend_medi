@@ -7,7 +7,7 @@ import retrofit2.http.*
 //**************************************************************************//
 
 interface Status {
-    @POST("status")
+    @POST("api/status")
     fun addStatus(
         @Body statusRequest: StatusRequest
     ): Call<StatusResponse>
@@ -33,7 +33,7 @@ data class StatusResponse(
 //**************************************************************************//
 
 interface CalenderStatus {
-    @GET("status/date/{date}")
+    @GET("api/status/date/{date}")
     fun getDateDetails(
         @Path("date") date: String
     ): Call<CalenderResponse>

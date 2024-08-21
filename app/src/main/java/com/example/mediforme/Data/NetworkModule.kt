@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 //여기에 슬레시 안붙어있으면 아래에 주의해야함! .baseUrl안에 (15:50)
 //여긴 마지막에 슬래쉬를 붙이니까 인터페이스에 앞에 슬래쉬는 빼야함
-const val BASE_URL = "http://10.0.2.2:8080/api/"
+const val BASE_URL = "http://10.0.2.2:8080/"
 fun getRetrofit(): Retrofit{
     val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

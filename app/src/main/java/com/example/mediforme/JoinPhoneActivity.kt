@@ -83,6 +83,7 @@
 
 package com.example.mediforme
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -120,9 +121,21 @@ class JoinPhoneActivity : AppCompatActivity() {
         })
 
         veri_btn.setOnClickListener {
+            val phoneNumber = phone_num_ET.text.toString().trim()
+
+            // SharedPreferences에 전화번호 저장
+            savePhoneNumber(phoneNumber)
+
             val intent = Intent(this@JoinPhoneActivity, JoinVericodeActivity::class.java)
             startActivity(intent)
         }
-
+    }
+    // 전화번호를 SharedPreferences에 저장하는 함수
+    private fun savePhoneNumber(phoneNumber: String) {
+        val sharedPref = getSharedPreferences("user_prefs", Context.MODE_PRIVATE)
+        with(sharedPref.edit()) {
+            putString("user_phoneNumber", phoneNumber)
+            apply()  // 비동기 저장
+        }
     }
 }
