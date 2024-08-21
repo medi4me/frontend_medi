@@ -32,11 +32,12 @@ class SearchFragment : Fragment() {
         checkPermissions()
 
         binding.searchWithCamera.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                dispatchTakePictureIntent()
-            } else {
-                requestCameraPermission()
-            }
+//            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+//                dispatchTakePictureIntent()
+//            } else {
+//                requestCameraPermission()
+//            }
+            startActivity(Intent(requireContext(), SearchResultActivity::class.java))
         }
 
         binding.searchWithName.setOnClickListener {
