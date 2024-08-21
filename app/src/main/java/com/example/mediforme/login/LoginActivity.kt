@@ -1,10 +1,10 @@
 package com.example.mediforme.login
 
-import JoinServiceActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mediforme.JoinServiceActivity
 import com.example.mediforme.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
