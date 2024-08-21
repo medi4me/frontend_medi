@@ -16,15 +16,3 @@ fun getRetrofit(): Retrofit{
         .build()
     return  retrofit
 }
-
-//오브젝트유/ 싱글톤패턴
-//object RetrofitInstance {
-//    private const val BASE_URL = "https://bbbbbb/api"
-//
-//    val retrofit: Retrofit by lazy {
-//        Retrofit.Builder()
-//            .baseUrl(BASE_URL)
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//    }
-//}
