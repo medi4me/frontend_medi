@@ -8,7 +8,7 @@ import retrofit2.http.Query
 // 온보딩 약 검색
 
 interface MedicineApiService {
-    @GET("/api/medi/itemName")
+    @GET("api/medi/itemName")
     fun getMedicines(@Query("itemName") itemName: String): Call<MedicineResponse>
 }
 
