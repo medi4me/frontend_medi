@@ -3,7 +3,15 @@ package com.example.mediforme.home.todayCondition
 import java.text.SimpleDateFormat
 import java.util.*
 
-data class WeekDayItem(val dayOfWeek: String, val date: String, val month: Int, var imageUri: String? = null, var isSelected: Boolean = false)
+data class WeekDayItem(
+    val dayOfWeek: String,
+    val date: String,
+    val month: Int,
+    var imageUri: String? = null,
+    var isSelected: Boolean = false,
+    var status: String? = null,  // 상태 저장
+    var isStatusLoaded: Boolean = false // 상태 로드 여부 저장
+)
 
 fun getWeekDates(): Pair<List<WeekDayItem>, Int> {
     val dayOfWeekFormat = SimpleDateFormat("E", Locale("ko"))

@@ -415,7 +415,7 @@
                             android:layout_height="wrap_content"
                             android:paddingLeft="20dp"
                             android:paddingRight="20dp"
-                            android:text="별로예요"
+                            android:text="별로에요"
                             android:textColor="@drawable/text_color_selector"
                             android:background="@drawable/option_button_background"
                             android:layout_margin="8dp"

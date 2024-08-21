@@ -117,14 +117,17 @@ dependencies {
     implementation ("androidx.camera:camera-extensions:${camerax_version}")
     implementation ("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
-    //API연결을 위해..
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    //gson컨버터
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.google.code.gson:gson:2.10.1")
-    //okhttp
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
-    //레트로핏 로깅 인터셉터
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
+    //Retrofit
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.retrofit2:adapter-rxjava2:2.9.0")
+
+    //okHttp
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
+
+    //Glide (이미지 처리)
+    implementation ("com.github.bumptech.glide:glide:4.11.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
 
 }
