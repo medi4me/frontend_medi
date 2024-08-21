@@ -79,36 +79,36 @@ class JoinVericodeActivity : AppCompatActivity() {
         }
     }
 }
+//
+////0819 백연결 GPT 참고
+//private fun verifyPhoneNumber(phone: String, verificationCode: String) {
+//    val apiService = RetrofitClient.instance
+//    val request = VerifyPhoneRequest(phone, verificationCode)
+//
+//    apiService.verifyPhone(request).enqueue(object : Callback<VerifyPhoneResponse> {
+//        override fun onResponse(call: Call<VerifyPhoneResponse>, response: Response<VerifyPhoneResponse>) {
+//            if (response.isSuccessful) {
+//                val body = response.body()
+//                if (body != null && body.isSuccess) {
+//                    Toast.makeText(this, "인증 성공", Toast.LENGTH_SHORT).show()
+//                    val intent = Intent(this, JoinIdActivity::class.java)
+//                    intent.putExtra("user_phoneNumber", phone)
+//                    intent.putExtra("consent", "AGREE")
+//                    startActivity(intent)
+//                } else {
+//                    Toast.makeText(this, body?.message ?: "인증 실패", Toast.LENGTH_SHORT).show()
+//                }
+//            } else {
+//                Toast.makeText(this, "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
+//            }
+//        }
+//
+//        override fun onFailure(call: Call<VerifyPhoneResponse>, t: Throwable) {
+//            Toast.makeText(this, "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
+//        }
+//    })
+//}
 
-//0819 백연결 GPT 참고
-private fun verifyPhoneNumber(phone: String, verificationCode: String) {
-    val apiService = RetrofitClient.instance
-    val request = VerifyPhoneRequest(phone, verificationCode)
-
-    apiService.verifyPhone(request).enqueue(object : Callback<VerifyPhoneResponse> {
-        override fun onResponse(call: Call<VerifyPhoneResponse>, response: Response<VerifyPhoneResponse>) {
-            if (response.isSuccessful) {
-                val body = response.body()
-                if (body != null && body.isSuccess) {
-                    Toast.makeText(this, "인증 성공", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, JoinIdActivity::class.java)
-                    intent.putExtra("user_phoneNumber", phone)
-                    intent.putExtra("consent", "AGREE")
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(this, body?.message ?: "인증 실패", Toast.LENGTH_SHORT).show()
-                }
-            } else {
-                Toast.makeText(this, "서버 오류: ${response.code()}", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        override fun onFailure(call: Call<VerifyPhoneResponse>, t: Throwable) {
-            Toast.makeText(this, "네트워크 오류: ${t.message}", Toast.LENGTH_SHORT).show()
-        }
-    })
-}
-}
 
 //package com.example.mediforme
 //

@@ -50,18 +50,3 @@ data class CalenderResponse(
 
 //**************************************************************************//
 
-// 온보딩 약 검색
-
-interface MedicineApi {
-    @GET("api/medi/itemName")
-    fun searchMedicines(@Query("itemName") itemName: String): Call<MedicineResponse>
-}
-
-data class MedicineResponse(
-    val medicines: List<Medicine>
-)
-
-data class Medicine(
-    val itemName: String,
-    val itemImage: String?
-)
