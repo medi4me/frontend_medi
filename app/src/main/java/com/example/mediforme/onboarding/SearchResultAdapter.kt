@@ -24,9 +24,10 @@ class SearchResultAdapter(
             medicineNumber.text = (position + 1).toString()
             medicineName.text = medicine.itemName
             Glide.with(itemView.context)
-                .load(medicine.itemImage) // 이미지 URL로 로딩
-                .placeholder(R.drawable.ic_drug_default) // 로딩 중 표시될 이미지
+                .load(medicine.itemImage)
+                .placeholder(R.drawable.ic_drug_default)
                 .into(medicineImage)
+
             itemView.setOnClickListener {
                 itemClickListener.onItemClick(medicine.itemName)
             }

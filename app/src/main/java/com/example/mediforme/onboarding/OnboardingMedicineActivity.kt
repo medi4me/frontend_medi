@@ -16,7 +16,6 @@ import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
 import com.example.mediforme.search.CameraActivity
-import com.example.mediforme.search.Medicine
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,7 +24,6 @@ import retrofit2.Response
 class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickListener {
 
     private lateinit var binding: ActivityOnboardingMedicineBinding
-    private lateinit var adapter: SearchResultAdapter
     private val apiService = getRetrofit().create(MedicineApiService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +70,7 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
 
     private fun fetchMedicinesFromServer(query: String) {
         val apiService = getRetrofit().create(MedicineApiService::class.java)
-        val call = apiService.getMedicines(query)  // 서버 요청에 query 파라미터 전달
+        val call = apiService.getMedicines(query)
 
         call.enqueue(object : Callback<MedicineResponse> {
             override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
@@ -90,8 +88,6 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
             }
         })
     }
-
-
 
     private fun showSearchResultsBottomSheet(medicines: List<Medicines>) {
         val bottomSheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_search_results, null)
@@ -111,8 +107,6 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
 
         bottomSheetDialog.show()
     }
-
-
 
     override fun onItemClick(name: String) {
         val intent = Intent(this, OnboardingDetailActivity::class.java).apply {
