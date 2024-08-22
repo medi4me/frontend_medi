@@ -8,13 +8,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import com.example.mediforme.Data.AuthService
+import com.example.mediforme.Data.FindIDResponse
+import com.example.mediforme.Data.VerificationRequest
+import com.example.mediforme.Data.VerificationResponse
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class SearchIDFragment : Fragment() {
 
@@ -23,6 +32,10 @@ class SearchIDFragment : Fragment() {
     private lateinit var veriSendBtn: Button
     private lateinit var enterBtn: Button
     private lateinit var searchIdBtn: Button
+    private lateinit var authService: AuthService
+
+    private var memberID: String? = null
+    private var password: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +49,8 @@ class SearchIDFragment : Fragment() {
         veriSendBtn = view.findViewById(R.id.veri_send_btn)
         enterBtn = view.findViewById(R.id.enter_Btn)
         searchIdBtn = view.findViewById(R.id.saerch_id_Btn)
+
+        authService = getRetrofit().create(AuthService::class.java)
 
         // 초기 상태에서 버튼을 비활성화합니다.
         veriSendBtn.isEnabled = false
@@ -53,11 +68,24 @@ class SearchIDFragment : Fragment() {
         phoneNumET.addTextChangedListener(textWatcher)
         veriET.addTextChangedListener(textWatcher)
 
+        veriSendBtn.setOnClickListener {
+            sendVerificationCode()
+        }
+        enterBtn.setOnClickListener {
+            verifyAndFindID()
+        }
+
         searchIdBtn.setOnClickListener {
             if (searchIdBtn.isEnabled) {
                 // InfoIDFragment로 이동
+                val fragment = InfoIDFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("memberID", memberID)
+                        putString("password", password)
+                    }
+                }
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, InfoIDFragment())
+                    .replace(R.id.fragment_container, fragment)
                     .addToBackStack(null)
                     .commit()
             }
@@ -83,6 +111,60 @@ class SearchIDFragment : Fragment() {
 
         veriSendBtn.isEnabled = phoneNumFilled
         enterBtn.isEnabled = veriFilled
-        searchIdBtn.isEnabled = phoneNumFilled && veriFilled
+       //searchIdBtn.isEnabled = phoneNumFilled && veriFilled
+    }
+
+    private fun sendVerificationCode() {
+        val phoneNumber = phoneNumET.text.toString().trim()
+        val request = VerificationRequest(phone = phoneNumber)
+
+        authService.sendVerificationCode(request).enqueue(object : Callback<VerificationResponse> {
+            override fun onResponse(call: Call<VerificationResponse>, response: Response<VerificationResponse>) {
+                if (response.isSuccessful) {
+                    val verificationResponse = response.body()
+                    verificationResponse?.let {
+                        if (it.isSuccess) {
+                            Toast.makeText(requireContext(), "인증 코드가 발송되었습니다.", Toast.LENGTH_SHORT).show()
+                        } else if (it.code == "PHONE_NOT_FOUND") {
+                            Toast.makeText(requireContext(), "존재하지 않는 번호입니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+            }
+            override fun onFailure(call: Call<VerificationResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+    private fun verifyAndFindID() {
+        val phoneNumber = phoneNumET.text.toString().trim()
+        val verificationCode = veriET.text.toString().trim()
+        val request = VerificationRequest(phone = phoneNumber, verificationCode = verificationCode)
+
+        authService.verifyAndFindID(request).enqueue(object : Callback<FindIDResponse> {
+            override fun onResponse(call: Call<FindIDResponse>, response: Response<FindIDResponse>) {
+                if (response.isSuccessful) {
+                    val findIDResponse = response.body()
+                    findIDResponse?.let {
+                        if (it.isSuccess) {
+                            memberID = it.result?.memberID
+                            password = it.result?.password
+
+                            // 인증 성공 시 "아이디 찾기" 버튼을 활성화
+                            searchIdBtn.isEnabled = true
+
+                        } else {
+                            Toast.makeText(requireContext(), "인증에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            searchIdBtn.isEnabled = false // 인증 실패 시 버튼 비활성화
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<FindIDResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
+

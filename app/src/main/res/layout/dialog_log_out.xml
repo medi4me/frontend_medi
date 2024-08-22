@@ -8,15 +8,15 @@
     android:layout_height="200dp"
     >
 
-    <ImageView
-        android:id="@+id/dialog_log_out_xBtn_IV"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@drawable/icon_x"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="13dp"/>
+<!--    <ImageView-->
+<!--        android:id="@+id/dialog_log_out_xBtn_IV"-->
+<!--        android:layout_width="24dp"-->
+<!--        android:layout_height="24dp"-->
+<!--        android:src="@drawable/icon_x"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_marginEnd="20dp"-->
+<!--        android:layout_marginTop="13dp"/>-->
 
 
     <TextView

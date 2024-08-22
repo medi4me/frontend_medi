@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mediforme.Data.CalenderResponse
 import com.example.mediforme.Data.CalenderStatus
+import com.example.mediforme.Data.CalenderUpdateRequest
 import com.example.mediforme.Data.Status
 import com.example.mediforme.Data.StatusRequest
 import com.example.mediforme.Data.StatusResponse
@@ -43,6 +45,9 @@ class TodayConditionFragment : Fragment() {
     private var selectedConditionButton: Button? = null  //선택된 컨디션 버튼 저장 변수
     private lateinit var clickedDate: String // 체크된 날짜
 
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var homeNameTV: TextView
+
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
     }
@@ -58,6 +63,15 @@ class TodayConditionFragment : Fragment() {
         clickedDate = sdf.format(currentCalendar.time)
 
         binding = FragmentTodayConditionBinding.inflate(inflater,container,false)
+
+        sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        homeNameTV = binding.homeNameTV
+
+        val name = sharedPreferences.getString("name", "Unknown Name")
+        homeNameTV.text = "$name"
+
+
+
 
         binding.howTodayBackBtnIV.setOnClickListener {
             // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
@@ -324,8 +338,14 @@ class TodayConditionFragment : Fragment() {
         var statusText : String? = null
 
         selectedOption?.let { option ->
-             selectedText = (option.getChildAt(1) as TextView).text.toString()
-            //Log.d("TodayConditionFragment", "Selected Edit Option: $selectedText")
+            selectedText = (option.getChildAt(1) as TextView).text.toString()
+            // selectedText 값에 따라 변환
+            selectedText = when (selectedText) {
+                "좋아요" -> "GOOD"
+                "그럭저럭" -> "NOTBAD"
+                "나빠요" -> "BAD"
+                else -> null // 기본 값 설정
+            }
         } ?: run {
             Log.d("TodayConditionFragment", "No Option Selected")
         }
@@ -333,20 +353,76 @@ class TodayConditionFragment : Fragment() {
         // 선택된 답변 버튼이 있는지 확인
         selectedAnswerButton?.let { button ->
             answerText = button.text.toString()
-           // Log.d("TodayConditionFragment", "Selected Edit Answer: $answerText")
+            // 아니요, 마셨어요 변환
+            answerText = when (answerText) {
+                "아니요" -> "NODRINK"
+                "마셨어요" -> "DRINK"
+                else -> null // 기본 값 설정
+            }
         } ?: run {
             Log.d("TodayConditionFragment", "No Answer Selected")
         }
         // 선택된 컨디션 버튼이 있는지 확인
         selectedConditionButton?.let { button ->
             conditionText = button.text.toString()
-            //Log.d("TodayConditionFragment", "Selected Edit Condition: $conditionText")
+            // selectedText 값에 따라 변환
+            conditionText = when (conditionText) {
+                "아주 좋아요" -> "GOOD"
+                "그럭저럭" -> "NOTBAD"
+                "별로에요" -> "BAD"
+                else -> null // 기본 값 설정
+            }
         } ?: run {
             Log.d("TodayConditionFragment", "No Condition Edit Selected")
         }
 
         // TextView에 있는 상태 메시지 전송
         statusText = binding.editTextStatus.text.toString()
+
+        // 현재 날짜 가져오기
+        val date = clickedDate
+
+        // Retrofit 호출을 통해 서버로 데이터 전송 (PUT 요청)
+        val updateRequest = CalenderUpdateRequest(
+            status = selectedText,
+            drink = answerText,
+            statusCondition = conditionText,
+            memo = statusText,
+            date = date
+        )
+        val calendarService = getRetrofit().create(CalenderStatus::class.java)
+
+        calendarService.updateDateStatus(date, updateRequest).enqueue(object : Callback<CalenderResponse> {
+            override fun onResponse(call: Call<CalenderResponse>, response: Response<CalenderResponse>) {
+                if (response.isSuccessful) {
+                    // 서버로부터 성공적인 응답을 받은 경우
+                    val statusResponse = response.body()
+                    Log.d("TodayConditionFragment", "Status updated: $statusResponse")
+
+                    // 수정된 날짜에 해당하는 WeekDayItem의 상태를 업데이트
+                    selectedDateItem?.status = statusResponse?.status
+                    selectedDateItem?.isStatusLoaded = true
+
+                    // 어댑터에게 데이터 변경을 알림
+                    adapter.notifyDataSetChanged()
+
+                    // 수정 버튼 비활성화 및 저장 버튼 활성화
+                    binding.saveBtn.visibility = View.GONE
+                    binding.editBtn.visibility = View.VISIBLE
+
+                    updateTextViewStatus()
+                } else {
+                    // 서버 응답이 실패한 경우
+                    Log.e("TodayConditionFragment", "Failed to update status: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<CalenderResponse>, t: Throwable) {
+                // 네트워크 오류 등의 실패 처리
+                Log.e("TodayConditionFragment", "Error updating status", t)
+            }
+        })
+
 
         Log.d("TodayConditionFragment", "Selected Edit Option2: $selectedText")
         Log.d("TodayConditionFragment", "Selected Edit Answer2: $answerText")
