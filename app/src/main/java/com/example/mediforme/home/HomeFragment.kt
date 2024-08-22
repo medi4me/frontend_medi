@@ -15,19 +15,26 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.navigation.fragment.findNavController
+import com.example.mediforme.Data.MedicineResponse
+import com.example.mediforme.Data.MedicineShowService
+import com.example.mediforme.Data.Medicines
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.home.todayCondition.WeekDayAdapter
 import com.example.mediforme.home.todayCondition.WeekDayItem
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.Timer
-
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private val timer = Timer()
     private val handler = Handler(Looper.getMainLooper())
-    private lateinit var adapter: WeekDayAdapter2
+    private lateinit var weekDayAdapter: WeekDayAdapter2  // 요일에 사용하는 어댑터
+    private lateinit var routineDrugAdapter: RoutineDrugRVAdaptor // 약물 리스트에 사용하는 어댑터
     private lateinit var items2: List<WeekDayItem2>
     private var selectedDateItem2: WeekDayItem2? = null
     private var todayIndex2: Int = 0
@@ -36,11 +43,10 @@ class HomeFragment : Fragment() {
         private const val REQUEST_IMAGE_PICK = 1
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
 
         // Setup ViewPager with BannerFragment
@@ -57,25 +63,26 @@ class HomeFragment : Fragment() {
         items2 = weekData2.first
         todayIndex2 = weekData2.second
 
-        // RecyclerView 설정
-        adapter = WeekDayAdapter2(items2) { dateItem ->
+        // 요일 RecyclerView 설정
+        weekDayAdapter = WeekDayAdapter2(items2) { dateItem ->
             selectedDateItem2 = dateItem
             onDateItemClick(dateItem)
         }
         binding.recyclerView2.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.recyclerView2.adapter = adapter
+        binding.recyclerView2.adapter = weekDayAdapter
 
         // 오늘 날짜 선택
         selectTodayDate()
 
         return binding.root
     }
+
     private fun selectTodayDate() {
         // 오늘 날짜 아이템을 선택 상태로 설정
         val todayItem = items2[todayIndex2]
         todayItem.isSelected = true
         selectedDateItem2 = todayItem
-        adapter.notifyDataSetChanged()
+        weekDayAdapter.notifyDataSetChanged()
 
         // 오늘 날짜로 스크롤
         binding.recyclerView2.scrollToPosition(todayIndex2)
@@ -103,7 +110,7 @@ class HomeFragment : Fragment() {
         dateItem.isSelected = true
 
         // 어댑터에 알림을 보냄
-        adapter.notifyDataSetChanged()
+        weekDayAdapter.notifyDataSetChanged()
 
         // 현재 날짜와 시간을 가져옴
         val currentCalendar = Calendar.getInstance()
@@ -131,25 +138,45 @@ class HomeFragment : Fragment() {
             findNavController().navigate(action)
         }
 
-        // Dummy data for RecyclerView
-        val routineDrugList = arrayListOf(
-            RoutineDrug("09:00", "테스민정 0.1mg", "1정", false),
-            RoutineDrug("12:00", "테스민 0.1mg", "2정", false),
-            RoutineDrug("12:00", "테스민정 0.1mg", "2정", false),
-            RoutineDrug("12:00", "테민정 0.1mg", "2정", false),
-            RoutineDrug("18:00", "스민정 0.1mg", "1정", false),
-            RoutineDrug("18:00", "테스민정 0.1mg", "2정", false),
-            RoutineDrug("12:00", "테민정 0.1mg", "2정", false),
-            RoutineDrug("18:00", "스민정 0.1mg", "1정", false),
-            RoutineDrug("18:00", "테스민정 0.1mg", "2정", false),
-            RoutineDrug("12:00", "테민정 0.1mg", "2정", false),
-            RoutineDrug("18:00", "스민정 0.1mg", "1정", false),
-            RoutineDrug("18:00", "테스민정 0.1mg", "2정", false)
-        )
-
-        // Setup RecyclerView
-        binding.homeRoutineRV.adapter = RoutineDrugRVAdaptor(routineDrugList)
+        // 약물 리스트 RecyclerView 설정
+        routineDrugAdapter = RoutineDrugRVAdaptor(arrayListOf())
+        binding.homeRoutineRV.adapter = routineDrugAdapter
         binding.homeRoutineRV.layoutManager = LinearLayoutManager(requireContext())
+
+        fetchMedicines()
+    }
+
+    private fun fetchMedicines() {
+        val retrofit = getRetrofit()
+        val service = retrofit.create(MedicineShowService::class.java)
+        val call = service.getUserMedicines(memberId = "1") // 사용자의 memberId로 변경해야 함
+
+        call.enqueue(object : Callback<MedicineResponse> {
+            override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+                if (response.isSuccessful) {
+                    val medicineList = response.body()?.medicines ?: emptyList()
+                    updateRecyclerView(medicineList)
+                } else {
+                    Log.e(TAG, "Failed to fetch medicines: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
+                Log.e(TAG, "Error fetching medicines", t)
+            }
+        })
+    }
+
+    private fun updateRecyclerView(medicineList: List<Medicines>) {
+        val routineDrugList = medicineList.map { medicine ->
+            RoutineDrug(
+                drugTime = medicine.time ?: "",
+                drugName = medicine.itemName ?: "",
+                drugNum = medicine.dosage ?: "",
+                drugCheckBtn = medicine.check
+            )
+        }
+        routineDrugAdapter.updateData(routineDrugList)
     }
 
     private fun startAutoSlide(adapter: BannerVPAdapter) {

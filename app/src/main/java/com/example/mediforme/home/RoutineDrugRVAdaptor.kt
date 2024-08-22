@@ -1,12 +1,12 @@
 package com.example.mediforme.home
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mediforme.databinding.ItemRoutineDrugBinding
-class RoutineDrugRVAdaptor(private val drugRoutineList: ArrayList<RoutineDrug>) : RecyclerView.Adapter<RoutineDrugRVAdaptor.Holder>() {
+
+class RoutineDrugRVAdaptor(private var drugRoutineList: ArrayList<RoutineDrug>) : RecyclerView.Adapter<RoutineDrugRVAdaptor.Holder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = ItemRoutineDrugBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -35,15 +35,10 @@ class RoutineDrugRVAdaptor(private val drugRoutineList: ArrayList<RoutineDrug>) 
             drugName.text = routineDrug.drugName
             drugNum.text = routineDrug.drugNum
 
-            // 리스너를 설정하기 전에 이전 리스너를 제거
             drugCheckBtn.setOnCheckedChangeListener(null)
 
-            // CheckBox의 상태 설정
             drugCheckBtn.isChecked = routineDrug.drugCheckBtn
 
-
-
-            // CheckBox 상태에 따른 선택바 보이기/숨기기
             if (routineDrug.drugCheckBtn) {
                 selectBar.visibility = View.VISIBLE
                 unselectBar.visibility = View.GONE
@@ -52,10 +47,8 @@ class RoutineDrugRVAdaptor(private val drugRoutineList: ArrayList<RoutineDrug>) 
                 unselectBar.visibility = View.VISIBLE
             }
 
-            // CheckBox의 상태 변경 리스너 설정
             drugCheckBtn.setOnCheckedChangeListener { _, isChecked ->
                 routineDrug.drugCheckBtn = isChecked
-                // CheckBox 상태에 따른 선택바 보이기/숨기기 업데이트
                 if (isChecked) {
                     selectBar.visibility = View.VISIBLE
                     unselectBar.visibility = View.GONE
@@ -65,5 +58,11 @@ class RoutineDrugRVAdaptor(private val drugRoutineList: ArrayList<RoutineDrug>) 
                 }
             }
         }
+    }
+
+    fun updateData(newDrugRoutineList: List<RoutineDrug>) {
+        drugRoutineList.clear()
+        drugRoutineList.addAll(newDrugRoutineList)
+        notifyDataSetChanged()
     }
 }

@@ -2,7 +2,7 @@ package com.example.mediforme.Data
 
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
-import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
@@ -32,6 +32,14 @@ interface MedicineShowService{
     ): Call<MedicineResponse>
 }
 
+interface MedicineDeleteService {
+    @DELETE("delete/userMedicine")
+    fun deleteMedicine(
+        @Query("memberId") memberId: Int,
+        @Query("userMedicineId") userMedicineId: Int
+    ): Call<String>
+}
+
 data class MedicineResponse(
     val medicines: List<Medicines>
 )
@@ -48,7 +56,6 @@ data class Medicines(
     @SerializedName("dosage") val dosage: String?,
     @SerializedName("alarm") val alarm: Boolean,
     @SerializedName("check") val check: Boolean
-
 )
 
 data class MedicineRequest(
