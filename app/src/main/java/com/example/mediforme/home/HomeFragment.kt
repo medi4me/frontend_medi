@@ -1,6 +1,8 @@
 package com.example.mediforme.home
 
 import android.content.ContentValues.TAG
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import kotlin.concurrent.scheduleAtFixedRate
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import com.example.mediforme.home.todayCondition.WeekDayAdapter
 import com.example.mediforme.home.todayCondition.WeekDayItem
@@ -31,6 +34,9 @@ class HomeFragment : Fragment() {
     private lateinit var items2: List<WeekDayItem2>
     private var selectedDateItem2: WeekDayItem2? = null
     private var todayIndex2: Int = 0
+
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var homeNameTV: TextView
 
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
@@ -51,6 +57,16 @@ class HomeFragment : Fragment() {
         binding.homeBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         binding.homeBannerIndicator.setViewPager(binding.homeBannerVp)
         startAutoSlide(bannerAdapter)
+
+        sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        homeNameTV = binding.homeNameTV
+
+        // Retrieve the stored memberID and name
+        val memberID = sharedPreferences.getString("memberID", "Unknown ID")
+        val name = sharedPreferences.getString("name", "Unknown Name")
+
+        // Set the retrieved values to the TextView
+        homeNameTV.text = "$name"
 
         // 날짜 데이터 초기화
         val weekData2 = com.example.mediforme.home.getWeekDates()

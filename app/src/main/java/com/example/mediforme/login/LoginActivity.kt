@@ -1,6 +1,8 @@
 package com.example.mediforme.login
 
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -9,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.Data.AuthService
 import com.example.mediforme.Data.LoginRequest
 import com.example.mediforme.Data.LoginResponse
+import com.example.mediforme.Data.NameResponse
 import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.JoinServiceActivity
 import com.example.mediforme.MainActivity
@@ -21,6 +24,8 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var authService: AuthService
+    private lateinit var sharedPreferences: SharedPreferences
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +37,8 @@ class LoginActivity : AppCompatActivity() {
 
         // authService 초기화
         authService = getRetrofit().create(AuthService::class.java)
+        sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+
 
         // 아이디 찾기 텍스트뷰 클릭 리스너
         binding.searchIdTV.setOnClickListener {
@@ -65,10 +72,13 @@ class LoginActivity : AppCompatActivity() {
                         val loginResponse = response.body()
                         loginResponse?.let {
                             if (it.isSuccess) {
-                                Log.d("LoginActivity", "Login Successful: ${it.result.accessToken}")
+                                //Log.d("LoginActivity", "Login Successful: ${it.result.accessToken}")
                                 // Access token과 같은 데이터를 저장하거나 다음 화면으로 이동하는 로직 추가
-                                Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
-                                // 로그인 성공 시 MainActivity로 이동
+                                //Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
+
+                                //로그인 성공시에 회원아이디, 회원이름 SharedPreferences에 저장
+                                fetchUserNameAndSave(id)
+
                                 val intent = Intent(this@LoginActivity, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
@@ -89,7 +99,42 @@ class LoginActivity : AppCompatActivity() {
                 }
             })
         }
+    }
+    private fun fetchUserNameAndSave(memberID: String) {
+        authService.getName(memberID).enqueue(object : Callback<NameResponse> {
+            override fun onResponse(call: Call<NameResponse>, response: Response<NameResponse>) {
+                if (response.isSuccessful) {
+                    val nameResponse = response.body()
+                    nameResponse?.let {
+                        if (it.isSuccess) {
+                            val editor = sharedPreferences.edit()
+                            editor.putString("memberID", memberID)
+                            editor.putString("name", it.result)
+                            editor.apply()
 
+                            Log.d("LoginActivity", "Name fetched and saved: ${it.result}")
+                            Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
 
+                            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            Log.e("LoginActivity", "Failed to fetch name: ${it.message}")
+                            Toast.makeText(this@LoginActivity, "이름 가져오기 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    Log.e("LoginActivity", "Response Error: ${response.code()}")
+                    Toast.makeText(this@LoginActivity, "이름 가져오기 실패: 서버 오류", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<NameResponse>, t: Throwable) {
+                Log.e("LoginActivity", "Network Error: ${t.message}")
+                Toast.makeText(this@LoginActivity, "이름 가져오기 실패: 네트워크 오류", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 }
+
+

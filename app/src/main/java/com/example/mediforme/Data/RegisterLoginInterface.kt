@@ -3,7 +3,9 @@ package com.example.mediforme.Data
 import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 // Retrofit 인터페이스 정의
 interface Register {
@@ -37,8 +39,13 @@ data class ResultData(
 //***********************************************************************
 
 interface AuthService {
+    //로그인
     @POST("auth/login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
+
+    //아이디로 회원이름 값 받아오기
+    @GET("auth/search-name/{memberID}")
+    fun getName(@Path("memberID") memberID: String): Call<NameResponse>
 }
 
 
@@ -59,3 +66,13 @@ data class Result(
     val accessToken: String,
     val refreshToken: String
 )
+
+//로그인 시 아이디 검색으로 이름 받아오기
+data class NameResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: String
+)
+
+//***************************************************************

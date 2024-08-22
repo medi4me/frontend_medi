@@ -1,7 +1,9 @@
 package com.example.mediforme.mypage
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
@@ -11,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -26,6 +29,9 @@ import com.example.mediforme.onboarding.OnboardingMedicineActivity
 class MyPageFragment : Fragment() {
     lateinit var binding: FragmentMypageBinding
     lateinit var adapter: ContentDrugRVAdaptor
+
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var myPageNameTV: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +57,15 @@ class MyPageFragment : Fragment() {
             ContentDrug(R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", false),
             ContentDrug(R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일",false),
         )
+
+        sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        myPageNameTV = binding.myNameTV
+
+        val memberID = sharedPreferences.getString("memberID", "Unknown ID")
+        val name = sharedPreferences.getString("name", "Unknown Name")
+
+        myPageNameTV.text = "$name"
+
 
         adapter = ContentDrugRVAdaptor(contentDrugList)
         binding.myDrugRV.adapter = adapter
