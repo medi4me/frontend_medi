@@ -16,6 +16,7 @@ import com.example.mediforme.Data.Register
 import com.example.mediforme.Data.RegisterResponse
 import com.example.mediforme.Data.RegisterUserData
 import com.example.mediforme.Data.getRetrofit
+import com.example.mediforme.login.LoginActivity
 import com.example.mediforme.onboarding.OnboardingAgeActivity
 import com.example.mediforme.onboarding.OnboardingMedicineActivity
 import retrofit2.Call
@@ -76,7 +77,7 @@ class JoinNameActivity : AppCompatActivity() {
                     response.body()?.let {
                         if (it.isSuccess) {
                             Log.d("Register", "회원가입 성공: ${it.message}")
-                            val intent = Intent(this@JoinNameActivity, OnboardingMedicineActivity::class.java)
+                            val intent = Intent(this@JoinNameActivity, LoginActivity::class.java)
                             startActivity(intent)
                         } else {
                             Log.d("Register", "회원가입 실패: ${it.message}")
