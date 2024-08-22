@@ -16,6 +16,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.example.mediforme.Data.AuthService
+import com.example.mediforme.Data.FindIDResponse
 import com.example.mediforme.Data.VerificationRequest
 import com.example.mediforme.Data.VerificationResponse
 import com.example.mediforme.Data.getRetrofit
@@ -32,6 +33,9 @@ class SearchIDFragment : Fragment() {
     private lateinit var enterBtn: Button
     private lateinit var searchIdBtn: Button
     private lateinit var authService: AuthService
+
+    private var memberID: String? = null
+    private var password: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,12 +71,21 @@ class SearchIDFragment : Fragment() {
         veriSendBtn.setOnClickListener {
             sendVerificationCode()
         }
+        enterBtn.setOnClickListener {
+            verifyAndFindID()
+        }
 
         searchIdBtn.setOnClickListener {
             if (searchIdBtn.isEnabled) {
                 // InfoIDFragment로 이동
+                val fragment = InfoIDFragment().apply {
+                    arguments = Bundle().apply {
+                        putString("memberID", memberID)
+                        putString("password", password)
+                    }
+                }
                 parentFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, InfoIDFragment())
+                    .replace(R.id.fragment_container, fragment)
                     .addToBackStack(null)
                     .commit()
             }
@@ -98,7 +111,7 @@ class SearchIDFragment : Fragment() {
 
         veriSendBtn.isEnabled = phoneNumFilled
         enterBtn.isEnabled = veriFilled
-        searchIdBtn.isEnabled = phoneNumFilled && veriFilled
+       //searchIdBtn.isEnabled = phoneNumFilled && veriFilled
     }
 
     private fun sendVerificationCode() {
@@ -118,8 +131,37 @@ class SearchIDFragment : Fragment() {
                     }
                 }
             }
-
             override fun onFailure(call: Call<VerificationResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+    private fun verifyAndFindID() {
+        val phoneNumber = phoneNumET.text.toString().trim()
+        val verificationCode = veriET.text.toString().trim()
+        val request = VerificationRequest(phone = phoneNumber, verificationCode = verificationCode)
+
+        authService.verifyAndFindID(request).enqueue(object : Callback<FindIDResponse> {
+            override fun onResponse(call: Call<FindIDResponse>, response: Response<FindIDResponse>) {
+                if (response.isSuccessful) {
+                    val findIDResponse = response.body()
+                    findIDResponse?.let {
+                        if (it.isSuccess) {
+                            memberID = it.result?.memberID
+                            password = it.result?.password
+
+                            // 인증 성공 시 "아이디 찾기" 버튼을 활성화
+                            searchIdBtn.isEnabled = true
+
+                        } else {
+                            Toast.makeText(requireContext(), "인증에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                            searchIdBtn.isEnabled = false // 인증 실패 시 버튼 비활성화
+                        }
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<FindIDResponse>, t: Throwable) {
                 Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
         })
