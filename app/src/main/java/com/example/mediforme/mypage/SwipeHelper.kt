@@ -11,7 +11,13 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.Data.MedicineDeleteService
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.R
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.math.max
 import kotlin.math.min
 
@@ -125,13 +131,33 @@ class SwipeHelper(
             alertDialog.dismiss()
         }
         deleteBtn.setOnClickListener {
-            // 삭제 버튼
+            // 약물 삭제 서버 요청
+            val contentDrug = adapter.contentDrugList[position]
+            val memberId = 1 // 실제 memberId를 사용해야 합니다.
+            val userMedicineId = contentDrug.userMedicineId // 해당 약물의 userMedicineId를 사용해야 합니다.
 
-            //약삭제!!!!!!
+            val retrofit = getRetrofit()
+            val service = retrofit.create(MedicineDeleteService::class.java)
+            val call = service.deleteMedicine(memberId, userMedicineId)
 
+            Log.d("SwipeHelper", "Attempting to delete userMedicineId: $userMedicineId, memberId: $memberId")
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()?.string() // 응답을 직접 읽음
+                        Log.d("SwipeHelper", "Response: $responseBody")
+                        // 성공적으로 삭제된 경우 로컬에서도 삭제 처리
+                        adapter.removeItem(position)
+                        alertDialog.dismiss()
+                    } else {
+                        Log.e("SwipeHelper", "Failed to delete medicine: ${response.errorBody()?.string()}")
+                    }
+                }
 
-            adapter.removeItem(position)
-            alertDialog.dismiss()
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Log.e("SwipeHelper", "Error deleting medicine", t)
+                }
+            })
         }
         alertDialog.show()
     }

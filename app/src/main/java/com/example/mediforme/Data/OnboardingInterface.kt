@@ -1,6 +1,7 @@
 package com.example.mediforme.Data
 
 import com.google.gson.annotations.SerializedName
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -37,7 +38,7 @@ interface MedicineDeleteService {
     fun deleteMedicine(
         @Query("memberId") memberId: Int,
         @Query("userMedicineId") userMedicineId: Int
-    ): Call<String>
+    ): Call<ResponseBody>
 }
 
 data class MedicineResponse(
