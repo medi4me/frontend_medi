@@ -20,6 +20,8 @@ interface Register {
     @POST("register/phone")
     fun checkPhoneNumber(@Query("phone") phone: String): Call<PhoneNumberResponse>
 
+    @POST("register/verifyPhone")
+    fun verifyPhone(@Body request: PhoneVerificationRequest): Call<PhoneVerificationResponse>
 }
 
 // 데이터 클래스 정의
@@ -66,6 +68,20 @@ data class PhoneNumberResponse(
     val code: String,
     val message: String,
     val result: String
+)
+
+//인증번호 인증 확인 request
+data class PhoneVerificationRequest(
+    val phone: String,
+    val verificationCode: String
+)
+
+//인증번호 전송 확인 response
+data class PhoneVerificationResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: String?
 )
 
 

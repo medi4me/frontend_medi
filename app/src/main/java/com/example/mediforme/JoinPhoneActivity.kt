@@ -74,6 +74,7 @@ class JoinPhoneActivity : AppCompatActivity() {
                             isAvailableTV.visibility = TextView.GONE
                             savePhoneNumber(phoneNumber)
                             val intent = Intent(this@JoinPhoneActivity, JoinVericodeActivity::class.java)
+                            intent.putExtra("phoneNumber",phoneNumber)
                             startActivity(intent)
                         } else if (it.code == "PHONE_FOUND") {
                             isAvailableTV.visibility = TextView.VISIBLE
