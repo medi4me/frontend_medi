@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -44,6 +45,9 @@ class TodayConditionFragment : Fragment() {
     private var selectedConditionButton: Button? = null  //선택된 컨디션 버튼 저장 변수
     private lateinit var clickedDate: String // 체크된 날짜
 
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var homeNameTV: TextView
+
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
     }
@@ -53,6 +57,9 @@ class TodayConditionFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // 클릭된 날짜 초기화
+
+        sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        homeNameTV = binding.homeNameTV
 
         val currentCalendar = Calendar.getInstance()
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
