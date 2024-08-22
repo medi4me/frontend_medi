@@ -24,5 +24,11 @@ data class RegisterResponse(
     @SerializedName("isSuccess") val isSuccess: Boolean,
     @SerializedName("code") val code: String,
     @SerializedName("message") val message: String,
-    @SerializedName("result") val result: Any?
+    @SerializedName("result") val result: ResultData?
+)
+
+data class ResultData(
+    @SerializedName("memberID") val memberID: String,
+    @SerializedName("accessToken") val accessToken: String,
+    @SerializedName("refreshToken") val refreshToken: String
 )
