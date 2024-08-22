@@ -18,10 +18,17 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.Data.MedicineResponse
+import com.example.mediforme.Data.MedicineShowService
+import com.example.mediforme.Data.Medicines
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentMypageBinding
 import com.example.mediforme.onboarding.OnboardingMedicineActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MyPageFragment : Fragment() {
     lateinit var binding: FragmentMypageBinding
@@ -62,6 +69,9 @@ class MyPageFragment : Fragment() {
         val itemTouchHelper = ItemTouchHelper(swipeHelper)
         itemTouchHelper.attachToRecyclerView(binding.myDrugRV)
 
+        // 서버에서 데이터를 가져와서 RecyclerView에 표시
+        fetchMedicines()
+
         // 추가하기 버튼 클릭시 온보딩 화면으로 전환
         binding.myPlusBtnBtn.setOnClickListener {
             startActivity(Intent(requireContext(), OnboardingMedicineActivity::class.java))
@@ -73,10 +83,44 @@ class MyPageFragment : Fragment() {
         }
         // 로그아웃 버튼 클릭 시 다이얼로그 표시
         binding.myTextLogoutTV.setOnClickListener {
-            showLogoutAccountDialog()
+            this.showLogoutAccountDialog()
         }
 
 
+    }
+
+    private fun fetchMedicines() {
+        val retrofit = getRetrofit()
+        val service = retrofit.create(MedicineShowService::class.java)
+        val call = service.getUserMedicines(memberId = "1") // 사용자의 memberId로 변경해야 함
+
+        call.enqueue(object : Callback<MedicineResponse> {
+            override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+                if (response.isSuccessful) {
+                    val medicineList = response.body()?.medicines ?: emptyList()
+                    updateRecyclerView(medicineList)
+                } else {
+                    // 서버에서 오류가 발생했을 때 처리
+                }
+            }
+
+            override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
+                // 네트워크 오류 또는 서버 오류 처리
+            }
+        })
+    }
+
+    private fun updateRecyclerView(medicineList: List<Medicines>) {
+        val contentDrugList = medicineList.map { medicine ->
+            ContentDrug(
+                contentDrugImg = R.drawable.ic_drug_default, // 이미지가 정해져 있지 않다면 기본 이미지를 사용
+                contentDrugName = medicine.itemName ?: "",
+                contentDrugTime = "매일", // 항상 "매일"로 설정
+                contentDrugFrequency = medicine.time ?: "",
+                isBellOn = medicine.alarm
+            )
+        }
+        adapter.updateData(contentDrugList)
     }
 
     //로그아웃 버튼 클릭 시 다이얼로그 표시 메소드

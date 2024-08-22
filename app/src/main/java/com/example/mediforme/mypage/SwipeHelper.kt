@@ -126,6 +126,10 @@ class SwipeHelper(
         }
         deleteBtn.setOnClickListener {
             // 삭제 버튼
+
+            //약삭제!!!!!!
+
+
             adapter.removeItem(position)
             alertDialog.dismiss()
         }

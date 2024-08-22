@@ -45,6 +45,12 @@ class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>) :
         return contentDrugList.size
     }
 
+    fun updateData(newContentDrugList: List<ContentDrug>) {
+        contentDrugList.clear()
+        contentDrugList.addAll(newContentDrugList)
+        notifyDataSetChanged()
+    }
+
     fun removeItem(position: Int) {
         contentDrugList.removeAt(position)
         notifyItemRemoved(position)

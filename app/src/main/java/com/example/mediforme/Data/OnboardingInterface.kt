@@ -49,7 +49,7 @@ data class Medicines(
     @SerializedName("itemName") val itemName: String,
     @SerializedName("itemImage") val itemImage: String?,
     @SerializedName("description") val description: String?,
-    @SerializedName("benefit") val benefit: String?,
+    @SerializedName("benefit") val benefit:                                                                                                 String?,
     @SerializedName("drugInteraction") val drugInteraction: String?,
     @SerializedName("meal") val meal: String?,
     @SerializedName("time") val time: String?,
