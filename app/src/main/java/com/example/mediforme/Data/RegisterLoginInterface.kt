@@ -96,6 +96,11 @@ interface AuthService {
     //아이디로 회원이름 값 받아오기
     @GET("auth/search-name/{memberID}")
     fun getName(@Path("memberID") memberID: String): Call<NameResponse>
+
+    //아이디 찾기, 비밀번호 찾기 인증번호 전송
+    @POST("find/send-verification-code")
+    fun sendVerificationCode(@Body request: VerificationRequest): Call<VerificationResponse>
+
 }
 
 
@@ -123,6 +128,20 @@ data class NameResponse(
     val code: String,
     val message: String,
     val result: String
+)
+
+//아이디 찾기, 비밀번호 찾기 인증번호 전송 request
+data class VerificationRequest(
+    val phone: String,
+    val verificationCode: String = "string"  // 기본값 설정
+)
+
+//아이디 찾기, 비밀번호 찾기 인증번호 전송 response
+data class VerificationResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: String?
 )
 
 //***************************************************************
