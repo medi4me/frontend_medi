@@ -5,11 +5,16 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
+import android.widget.EditText
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.Data.AuthService
@@ -26,21 +31,32 @@ import retrofit2.Callback
 import retrofit2.Response
 class LoginActivity : AppCompatActivity() {
 
+    private lateinit var passwordET: EditText
     private lateinit var binding: ActivityLoginBinding
     private lateinit var authService: AuthService
     private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var viewPasswordIv: ImageView
+    private lateinit var hidePasswordIv: ImageView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
+
         // View Binding 초기화
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         // authService 초기화
         authService = getRetrofit().create(AuthService::class.java)
         sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+
+        passwordET = findViewById(R.id.password_ET)
+        viewPasswordIv = findViewById(R.id.sign_up_view_password_iv)
+        hidePasswordIv = findViewById(R.id.sign_up_hide_password_iv)
+
 
         // 아이디 찾기 텍스트뷰 클릭 리스너
         binding.searchIdTV.setOnClickListener {
@@ -55,6 +71,7 @@ class LoginActivity : AppCompatActivity() {
         binding.joinTV.setOnClickListener {
             startActivity(Intent(this, JoinServiceActivity::class.java))
         }
+
 
         // 로그인 버튼 클릭 리스너
         binding.veriBtn.setOnClickListener {
@@ -159,5 +176,19 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this@LoginActivity, "이름 가져오기 실패: 네트워크 오류", Toast.LENGTH_SHORT).show()
             }
         })
+
+        viewPasswordIv.setOnClickListener {
+            passwordET.transformationMethod = HideReturnsTransformationMethod.getInstance()
+            viewPasswordIv.visibility = ImageView.GONE
+            hidePasswordIv.visibility = ImageView.VISIBLE
+        }
+
+        hidePasswordIv.setOnClickListener {
+            passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
+            viewPasswordIv.visibility = ImageView.VISIBLE
+            hidePasswordIv.visibility = ImageView.GONE
+        }
+
+
     }
 }
