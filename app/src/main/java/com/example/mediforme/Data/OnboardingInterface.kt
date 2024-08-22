@@ -17,7 +17,12 @@ interface MedicineApiService {
 
 interface MedicineSaveService {
     @POST("api/medi/save")
-    fun saveMedicine(@Body medicineRequest: MedicineRequest
+    fun saveMedicine(
+        @Query("name") name: String,
+        @Query("meal") meal: String,
+        @Query("time") time: String,
+        @Query("dosage") dosage: String,
+        @Query("memberId") memberId: Int
     ): Call<MedicineResponse>
 }
 
@@ -41,14 +46,15 @@ data class Medicines(
     @SerializedName("meal") val meal: String?,
     @SerializedName("time") val time: String?,
     @SerializedName("dosage") val dosage: String?,
-    @SerializedName("check") val check: Boolean,
-    @SerializedName("alarm") val alarm: Boolean
+    @SerializedName("alarm") val alarm: Boolean,
+    @SerializedName("check") val check: Boolean
+
 )
 
 data class MedicineRequest(
-    @SerializedName("name") val name: String,
+    @SerializedName("name") val name: String?,
     @SerializedName("meal") val meal: String,
     @SerializedName("time") val time: String,
     @SerializedName("dosage") val dosage: String,
-    @SerializedName("memberId") val memberId: String
+    @SerializedName("memberId") val memberId: Int
 )
