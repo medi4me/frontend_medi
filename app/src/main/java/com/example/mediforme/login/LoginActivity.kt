@@ -1,10 +1,14 @@
 package com.example.mediforme.login
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +19,7 @@ import com.example.mediforme.Data.NameResponse
 import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.JoinServiceActivity
 import com.example.mediforme.MainActivity
+import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityLoginBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,12 +89,14 @@ class LoginActivity : AppCompatActivity() {
                                 finish()
                             } else {
                                 Log.e("LoginActivity", "Login Failed: ${it.message}")
-                                Toast.makeText(this@LoginActivity, "로그인 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                                //Toast.makeText(this@LoginActivity, "로그인 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                                loginFailDialog()
                             }
                         }
                     } else {
                         Log.e("LoginActivity", "Response Error: ${response.code()}")
-                        Toast.makeText(this@LoginActivity, "로그인 실패: 서버 오류", Toast.LENGTH_SHORT).show()
+                       // Toast.makeText(this@LoginActivity, "로그인 실패: 서버 오류", Toast.LENGTH_SHORT).show()
+                        loginFailDialog()
                     }
                 }
 
@@ -100,6 +107,28 @@ class LoginActivity : AppCompatActivity() {
             })
         }
     }
+
+    //로그아웃 버튼 클릭 시 다이얼로그 표시 메소드
+    private fun loginFailDialog() {
+        val dialogView1 = LayoutInflater.from(this).inflate(R.layout.dialog_not_collect, null)
+        val dialogBuilder = AlertDialog.Builder(this)
+            .setView(dialogView1)
+            .setCancelable(false)
+        val alertDialog = dialogBuilder.create()
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) // 외부 배경을 투명하게 설정,둥글게 보이기 위해서
+        val BackBtn = dialogView1.findViewById<ImageView>(R.id.dialog_not_collect_xBtn_IV)
+        val okBtn = dialogView1.findViewById<Button>(R.id.dialog_not_collect_ok_BTN)
+
+        BackBtn.setOnClickListener{
+            alertDialog.dismiss()
+        }
+        okBtn.setOnClickListener{
+            // 로그인 액티비티 뜨게 변경예정
+            alertDialog.dismiss()
+        }
+        alertDialog.show()
+    }
+
     private fun fetchUserNameAndSave(memberID: String) {
         authService.getName(memberID).enqueue(object : Callback<NameResponse> {
             override fun onResponse(call: Call<NameResponse>, response: Response<NameResponse>) {
