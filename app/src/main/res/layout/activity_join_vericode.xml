@@ -74,7 +74,8 @@
         android:textColor="@color/red"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/veri_code_ET"
-        app:layout_constraintTop_toBottomOf="@+id/veri_code_ET" />
+        app:layout_constraintTop_toBottomOf="@+id/veri_code_ET"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/timer_TV"
@@ -82,11 +83,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:fontFamily="@font/pretendard_regular"
-        android:text="03 : 00"
+        android:text="05 : 00"
         android:textColor="@color/red"
         android:textSize="15sp"
         app:layout_constraintStart_toEndOf="@+id/remain_TV"
-        app:layout_constraintTop_toBottomOf="@+id/veri_code_ET" />
+        app:layout_constraintTop_toBottomOf="@+id/veri_code_ET"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/done_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="인증시간이 만료되었습니다."
+        android:textColor="@color/red"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/veri_code_ET"
+        app:layout_constraintTop_toBottomOf="@+id/veri_code_ET"
+        android:visibility="gone"
+        />
 
     <TextView
         android:id="@+id/reveri_TV"
