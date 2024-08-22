@@ -114,6 +114,9 @@ interface AuthService {
     @POST("/find/verify-and-find-password")
     fun verifyAndFindPassword(@Body request: VerificationRequest): Call<FindPasswordResponse>
 
+    // 로그아웃
+    @POST("auth/logout")
+    fun logout(@Header("Authorization") token: String): Call<LogoutResponse>
 
 }
 
@@ -125,19 +128,28 @@ data class ResignResponse(
     val result: String?
 )
 
+//로그아웃 response
+data class LogoutResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: String
+)
 
+// 로그인 request
 data class LoginRequest(
     val memberID: String,
     val password: String
 )
 
+//로그인 response
 data class LoginResponse(
     val isSuccess: Boolean,
     val code: String,
     val message: String,
     val result: Result
 )
-
+//로그인 response
 data class Result(
     val memberID: String,
     val accessToken: String,
@@ -194,7 +206,5 @@ data class PasswordResult(
     val memberID: String?,
     val password: String?
 )
-
-
 
 //***************************************************************

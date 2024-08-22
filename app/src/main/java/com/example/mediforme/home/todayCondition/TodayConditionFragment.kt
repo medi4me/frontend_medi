@@ -58,14 +58,20 @@ class TodayConditionFragment : Fragment() {
     ): View? {
         // 클릭된 날짜 초기화
 
-        sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        homeNameTV = binding.homeNameTV
-
         val currentCalendar = Calendar.getInstance()
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         clickedDate = sdf.format(currentCalendar.time)
 
         binding = FragmentTodayConditionBinding.inflate(inflater,container,false)
+
+        sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        homeNameTV = binding.homeNameTV
+
+        val name = sharedPreferences.getString("name", "Unknown Name")
+        homeNameTV.text = "$name"
+
+
+
 
         binding.howTodayBackBtnIV.setOnClickListener {
             // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감

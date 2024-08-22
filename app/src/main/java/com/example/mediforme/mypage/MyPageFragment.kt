@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mediforme.Data.AuthService
+import com.example.mediforme.Data.LogoutResponse
 import com.example.mediforme.Data.ResignResponse
 import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.MainActivity
@@ -115,15 +116,12 @@ class MyPageFragment : Fragment() {
             .setCancelable(false)
         val alertDialog = dialogBuilder.create()
         alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) // 외부 배경을 투명하게 설정,둥글게 보이기 위해서
-        val logoutBackBtn = dialogView1.findViewById<ImageView>(R.id.dialog_log_out_xBtn_IV)
+       // val logoutBackBtn = dialogView1.findViewById<ImageView>(R.id.dialog_log_out_xBtn_IV)
         val loginBtn = dialogView1.findViewById<Button>(R.id.dialog_log_out_login_BTN)
 
-
-        logoutBackBtn.setOnClickListener{
-            alertDialog.dismiss()
-        }
         loginBtn.setOnClickListener{
             //로그인 액티비티 뜨게 변경예정 !
+            logout()
             alertDialog.dismiss()
         }
 
@@ -202,11 +200,58 @@ class MyPageFragment : Fragment() {
             requireActivity().finish()
         }
     }
+    private fun logout() {
+        // SharedPreferences에서 액세스 토큰 불러오기
+        val accessToken = sharedPreferences.getString("accessToken", null)
+
+        if (accessToken != null) {
+            // Authorization 헤더에 Bearer 토큰 추가
+            val authToken = "Bearer $accessToken"
+
+            // 로그아웃 API 호출
+            authService.logout(authToken).enqueue(object : Callback<LogoutResponse> {
+                override fun onResponse(call: Call<LogoutResponse>, response: Response<LogoutResponse>) {
+                    if (response.isSuccessful) {
+                        val logoutResponse = response.body()
+                        logoutResponse?.let {
+                            if (it.isSuccess) {
+                                // 로그아웃 성공
+                                Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+
+                                // SharedPreferences 초기화 (로그아웃 처리)
+                                clearSharedPreferences()
+
+                                // 로그인 화면으로 이동
+                                val intent = Intent(requireActivity(), LoginActivity::class.java)
+                                startActivity(intent)
+                                requireActivity().finish()
+                            } else {
+                                // 로그아웃 실패 메시지 처리
+                                Toast.makeText(requireContext(), "로그아웃 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "서버 오류로 로그아웃에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<LogoutResponse>, t: Throwable) {
+                    Toast.makeText(requireContext(), "네트워크 오류로 로그아웃에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            })
+        } else {
+            Toast.makeText(requireContext(), "액세스 토큰이 없습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireActivity(), LoginActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
+    }
+
 
     // SharedPreferences 초기화
     private fun clearSharedPreferences() {
         val editor = sharedPreferences.edit()
-        editor.clear()
+        editor.clear() // 모든 데이터 삭제
         editor.apply()
     }
 }
