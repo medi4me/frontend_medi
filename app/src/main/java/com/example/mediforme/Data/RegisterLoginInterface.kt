@@ -101,10 +101,13 @@ interface AuthService {
     @POST("find/send-verification-code")
     fun sendVerificationCode(@Body request: VerificationRequest): Call<VerificationResponse>
 
-    //아이디 찾기 인정번호 일치 확인
+    //아이디 찾기 인증번호 일치 확인
     @POST("find/verify-and-find-id")
     fun verifyAndFindID(@Body request: VerificationRequest): Call<FindIDResponse>
 
+    //비밀번호 찾기 인증번호 일치 확인
+    @POST("/find/verify-and-find-password")
+    fun verifyAndFindPassword(@Body request: VerificationRequest): Call<FindPasswordResponse>
 }
 
 
@@ -148,7 +151,8 @@ data class VerificationResponse(
     val result: String?
 )
 
-//아이디 찾기 인정번호 일치 확인 response
+
+//아이디 찾기 인증번호 일치 확인 response
 data class FindIDResponse(
     val isSuccess: Boolean,
     val code: String,
@@ -156,10 +160,26 @@ data class FindIDResponse(
     val result: Result2?
 )
 
-//아이디 찾기 인정번호 일치 확인 request
+//아이디 찾기 인증번호 일치 확인 request
 data class Result2(
     val memberID: String,
     val password: String
 )
+
+
+//비밀번호 찾기 인증번호 일치 확인 response
+data class FindPasswordResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: PasswordResult?
+)
+//비밀번호 찾기 인증번호 일치 확인 response
+data class PasswordResult(
+    val memberID: String?,
+    val password: String?
+)
+
+
 
 //***************************************************************
