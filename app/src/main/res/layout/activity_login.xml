@@ -68,7 +68,7 @@
         android:textColor="@color/gray"
         android:paddingStart="16dp"
         android:imeOptions="actionDone"
-        android:inputType="text"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_ET" />
