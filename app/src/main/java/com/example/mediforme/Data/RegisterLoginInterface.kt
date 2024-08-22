@@ -32,3 +32,30 @@ data class ResultData(
     @SerializedName("accessToken") val accessToken: String,
     @SerializedName("refreshToken") val refreshToken: String
 )
+
+
+//***********************************************************************
+
+interface AuthService {
+    @POST("auth/login")
+    fun login(@Body request: LoginRequest): Call<LoginResponse>
+}
+
+
+data class LoginRequest(
+    val memberID: String,
+    val password: String
+)
+
+data class LoginResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: Result
+)
+
+data class Result(
+    val memberID: String,
+    val accessToken: String,
+    val refreshToken: String
+)
