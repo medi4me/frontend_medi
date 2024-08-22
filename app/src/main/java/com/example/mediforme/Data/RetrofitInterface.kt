@@ -37,6 +37,12 @@ interface CalenderStatus {
     fun getDateDetails(
         @Path("date") date: String
     ): Call<CalenderResponse>
+
+    @PUT("api/status/date/{date}")
+    fun updateDateStatus(
+        @Path("date") date: String,
+        @Body updateRequest: CalenderUpdateRequest
+    ): Call<CalenderResponse>
 }
 
 //날짜 선택 응답
@@ -45,6 +51,15 @@ data class CalenderResponse(
     @SerializedName("drink") val drink: String,
     @SerializedName("statusCondition") val statusCondition: String,
     @SerializedName("memo") val memo: String,
+    @SerializedName("date") val date: String
+)
+
+//날짜 수정 요청
+data class CalenderUpdateRequest(
+    @SerializedName("status") val status: String?,
+    @SerializedName("drink") val drink: String?,
+    @SerializedName("statusCondition") val statusCondition: String?,
+    @SerializedName("memo") val memo: String?,
     @SerializedName("date") val date: String
 )
 
