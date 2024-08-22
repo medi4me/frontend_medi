@@ -14,12 +14,21 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
+import com.example.mediforme.Data.MedicineApiService
+import com.example.mediforme.Data.MedicineRequest
+import com.example.mediforme.Data.MedicineResponse
+import com.example.mediforme.Data.Medicines
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.databinding.ActivityOnboardingDetailBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class OnboardingDetailActivity : AppCompatActivity() {
     lateinit var binding: ActivityOnboardingDetailBinding
     private var selectedTime: String? = null // 선택된 시간 저장 변수
     private var selectedMealTime: String? = null // 선택된 식사 시간 저장 변수
+    private val memberId: String = "1" // 고정된 멤버 ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,19 +75,66 @@ class OnboardingDetailActivity : AppCompatActivity() {
         })
 
         binding.veriBtn.setOnClickListener {
-            // 선택된 시간, 식사 시간, 복용량을 로그로 출력
             val dosageOnetime = binding.dosageOnetimeEV.text.toString()
+            // 선택된 시간, 식사 시간, 복용량을 로그로 출력
+            Log.d("OnboardingDetailActivity", "Medicine Name: $medicineName")
             Log.d("OnboardingDetailActivity", "Selected Time: $selectedTime")
             Log.d("OnboardingDetailActivity", "Selected Meal Time: $selectedMealTime")
             Log.d("OnboardingDetailActivity", "Dosage One-time: $dosageOnetime")
 
-            startActivity(Intent(this, OnboardingMedicineActivity::class.java))
+            // API 호출하여 데이터 전송
+            saveMedicineToServer("타이레놀", "MEAL", selectedTime, dosageOnetime,memberId)
+
+            //startActivity(Intent(this, OnboardingMedicineActivity::class.java))
         }
 
         binding.skippingTv.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
     }
+
+    private fun saveMedicineToServer(name: String?, meal: String?, time: String?, dosage: String?, memberId: String) {
+        if (name == null || meal == null || time == null || dosage == null) {
+            Log.e("OnboardingDetailActivity", "Missing required fields")
+            return
+        }
+
+        // Retrofit 설정 (기존 getRetrofit() 함수 사용)
+        val retrofit = getRetrofit()
+        val apiService = retrofit.create(MedicineApiService::class.java)
+
+        // MedicineRequest 객체 생성
+        val request = MedicineRequest(
+            name = name,
+            meal = meal,
+            time = time,
+            dosage = dosage,
+            memberId = memberId
+        )
+
+        // 요청 본문 로그 출력
+        Log.d("OnboardingDetailActivity", "Sending request with body: $request")
+
+        // API 호출
+        val call = apiService.saveMedicine(request)
+        call.enqueue(object : Callback<MedicineResponse> {
+            override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+                if (response.isSuccessful) {
+                    Log.d("OnboardingDetailActivity", "Medicine saved successfully")
+                    startActivity(Intent(this@OnboardingDetailActivity, OnboardingMedicineActivity::class.java))
+                } else {
+                    // 실패 시 응답 본문 로그 출력
+                    val errorBody = response.errorBody()?.string()
+                    Log.e("OnboardingDetailActivity", "Failed to save medicine. HTTP Status: ${response.code()}. Error: $errorBody")
+                }
+            }
+
+            override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
+                Log.e("OnboardingDetailActivity", "Error saving medicine", t)
+            }
+        })
+    }
+
 
     private fun showTimePickerDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_time_picker, null)
