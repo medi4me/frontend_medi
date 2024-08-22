@@ -5,7 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface ApiService {
-    @POST("/verifyPhone")
+    @POST("verifyPhone")
     fun verifyPhone(@Body request: VerifyPhoneRequest): Call<VerifyPhoneResponse>
 }
 

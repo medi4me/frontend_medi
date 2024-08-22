@@ -86,21 +86,15 @@ class SearchWithNameActivity : AppCompatActivity() {
             override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
                 if (response.isSuccessful) {
                     val dataMedicines = response.body()?.medicines ?: emptyList()
-                    val medicines = dataMedicines.map { DataMedicine ->
-                        Medicines(
-                            itemName = DataMedicine.itemName,
-                            itemImage = DataMedicine.itemImage
-                        )
-                    }
-                    val adapter = SearchWithNameAdapter(medicines)
+                    val adapter = SearchWithNameAdapter(dataMedicines)
                     recyclerView.adapter = adapter
                 } else {
-                    Log.e("SearchWithNameActivity", "Failed to get medicines")
+                    Log.e("CheckMedicineActivity", "Failed to get medicines: ${response.errorBody()?.string()}")
                 }
             }
 
             override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
-                Log.e("SearchWithNameActivity", "API call failed", t)
+                Log.e("CheckMedicineActivity", "API call failed", t)
             }
         })
 

@@ -5,7 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface ApiService {
-    @POST("/register/consent")
+    @POST("register/consent")
     fun postConsent(@Body request: ConsentRequest): Call<ServerResponse>
 }
 
