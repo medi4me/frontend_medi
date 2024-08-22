@@ -11,10 +11,20 @@ import retrofit2.http.Query
 
 interface MedicineApiService {
     @GET("api/medi/itemName")
-    fun getMedicines(@Query("name") itemName: String): Call<MedicineResponse>
+    fun getMedicines(@Query("name") itemName: String
+    ): Call<MedicineResponse>
+}
 
+interface MedicineSaveService {
     @POST("api/medi/save")
-    fun saveMedicine(@Body medicineRequest: MedicineRequest): Call<MedicineResponse>
+    fun saveMedicine(@Body medicineRequest: MedicineRequest
+    ): Call<MedicineResponse>
+}
+
+interface MedicineShowService{
+    @GET("list/medicines")
+    fun getUserMedicines(@Query("memberId") memberId: String
+    ): Call<MedicineResponse>
 }
 
 data class MedicineResponse(
@@ -22,14 +32,17 @@ data class MedicineResponse(
 )
 
 data class Medicines(
-    val itemName: String,
-    val itemImage: String?,
-    val description: String?,
-    val benefit: String?,
-    val drugInteraction: String?,
-    val meal: String?,
-    val time: String?,
-    val dosage: String?
+    @SerializedName("userMedicineId") val userMedicineId: Int,
+    @SerializedName("itemName") val itemName: String,
+    @SerializedName("itemImage") val itemImage: String?,
+    @SerializedName("description") val description: String?,
+    @SerializedName("benefit") val benefit: String?,
+    @SerializedName("drugInteraction") val drugInteraction: String?,
+    @SerializedName("meal") val meal: String?,
+    @SerializedName("time") val time: String?,
+    @SerializedName("dosage") val dosage: String?,
+    @SerializedName("check") val check: Boolean,
+    @SerializedName("alarm") val alarm: Boolean
 )
 
 data class MedicineRequest(

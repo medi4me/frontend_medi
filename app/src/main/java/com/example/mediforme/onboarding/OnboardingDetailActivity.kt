@@ -17,6 +17,7 @@ import com.example.mediforme.R
 import com.example.mediforme.Data.MedicineApiService
 import com.example.mediforme.Data.MedicineRequest
 import com.example.mediforme.Data.MedicineResponse
+import com.example.mediforme.Data.MedicineSaveService
 import com.example.mediforme.Data.Medicines
 import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.databinding.ActivityOnboardingDetailBinding
@@ -101,7 +102,7 @@ class OnboardingDetailActivity : AppCompatActivity() {
 
         // Retrofit 설정 (기존 getRetrofit() 함수 사용)
         val retrofit = getRetrofit()
-        val apiService = retrofit.create(MedicineApiService::class.java)
+        val apiService = retrofit.create(MedicineSaveService::class.java)
 
         // MedicineRequest 객체 생성
         val request = MedicineRequest(
