@@ -6,6 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 //회원가입
 //***********************************************************************
@@ -15,6 +16,10 @@ interface Register {
 
     @POST("register/memberID")
     fun checkMemberID(@Body request: MemberIDRequest): Call<MemberIDResponse>
+
+    @POST("register/phone")
+    fun checkPhoneNumber(@Query("phone") phone: String): Call<PhoneNumberResponse>
+
 }
 
 // 데이터 클래스 정의
@@ -55,7 +60,13 @@ data class MemberIDResponse(
     val message: String
 )
 
-
+//전화번호 중복검사,인증번호 sms전송
+data class PhoneNumberResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: String
+)
 
 
 //로그인
