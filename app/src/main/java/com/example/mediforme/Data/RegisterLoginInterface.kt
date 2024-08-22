@@ -7,10 +7,14 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-// Retrofit 인터페이스 정의
+//회원가입
+//***********************************************************************
 interface Register {
     @POST("register/name")
     fun registerUser(@Body userData: RegisterUserData): Call<RegisterResponse>
+
+    @POST("register/memberID")
+    fun checkMemberID(@Body request: MemberIDRequest): Call<MemberIDResponse>
 }
 
 // 데이터 클래스 정의
@@ -35,7 +39,26 @@ data class ResultData(
     @SerializedName("refreshToken") val refreshToken: String
 )
 
+//아이디 중복검사 request
+data class MemberIDRequest(
+    val name: String = "string",  // 기본값 설정
+    val password: String = "string",  // 기본값 설정 (비밀번호는 여기서 사용하지 않으므로 설정 필요 없음)
+    val phone: String = "string",  // 기본값 설정
+    val memberID: String,  // 사용자가 입력한 ID를 이 필드에 넣음
+    val consent: String = "AGREE"  // 기본값 설정
+)
 
+//아이디 중복검사 response
+data class MemberIDResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String
+)
+
+
+
+
+//로그인
 //***********************************************************************
 
 interface AuthService {
