@@ -12,6 +12,9 @@ import retrofit2.http.Query
 interface MedicineApiService {
     @GET("api/medi/itemName")
     fun getMedicines(@Query("name") itemName: String): Call<MedicineResponse>
+
+    @POST("api/medi/save")
+    fun saveMedicine(@Body medicineRequest: MedicineRequest): Call<MedicineResponse>
 }
 
 data class MedicineResponse(
@@ -29,12 +32,10 @@ data class Medicines(
     val dosage: String?
 )
 
-interface MedicineSave {
-
-    @POST("/api/medi/save")
-    fun saveMedicine(@Body medicineRequest: MedicineRequest): Call<MedicineResponse>
-}
-
 data class MedicineRequest(
-    val medicines: List<Medicines>
+    @SerializedName("name") val name: String,
+    @SerializedName("meal") val meal: String,
+    @SerializedName("time") val time: String,
+    @SerializedName("dosage") val dosage: String,
+    @SerializedName("memberId") val memberId: String
 )
