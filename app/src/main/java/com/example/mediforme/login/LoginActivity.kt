@@ -24,13 +24,11 @@ import com.example.mediforme.databinding.ActivityLoginBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var authService: AuthService
     private lateinit var sharedPreferences: SharedPreferences
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
         // authService 초기화
         authService = getRetrofit().create(AuthService::class.java)
         sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-
 
         // 아이디 찾기 텍스트뷰 클릭 리스너
         binding.searchIdTV.setOnClickListener {
@@ -64,7 +61,6 @@ class LoginActivity : AppCompatActivity() {
             val id = binding.idET.text.toString()
             val password = binding.passwordET.text.toString()
 
-
             // Retrofit을 사용하여 로그인 API 호출
             val loginRequest = LoginRequest(
                 memberID = id,
@@ -77,25 +73,15 @@ class LoginActivity : AppCompatActivity() {
                         val loginResponse = response.body()
                         loginResponse?.let {
                             if (it.isSuccess) {
-                                //Log.d("LoginActivity", "Login Successful: ${it.result.accessToken}")
-                                // Access token과 같은 데이터를 저장하거나 다음 화면으로 이동하는 로직 추가
-                                //Toast.makeText(this@LoginActivity, "로그인 성공", Toast.LENGTH_SHORT).show()
-
-                                //로그인 성공시에 회원아이디, 회원이름 SharedPreferences에 저장
-                                fetchUserNameAndSave(id)
-
-                                val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                                startActivity(intent)
-                                finish()
+                                // 로그인 성공 시, 토큰을 저장하고 다음 작업 진행
+                                saveTokensAndProceed(id, it.result.accessToken, it.result.refreshToken)
                             } else {
                                 Log.e("LoginActivity", "Login Failed: ${it.message}")
-                                //Toast.makeText(this@LoginActivity, "로그인 실패: ${it.message}", Toast.LENGTH_SHORT).show()
                                 loginFailDialog()
                             }
                         }
                     } else {
                         Log.e("LoginActivity", "Response Error: ${response.code()}")
-                       // Toast.makeText(this@LoginActivity, "로그인 실패: 서버 오류", Toast.LENGTH_SHORT).show()
                         loginFailDialog()
                     }
                 }
@@ -108,22 +94,33 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    //로그아웃 버튼 클릭 시 다이얼로그 표시 메소드
+    private fun saveTokensAndProceed(memberID: String, accessToken: String, refreshToken: String) {
+        // SharedPreferences에 저장
+        val editor = sharedPreferences.edit()
+        editor.putString("memberID", memberID)
+        editor.putString("accessToken", accessToken)
+        editor.putString("refreshToken", refreshToken)
+        editor.apply()
+
+        // 로그인 성공 후 이름 저장
+        fetchUserNameAndSave(memberID)
+    }
+
+    // 로그인 실패 시 다이얼로그 표시 메서드
     private fun loginFailDialog() {
         val dialogView1 = LayoutInflater.from(this).inflate(R.layout.dialog_not_collect, null)
         val dialogBuilder = AlertDialog.Builder(this)
             .setView(dialogView1)
             .setCancelable(false)
         val alertDialog = dialogBuilder.create()
-        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent) // 외부 배경을 투명하게 설정,둥글게 보이기 위해서
-        val BackBtn = dialogView1.findViewById<ImageView>(R.id.dialog_not_collect_xBtn_IV)
+        alertDialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        val backBtn = dialogView1.findViewById<ImageView>(R.id.dialog_not_collect_xBtn_IV)
         val okBtn = dialogView1.findViewById<Button>(R.id.dialog_not_collect_ok_BTN)
 
-        BackBtn.setOnClickListener{
+        backBtn.setOnClickListener {
             alertDialog.dismiss()
         }
-        okBtn.setOnClickListener{
-            // 로그인 액티비티 뜨게 변경예정
+        okBtn.setOnClickListener {
             alertDialog.dismiss()
         }
         alertDialog.show()
@@ -137,7 +134,6 @@ class LoginActivity : AppCompatActivity() {
                     nameResponse?.let {
                         if (it.isSuccess) {
                             val editor = sharedPreferences.edit()
-                            editor.putString("memberID", memberID)
                             editor.putString("name", it.result)
                             editor.apply()
 
@@ -165,5 +161,3 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 }
-
-

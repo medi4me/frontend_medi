@@ -8,12 +8,14 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -21,10 +23,17 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.Data.AuthService
+import com.example.mediforme.Data.ResignResponse
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentMypageBinding
+import com.example.mediforme.login.LoginActivity
 import com.example.mediforme.onboarding.OnboardingMedicineActivity
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MyPageFragment : Fragment() {
     lateinit var binding: FragmentMypageBinding
@@ -32,6 +41,7 @@ class MyPageFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var myPageNameTV: TextView
+    private lateinit var authService: AuthService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +53,9 @@ class MyPageFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        authService = getRetrofit().create(AuthService::class.java)
+
 
         // 더미 데이터 생성
         val contentDrugList = arrayListOf(
@@ -139,8 +152,61 @@ class MyPageFragment : Fragment() {
         }
         deleteBtn.setOnClickListener {
             // 회원탈퇴 처리 로직 추가
+            resign()
             alertDialog.dismiss()
         }
         alertDialog.show()
+    }
+    // 회원탈퇴 처리 메서드
+    private fun resign() {
+        val accessToken = sharedPreferences.getString("accessToken", null)
+
+        if (accessToken != null) {
+            val authToken = "Bearer $accessToken"
+
+            authService.resign(authToken).enqueue(object : Callback<ResignResponse> {
+                override fun onResponse(
+                    call: Call<ResignResponse>,
+                    response: Response<ResignResponse>
+                ) {
+                    if (response.isSuccessful) {
+                        val resignResponse = response.body()
+                        resignResponse?.let {
+                            if (it.isSuccess) {
+                                Toast.makeText(requireContext(), "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                                clearSharedPreferences()
+                                val intent = Intent(requireActivity(), LoginActivity::class.java)
+                                startActivity(intent)
+                                requireActivity().finish()
+                            } else {
+                                Toast.makeText(requireContext(), "회원 탈퇴 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        } ?: run {
+                            Toast.makeText(requireContext(), "회원 탈퇴 실패: 응답이 없습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(requireContext(), "서버 오류로 탈퇴에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                        Log.e("MyPageFragment", "Resign failed with code: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<ResignResponse>, t: Throwable) {
+                    Toast.makeText(requireContext(), "네트워크 오류로 탈퇴에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    Log.e("MyPageFragment", "Resign failed: ${t.message}")
+                }
+            })
+        } else {
+            Toast.makeText(requireContext(), "액세스 토큰이 없습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show()
+            val intent = Intent(requireActivity(), LoginActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
+    }
+
+    // SharedPreferences 초기화
+    private fun clearSharedPreferences() {
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
     }
 }

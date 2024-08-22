@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -93,6 +94,10 @@ interface AuthService {
     @POST("auth/login")
     fun login(@Body request: LoginRequest): Call<LoginResponse>
 
+    // 회원 탈퇴
+    @POST("resign")
+    fun resign(@Header("Authorization") token: String): Call<ResignResponse>
+
     //아이디로 회원이름 값 받아오기
     @GET("auth/search-name/{memberID}")
     fun getName(@Path("memberID") memberID: String): Call<NameResponse>
@@ -108,7 +113,17 @@ interface AuthService {
     //비밀번호 찾기 인증번호 일치 확인
     @POST("/find/verify-and-find-password")
     fun verifyAndFindPassword(@Body request: VerificationRequest): Call<FindPasswordResponse>
+
+
 }
+
+//회원 탈퇴 response
+data class ResignResponse(
+    val isSuccess: Boolean,
+    val code: String,
+    val message: String,
+    val result: String?
+)
 
 
 data class LoginRequest(
