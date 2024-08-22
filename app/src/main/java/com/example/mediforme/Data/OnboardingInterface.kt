@@ -6,6 +6,8 @@ import retrofit2.Call
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 // 온보딩 약 검색
@@ -39,6 +41,20 @@ interface MedicineDeleteService {
         @Query("memberId") memberId: Int,
         @Query("userMedicineId") userMedicineId: Int
     ): Call<ResponseBody>
+}
+
+interface MedicineCheckService {
+    @PUT("{userMedicineId}/check")
+    fun checkMedicine(
+        @Path("userMedicineId") userMedicineId: Int
+    ): Call<Void>
+}
+
+interface MedicineAlarmService {
+    @PUT("{userMedicineId}/check/alarm")
+    fun checkMedicineAlarm(
+        @Path("userMedicineId") userMedicineId: Int
+    ): Call<Void>
 }
 
 data class MedicineResponse(

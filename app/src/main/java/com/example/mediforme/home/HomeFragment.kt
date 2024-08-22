@@ -170,6 +170,7 @@ class HomeFragment : Fragment() {
     private fun updateRecyclerView(medicineList: List<Medicines>) {
         val routineDrugList = medicineList.map { medicine ->
             RoutineDrug(
+                userMedicineId = medicine.userMedicineId,
                 drugTime = medicine.time ?: "",
                 drugName = medicine.itemName ?: "",
                 drugNum = medicine.dosage ?: "",
