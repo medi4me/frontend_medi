@@ -51,6 +51,8 @@
         android:hint="아이디"
         android:textColor="@color/gray"
         android:paddingStart="16dp"
+        android:imeOptions="actionNext"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_TV" />
@@ -65,6 +67,8 @@
         android:hint="비밀번호"
         android:textColor="@color/gray"
         android:paddingStart="16dp"
+        android:imeOptions="actionDone"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_ET" />
