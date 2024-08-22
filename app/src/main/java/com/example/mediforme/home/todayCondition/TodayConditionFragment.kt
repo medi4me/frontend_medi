@@ -386,6 +386,13 @@ class TodayConditionFragment : Fragment() {
                     val statusResponse = response.body()
                     Log.d("TodayConditionFragment", "Status updated: $statusResponse")
 
+                    // 수정된 날짜에 해당하는 WeekDayItem의 상태를 업데이트
+                    selectedDateItem?.status = statusResponse?.status
+                    selectedDateItem?.isStatusLoaded = true
+
+                    // 어댑터에게 데이터 변경을 알림
+                    adapter.notifyDataSetChanged()
+
                     // 수정 버튼 비활성화 및 저장 버튼 활성화
                     binding.saveBtn.visibility = View.GONE
                     binding.editBtn.visibility = View.VISIBLE
