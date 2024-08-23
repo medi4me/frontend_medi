@@ -69,7 +69,7 @@ class JoinPhoneActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val phoneResponse = response.body()
                     phoneResponse?.let {
-                        if (it.isSuccess) {
+                        if (it.isSuccess && it.code == "COMMON200") {
                             // Phone number is valid and available
                             isAvailableTV.visibility = TextView.GONE
                             savePhoneNumber(phoneNumber)

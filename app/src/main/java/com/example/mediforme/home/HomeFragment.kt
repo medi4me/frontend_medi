@@ -2,6 +2,7 @@ package com.example.mediforme.home
 
 import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.example.mediforme.Data.MedicineResponse
 import com.example.mediforme.Data.MedicineShowService
 import com.example.mediforme.Data.Medicines
 import com.example.mediforme.Data.getRetrofit
+import com.example.mediforme.home.chat.ChatActivity
 import com.example.mediforme.home.todayCondition.WeekDayAdapter
 import com.example.mediforme.home.todayCondition.WeekDayItem
 import retrofit2.Call
@@ -150,10 +152,11 @@ class HomeFragment : Fragment() {
             findNavController().navigate(action)
         }
         // 물어보기 클릭 시
-        binding.askMeCV.setOnClickListener{
-            val action = HomeFragmentDirections.actionHomeFragmentToChatFragment()
-            findNavController().navigate(action)
+        binding.askMeCV.setOnClickListener {
+            val intent = Intent(requireContext(), ChatActivity::class.java)
+            startActivity(intent)
         }
+
 
         // 약물 리스트 RecyclerView 설정
         routineDrugAdapter = RoutineDrugRVAdaptor(arrayListOf(), requireContext())

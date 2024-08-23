@@ -66,6 +66,9 @@
             android:name=".JoinPhoneActivity"
             android:exported="false" />
         <activity
+            android:name=".home.chat.ChatActivity"
+            android:exported="false" />
+        <activity
             android:name=".search.AddMedicineActivity"
             android:exported="false" />
         <activity
