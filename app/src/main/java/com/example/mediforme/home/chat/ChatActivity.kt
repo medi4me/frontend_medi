@@ -1,10 +1,12 @@
 package com.example.mediforme.home.chat
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.databinding.FragmentChatBinding
@@ -19,6 +21,9 @@ class ChatActivity : AppCompatActivity() {
     private lateinit var chatAdapter: ChatAdapter
     private val messages = mutableListOf<Message>()
     private lateinit var apiService: ChatGptApiService
+    private lateinit var sharedPreferences: SharedPreferences
+    private var userName:  String? = null // userName을 String 타입으로 선언
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,6 +40,14 @@ class ChatActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@ChatActivity)
             adapter = chatAdapter
         }
+        // SharedPreferences에서 저장된 사용자 이름 가져오기
+        sharedPreferences = this.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        userName = sharedPreferences.getString("name", "Unknown Name")
+
+        Log.d("dddkkk","${userName}")
+        // 사용자 이름을 chat_name_TV에 설정
+        binding.chatNameTV.text = userName
+
 
         // 뒤로가기 버튼 클릭 시 액티비티 종료
         binding.howTodayBackBtnIV.setOnClickListener {
