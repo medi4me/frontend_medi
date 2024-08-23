@@ -1,6 +1,7 @@
 package com.example.mediforme.search
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
@@ -11,6 +12,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.mediforme.Data.CameraMedicineResponse
+import com.example.mediforme.Data.CameraService
 import com.example.mediforme.Data.MedicineInfoResponse
 import com.example.mediforme.Data.MedicineService
 import com.example.mediforme.Data.getRetrofit
@@ -21,9 +24,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.parcel.Parcelize
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -176,7 +186,9 @@ class BottomSheetFragment2 : BottomSheetDialogFragment() {
 
 // BottomSheetFragment3.kt
 class BottomSheetFragment3 : BottomSheetDialogFragment() {
+
     lateinit var binding: FragmentBottomSheet3Binding
+    private lateinit var cameraService: CameraService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -184,15 +196,57 @@ class BottomSheetFragment3 : BottomSheetDialogFragment() {
     ): View? {
         binding = FragmentBottomSheet3Binding.inflate(inflater, container, false)
 
-        binding.veriBtnCombination.setOnClickListener {
-            val intent = Intent(requireContext(), CheckMedicineActivity::class.java)
-            startActivity(intent)
+        // Retrofit 초기화
+        cameraService = getRetrofit().create(CameraService::class.java)
+
+        val photoUri = arguments?.getString("photoUri")
+
+        // 사진 파일을 서버로 전송
+        photoUri?.let {
+            val file = File(Uri.parse(it).path)
+            val requestFile = RequestBody.create("image/png".toMediaTypeOrNull(), file)
+            val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+            uploadPhotoAndDisplayWarnings(body)
         }
+
+//        binding.veriBtnCombination.setOnClickListener {
+//            val intent = Intent(requireContext(), CheckMedicineActivity::class.java)
+//            startActivity(intent)
+//        }
 
         return binding.root
     }
+
+    private fun uploadPhotoAndDisplayWarnings(body: MultipartBody.Part) {
+        cameraService.uploadImage(body).enqueue(object : Callback<List<CameraMedicineResponse>> {
+            override fun onResponse(
+                call: Call<List<CameraMedicineResponse>>,
+                response: Response<List<CameraMedicineResponse>>
+            ) {
+                if (response.isSuccessful) {
+                    val responseData = response.body()
+                    responseData?.let { data ->
+                        if (data.isNotEmpty()) {
+                            val drugInteraction = data[0].drugInteraction
+                            val alcoholWarning = data[0].alcoholWarning
+
+                            // 서버에서 받은 데이터 중 drugInteraction와 alcoholWarning를 UI에 반영
+                            binding.warningNameTv.text = drugInteraction
+                            binding.warningTextBlack2.text = alcoholWarning
+                        }
+                    }
+                } else {
+                    // 응답이 실패했을 경우 처리
+                    Log.e("BottomSheetFragment3", "Error: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<CameraMedicineResponse>>, t: Throwable) {
+                // 네트워크 오류 등으로 요청이 실패한 경우 처리
+                Log.e("BottomSheetFragment3", "Failure: ${t.message}")
+            }
+        })
+    }
 }
-
-
-
 

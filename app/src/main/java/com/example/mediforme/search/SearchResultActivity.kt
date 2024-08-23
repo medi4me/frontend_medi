@@ -105,10 +105,17 @@ class SearchResultActivity : AppCompatActivity() {
 //        }
 
 
-        // 약물 조합 확인하기 버튼 눌렀을 시
-        val bottomSheetFragment3 = BottomSheetFragment3()
+        // 약물 조합 확인하기 버튼 클릭 시
         binding.checkCombinationButton.setOnClickListener {
-            bottomSheetFragment3.show(supportFragmentManager, "BottomSheetDialog2")
+            val bottomSheetFragment3 = BottomSheetFragment3()
+
+            // 사진 파일의 경로 또는 URI를 Bundle로 전달
+            val fileUri = Uri.fromFile(File(cacheDir, "tirenol.png"))
+            val bundle = Bundle()
+            bundle.putString("photoUri", fileUri.toString()) // 사진 URI 추가
+
+            bottomSheetFragment3.arguments = bundle
+            bottomSheetFragment3.show(supportFragmentManager, "BottomSheetDialog3")
         }
 
         binding.backButton.setOnClickListener {
@@ -149,7 +156,7 @@ class SearchResultActivity : AppCompatActivity() {
                             name = response.name,
                             dosage = response.dosage ?: "",
                             effects = response.benefit ?: "",
-                            howToEat = response.drugInteraction ?: ""
+                            howToEat = response.dosage ?: ""
                         )
                     } ?: emptyList()
 
