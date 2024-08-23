@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.Data.MedicineCheckOffService
 import com.example.mediforme.Data.MedicineCheckService
 import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.databinding.ItemRoutineDrugBinding
@@ -59,8 +60,13 @@ class RoutineDrugRVAdaptor(private var drugRoutineList: ArrayList<RoutineDrug>) 
                 routineDrug.drugCheckBtn = isChecked
                 notifyItemChanged(adapterPosition) // 클릭된 항목만 상태 업데이트
 
-                // 서버에 체크 상태 업데이트 요청
-                checkMedicineStatus(routineDrug.userMedicineId)
+                if (isChecked) {
+                    // 체크 상태 업데이트 요청
+                    checkMedicineStatus(routineDrug.userMedicineId)
+                } else {
+                    // 체크 해제 상태 업데이트 요청
+                    uncheckMedicineStatus(routineDrug.userMedicineId)
+                }
 
                 // 선택바 상태 업데이트
                 if (isChecked) {
@@ -77,6 +83,26 @@ class RoutineDrugRVAdaptor(private var drugRoutineList: ArrayList<RoutineDrug>) 
             val retrofit = getRetrofit() // Retrofit 인스턴스 가져오기
             val service = retrofit.create(MedicineCheckService::class.java)
             val call = service.checkMedicine(userMedicineId)
+
+            call.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        // 성공적으로 업데이트됨
+                    } else {
+                        // 업데이트 실패 처리
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    // 네트워크 오류 처리
+                }
+            })
+        }
+
+        private fun uncheckMedicineStatus(userMedicineId: Int) {
+            val retrofit = getRetrofit() // Retrofit 인스턴스 가져오기
+            val service = retrofit.create(MedicineCheckOffService::class.java)
+            val call = service.uncheckMedicine(userMedicineId)
 
             call.enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {

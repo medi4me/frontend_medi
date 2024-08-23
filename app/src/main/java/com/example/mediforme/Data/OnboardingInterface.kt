@@ -11,13 +11,14 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 // 온보딩 약 검색
-
 interface MedicineApiService {
     @GET("api/medi/itemName")
     fun getMedicines(@Query("name") itemName: String
     ): Call<MedicineResponse>
 }
 
+
+// 온보딩 약 추가
 interface MedicineSaveService {
     @POST("api/medi/save")
     fun saveMedicine(
@@ -29,12 +30,16 @@ interface MedicineSaveService {
     ): Call<MedicineResponse>
 }
 
+
+// 온보딩, 메인화면, 마이페이지에서 복용약 모두 조회
 interface MedicineShowService{
     @GET("list/medicines")
     fun getUserMedicines(@Query("memberId") memberId: String
     ): Call<MedicineResponse>
 }
 
+
+// 마이페이지 복용약 삭제
 interface MedicineDeleteService {
     @DELETE("delete/userMedicine")
     fun deleteMedicine(
@@ -43,6 +48,9 @@ interface MedicineDeleteService {
     ): Call<ResponseBody>
 }
 
+
+
+// 메인화면 checkbox 체크, 해체 api
 interface MedicineCheckService {
     @PUT("{userMedicineId}/check")
     fun checkMedicine(
@@ -50,12 +58,24 @@ interface MedicineCheckService {
     ): Call<Void>
 }
 
+interface MedicineCheckOffService {
+    @PUT("{userMedicineId}/checkOff")
+    fun uncheckMedicine(
+        @Path("userMedicineId") userMedicineId: Int
+    ): Call<Void>
+}
+
+
+
+// 마이페이지 알람 체크, 해체 api
 interface MedicineAlarmService {
     @PUT("{userMedicineId}/check/alarm")
     fun checkMedicineAlarm(
         @Path("userMedicineId") userMedicineId: Int
     ): Call<Void>
 }
+
+
 
 data class MedicineResponse(
     val medicines: List<Medicines>
