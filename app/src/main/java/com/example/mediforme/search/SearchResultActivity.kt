@@ -66,10 +66,14 @@ class SearchResultActivity : AppCompatActivity() {
 
 
         // 복용 약에 추가하기 버튼을 눌렀을 시
-        val bottomSheetFragment = BottomSheetFragment()
         binding.addToMedsButton.setOnClickListener {
-            //bottomSheetFragment.show(supportFragmentManager, "BottomSheetDialog")
-            startActivity(Intent(this, AddMedicineActivity::class.java))
+            val intent = Intent(this, AddMedicineActivity::class.java)
+
+            // 사진 파일의 경로 또는 URI를 Intent에 추가
+            val fileUri = Uri.fromFile(File(cacheDir, "tirenol.png"))
+            intent.putExtra("photoUri", fileUri.toString())
+
+            startActivity(intent)
         }
 
         // 정보 더 알아보기 버튼 클릭 시
