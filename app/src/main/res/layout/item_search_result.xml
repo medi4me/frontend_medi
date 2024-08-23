@@ -38,7 +38,7 @@
         android:layout_marginStart="10dp"
         android:fontFamily="@font/pretendard_semibold"
         android:text="약 이름"
-        android:textSize="20sp"
+        android:textSize="15sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView5"

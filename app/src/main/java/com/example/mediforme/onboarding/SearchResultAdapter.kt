@@ -6,21 +6,30 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.mediforme.Data.Medicines
 import com.example.mediforme.R
 
-class SearchResultAdapter(private var results: List<SearchResult>, private val itemClickListener: OnItemClickListener) : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
+class SearchResultAdapter(
+    private var results: List<Medicines>,
+    private val itemClickListener: OnItemClickListener
+) : RecyclerView.Adapter<SearchResultAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val medicineNumber: TextView = itemView.findViewById(R.id.medicine_number_tv)
-        val medicineName: TextView = itemView.findViewById(R.id.medicine_results)
-        val medicineImage: ImageView = itemView.findViewById(R.id.imageView5)
+        private val medicineNumber: TextView = itemView.findViewById(R.id.medicine_number_tv)
+        private val medicineName: TextView = itemView.findViewById(R.id.medicine_results)
+        private val medicineImage: ImageView = itemView.findViewById(R.id.imageView5)
 
-        fun bind(result: SearchResult, position: Int) {
+        fun bind(medicine: Medicines, position: Int) {
             medicineNumber.text = (position + 1).toString()
-            medicineName.text = result.name
-            medicineImage.setImageResource(result.imageResId)
+            medicineName.text = medicine.itemName
+            Glide.with(itemView.context)
+                .load(medicine.itemImage)
+                .placeholder(R.drawable.ic_drug_default)
+                .into(medicineImage)
+
             itemView.setOnClickListener {
-                itemClickListener.onItemClick(result.name)
+                itemClickListener.onItemClick(medicine.itemName)
             }
         }
     }
@@ -40,13 +49,8 @@ class SearchResultAdapter(private var results: List<SearchResult>, private val i
 
     override fun getItemCount() = results.size
 
-    fun updateList(newList: List<SearchResult>) {
+    fun updateList(newList: List<Medicines>) {
         results = newList
         notifyDataSetChanged()
     }
 }
-
-data class SearchResult(
-    val imageResId: Int, // 이미지 리소스 ID
-    val name: String
-)

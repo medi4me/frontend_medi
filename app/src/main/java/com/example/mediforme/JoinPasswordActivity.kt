@@ -1,11 +1,13 @@
 package com.example.mediforme
-
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -19,16 +21,15 @@ class JoinPasswordActivity : AppCompatActivity() {
     private lateinit var criteriaLetter: TextView
     private lateinit var criteriaSpecial: TextView
     private lateinit var nextBtn: Button
+    private lateinit var viewPasswordIv: ImageView
+    private lateinit var hidePasswordIv: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_join_password)
 
-        //이전 화면에서 받아온 인텐트
-        val phoneNumber = intent.getStringExtra("user_phoneNumber")
+        // 이전 화면에서 받아온 인텐트
         val user_id = intent.getStringExtra("user_id")
 
         passwordET = findViewById(R.id.password_ET)
@@ -37,6 +38,8 @@ class JoinPasswordActivity : AppCompatActivity() {
         criteriaLetter = findViewById(R.id.criteria_letter)
         criteriaSpecial = findViewById(R.id.criteria_special)
         nextBtn = findViewById(R.id.next_btn)
+        viewPasswordIv = findViewById(R.id.sign_up_view_password_iv)
+        hidePasswordIv = findViewById(R.id.sign_up_hide_password_iv)
 
         nextBtn.isEnabled = false // 초기 상태에서 버튼 비활성화
 
@@ -50,15 +53,24 @@ class JoinPasswordActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        viewPasswordIv.setOnClickListener {
+            passwordET.transformationMethod = HideReturnsTransformationMethod.getInstance()
+            viewPasswordIv.visibility = ImageView.GONE
+            hidePasswordIv.visibility = ImageView.VISIBLE
+        }
+
+        hidePasswordIv.setOnClickListener {
+            passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
+            viewPasswordIv.visibility = ImageView.VISIBLE
+            hidePasswordIv.visibility = ImageView.GONE
+        }
+
         nextBtn.setOnClickListener {
             val user_password = passwordET.text.toString().trim()
-
             val intent = Intent(this@JoinPasswordActivity, JoinNameActivity::class.java).apply {
-                putExtra("user_id",user_id)
-                putExtra("user_phoneNumber",phoneNumber)
-                putExtra("user_password",user_password)
-                putExtra("consent","AGREE")
-
+                putExtra("user_id", user_id)
+                putExtra("user_password", user_password)
+                putExtra("consent", "AGREE")
             }
             startActivity(intent)
         }

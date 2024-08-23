@@ -2,7 +2,9 @@ package com.example.mediforme.search
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
@@ -11,6 +13,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -20,6 +23,9 @@ class SearchFragment : Fragment() {
     private lateinit var binding: FragmentSearchWithBackgroundBinding
     private val REQUEST_PERMISSIONS = 1
     private val REQUEST_IMAGE_CAPTURE = 2
+
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var shearchNameTV: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,12 +37,22 @@ class SearchFragment : Fragment() {
         // Check permissions when fragment view is created
         checkPermissions()
 
+        sharedPreferences = requireActivity().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        shearchNameTV = binding.homeNameTV
+
+        val memberID = sharedPreferences.getString("memberID", "Unknown ID")
+        val name = sharedPreferences.getString("name", "홍길동")
+
+        shearchNameTV.text = "$name"
+
+
         binding.searchWithCamera.setOnClickListener {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                dispatchTakePictureIntent()
-            } else {
-                requestCameraPermission()
-            }
+//            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+//                dispatchTakePictureIntent()
+//            } else {
+//                requestCameraPermission()
+//            }
+            startActivity(Intent(requireContext(), SearchResultActivity::class.java))
         }
 
         binding.searchWithName.setOnClickListener {

@@ -1,6 +1,7 @@
 package com.example.mediforme.mypage
 
 data class ContentDrug(
+    val userMedicineId: Int,
     val contentDrugImg: Int,
     val contentDrugName: String,
     val contentDrugTime: String,

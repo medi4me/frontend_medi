@@ -1,6 +1,7 @@
 package com.example.mediforme.home
 
 data class RoutineDrug(
+    val userMedicineId: Int,
     val drugTime: String,
     val drugName: String,
     val drugNum: String,

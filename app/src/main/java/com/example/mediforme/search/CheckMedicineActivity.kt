@@ -10,34 +10,21 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.Data.MedicineApiService
+import com.example.mediforme.Data.MedicineResponse
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityCheckMedicineBinding
 import com.example.mediforme.databinding.ActivitySearchWithNameBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CheckMedicineActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCheckMedicineBinding
-
-    // 더미 데이터
-    private val allSearchResults = listOf(
-        SearchResult(R.drawable.ic_tylenol, "타이레놀정 슈퍼우먼 플러스 울트라 500mg"),
-        SearchResult(R.drawable.ic_tylenol, "우먼스타이레놀정"),
-        SearchResult(R.drawable.ic_tylenol, "어린이 타이레놀"),
-        SearchResult(R.drawable.ic_tylenol, "아스피린정 100mg"),
-        SearchResult(R.drawable.ic_tylenol, "애드빌 200mg"),
-        SearchResult(R.drawable.ic_tylenol, "모트린 400mg"),
-        SearchResult(R.drawable.ic_tylenol, "알리브 250mg"),
-        SearchResult(R.drawable.ic_tylenol, "페니실린 500mg"),
-        SearchResult(R.drawable.ic_tylenol, "사이타멜 500mg"),
-        SearchResult(R.drawable.ic_tylenol, "엑세드린 500mg"),
-        SearchResult(R.drawable.ic_tylenol, "부루펜 200mg"),
-        SearchResult(R.drawable.ic_tylenol, "모터릴 400mg"),
-        SearchResult(R.drawable.ic_tylenol, "덴트렉스 500mg"),
-        SearchResult(R.drawable.ic_tylenol, "로펜 600mg"),
-        SearchResult(R.drawable.ic_tylenol, "스펙트린 500mg"),
-        SearchResult(R.drawable.ic_tylenol, "다이조날 650mg")
-    )
+    private val apiService = getRetrofit().create(MedicineApiService::class.java)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +46,7 @@ class CheckMedicineActivity : AppCompatActivity() {
         })
 
         binding.veriBtn.setOnClickListener {
-            // startActivity(Intent(this, OnboardingDetailActivity::class.java))
+            // Add functionality for verification button here
         }
 
         binding.searchMedicineIv.setOnClickListener {
@@ -70,11 +57,9 @@ class CheckMedicineActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             intent.putExtra("START_FRAGMENT", "SEARCH")
             startActivity(intent)
-
         }
 
         binding.backButton.setOnClickListener {
-            // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
             onBackPressed()
         }
 
@@ -91,29 +76,31 @@ class CheckMedicineActivity : AppCompatActivity() {
 
         val recyclerView = bottomSheetView.findViewById<RecyclerView>(R.id.recyclerView)
         if (recyclerView == null) {
-            Log.e("SearchWithNameActivity", "RecyclerView not found in bottom sheet layout")
+            Log.e("CheckMedicineActivity", "RecyclerView not found in bottom sheet layout")
             return
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // 현재 EditText에 입력된 검색어 가져오기
         val searchQuery = binding.medicineNameEV.text.toString()
 
-        // 검색어가 비어있으면 빈 리스트를 설정
-        val filteredResults = if (searchQuery.isEmpty()) {
-            emptyList() // 검색어가 없으면 빈 리스트
-        } else {
-            allSearchResults.filter {
-                it.name.contains(searchQuery, ignoreCase = true)
+        // 서버에서 데이터 가져오기
+        apiService.getMedicines(searchQuery).enqueue(object : Callback<MedicineResponse> {
+            override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+                if (response.isSuccessful) {
+                    val dataMedicines = response.body()?.medicines ?: emptyList()
+                    val adapter = SearchWithNameAdapter(dataMedicines)
+                    recyclerView.adapter = adapter
+                } else {
+                    Log.e("CheckMedicineActivity", "Failed to get medicines: ${response.errorBody()?.string()}")
+                }
             }
-        }
 
-        val adapter = SearchWithNameAdapter(filteredResults)
-        recyclerView.adapter = adapter
+            override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
+                Log.e("CheckMedicineActivity", "API call failed", t)
+            }
+        })
 
         bottomSheetDialog.show()
     }
-
 }
-

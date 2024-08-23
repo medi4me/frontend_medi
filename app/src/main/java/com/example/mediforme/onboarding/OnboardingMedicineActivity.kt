@@ -3,23 +3,28 @@ package com.example.mediforme.onboarding
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.Data.MedicineApiService
+import com.example.mediforme.Data.MedicineResponse
+import com.example.mediforme.Data.MedicineShowService
+import com.example.mediforme.Data.Medicines
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
 import com.example.mediforme.search.CameraActivity
-
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickListener {
 
     private lateinit var binding: ActivityOnboardingMedicineBinding
-    private lateinit var adapter: SearchResultAdapter
-    private val searchResults = mutableListOf<SearchResult>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,61 +39,61 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
         binding.skippingTv.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
+
         binding.searchWithCameraTv.setOnClickListener {
             val intent = Intent(this, CameraActivity::class.java)
             startActivity(intent)
         }
 
-        // 더미 데이터 생성
-        // RecyclerView에 더미 데이터 설정하기
-        val dummyDatas = listOf(
-            SearchAddResult("타이레놀정 슈퍼우먼 플러스 울트라 500mg", "14 : 20 / 식후 / 2정"),
-            SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
-            SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정"),
-            SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
-            SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
-            SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정")
-        )
-
-        val adapters = SearchAddResultAdapter(dummyDatas)
-        binding.searchAddResultsRecyclerview.layoutManager = LinearLayoutManager(this)
-        binding.searchAddResultsRecyclerview.adapter = adapters
-
-        // 더미 데이터
-        val dummyData = listOf(
-            SearchResult(R.drawable.ic_tylenol, "타이레놀정 슈퍼우먼 플러스 울트라 500mg"),
-            SearchResult(R.drawable.ic_tylenol, "우먼스타이레놀정"),
-            SearchResult(R.drawable.ic_tylenol, "어린이 타이레놀"),
-            SearchResult(R.drawable.ic_tylenol, "아스피린정 100mg"),
-            SearchResult(R.drawable.ic_tylenol, "애드빌 200mg"),
-            SearchResult(R.drawable.ic_tylenol, "모트린 400mg"),
-            SearchResult(R.drawable.ic_tylenol, "알리브 250mg"),
-            SearchResult(R.drawable.ic_tylenol, "페니실린 500mg"),
-            SearchResult(R.drawable.ic_tylenol, "사이타멜 500mg"),
-            SearchResult(R.drawable.ic_tylenol, "엑세드린 500mg"),
-            SearchResult(R.drawable.ic_tylenol, "부루펜 200mg"),
-            SearchResult(R.drawable.ic_tylenol, "모터릴 400mg"),
-            SearchResult(R.drawable.ic_tylenol, "덴트렉스 500mg"),
-            SearchResult(R.drawable.ic_tylenol, "로펜 600mg"),
-            SearchResult(R.drawable.ic_tylenol, "스펙트린 500mg"),
-            SearchResult(R.drawable.ic_tylenol, "다이조날 650mg")
-        )
-
-        searchResults.addAll(dummyData)
-
-        adapter = SearchResultAdapter(searchResults, this)
+//        // RecyclerView에 더미 데이터 설정하기
+//        val dummyDatas = listOf(
+//            SearchAddResult("타이레놀정 슈퍼우먼 플러스 울트라 500mg", "14 : 20 / 식후 / 2정"),
+//            SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
+//            SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정"),
+//            SearchAddResult("타이레놀정 500mg", "14 : 20 / 식후 / 2정"),
+//            SearchAddResult("우먼스타이레놀정", "18 : 20 / 식전 / 1정"),
+//            SearchAddResult("어린이 타이레놀", "21 : 20 / 식후 / 3정")
+//        )
+//
+//        val searchAddResultAdapter = SearchAddResultAdapter(dummyDatas)
+//        binding.searchAddResultsRecyclerview.layoutManager = LinearLayoutManager(this)
+//        binding.searchAddResultsRecyclerview.adapter = searchAddResultAdapter
 
         // 검색 아이콘 클릭 리스너 설정
         binding.searchMedicineIv.setOnClickListener {
             val query = binding.medicineNameEV.text.toString()
             if (query.isNotEmpty()) {
-                showSearchResultsBottomSheet(query)
+                fetchMedicinesFromServer(query)
             }
         }
+
+        // 서버로부터 데이터를 받아와 RecyclerView에 설정하기
+        fetchMedicinesInfoFromServer()
     }
 
-    private fun showSearchResultsBottomSheet(query: String) {
-        val bottomSheetView = layoutInflater.inflate(R.layout.bottom_sheet_search_results, null)
+    private fun fetchMedicinesFromServer(query: String) {
+        val apiService = getRetrofit().create(MedicineApiService::class.java)
+        val call = apiService.getMedicines(query)
+
+        call.enqueue(object : Callback<MedicineResponse> {
+            override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+                if (response.isSuccessful) {
+                    val medicines = response.body()?.medicines ?: emptyList()
+                    // BottomSheetDialog에 데이터 전달
+                    showSearchResultsBottomSheet(medicines)
+                } else {
+                    Log.e("OnboardingMedicineActivity", "Response error")
+                }
+            }
+
+            override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
+                Log.e("OnboardingMedicineActivity", "Fetch error", t)
+            }
+        })
+    }
+
+    private fun showSearchResultsBottomSheet(medicines: List<Medicines>) {
+        val bottomSheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_search_results, null)
         val bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.setContentView(bottomSheetView)
 
@@ -100,14 +105,48 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // 필터링된 결과 리스트 생성
-        val filteredList = searchResults.filter {
-            it.name.contains(query, ignoreCase = true)
-        }
-        val adapter = SearchResultAdapter(filteredList, this)
+        val adapter = SearchResultAdapter(medicines, this)
         recyclerView.adapter = adapter
 
         bottomSheetDialog.show()
+    }
+
+    private fun fetchMedicinesInfoFromServer() {
+        val apiService = getRetrofit().create(MedicineShowService::class.java)
+        // 여기서는 memberID를 "1"로 고정하여 테스트
+        val memberId = "2"
+        val call = apiService.getUserMedicines(memberId)
+
+        call.enqueue(object : Callback<MedicineResponse> {
+            override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+                Log.d("OnboardingMedicineActivity", "Response received: ${response.code()}")
+                if (response.isSuccessful) {
+                    val medicines = response.body()?.medicines ?: emptyList()
+                    setupRecyclerView(medicines)
+                } else {
+                    Log.e("OnboardingMedicineActivity", "Response error: ${response.code()} ${response.message()}")
+                    Log.e("OnboardingMedicineActivity", "Response body: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
+                Log.e("OnboardingMedicineActivity", "Fetch error", t)
+            }
+        })
+    }
+
+    private fun setupRecyclerView(medicines: List<Medicines>) {
+        val results = medicines.map { medicine ->
+            SearchAddResult(
+                image = medicine.itemImage ?: "",
+                name = medicine.itemName,
+                contents = "${medicine.time ?: "No time info"} / ${medicine.meal ?: "No meal info"} / ${medicine.dosage ?: "No dosage info"}"
+            )
+        }
+
+        val searchAddResultAdapter = SearchAddResultAdapter(results)
+        binding.searchAddResultsRecyclerview.layoutManager = LinearLayoutManager(this)
+        binding.searchAddResultsRecyclerview.adapter = searchAddResultAdapter
     }
 
     override fun onItemClick(name: String) {

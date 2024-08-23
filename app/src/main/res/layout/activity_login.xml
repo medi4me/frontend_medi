@@ -51,6 +51,8 @@
         android:hint="아이디"
         android:textColor="@color/gray"
         android:paddingStart="16dp"
+        android:imeOptions="actionNext"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_TV" />
@@ -65,9 +67,33 @@
         android:hint="비밀번호"
         android:textColor="@color/gray"
         android:paddingStart="16dp"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/id_ET" />
+
+    <ImageView
+        android:id="@+id/sign_up_view_password_iv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:paddingEnd="10dp"
+        android:src="@drawable/btn_input_password"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/password_ET"
+        app:layout_constraintEnd_toEndOf="@+id/password_ET"
+        app:layout_constraintTop_toTopOf="@+id/password_ET" />
+
+    <ImageView
+        android:id="@+id/sign_up_hide_password_iv"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:paddingEnd="10dp"
+        android:visibility="gone"
+        android:src="@drawable/btn_input_password_off"
+        app:layout_constraintBottom_toBottomOf="@+id/password_ET"
+        app:layout_constraintEnd_toEndOf="@+id/password_ET"
+        app:layout_constraintTop_toTopOf="@+id/password_ET" />
 
 
     <LinearLayout
