@@ -1,5 +1,8 @@
 package com.example.mediforme.mypage
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
@@ -13,8 +16,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>) :
+class ContentDrugRVAdaptor(
+    val contentDrugList: ArrayList<ContentDrug>,private val context: Context) :
     RecyclerView.Adapter<ContentDrugRVAdaptor.Holder>() {
+
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+    private val token = "Bearer ${sharedPreferences.getString("accessToken", "")}"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Holder {
         val binding = ItemDrugContentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -71,19 +78,24 @@ class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>) :
         private fun checkMedicineAlarmStatus(userMedicineId: Int) {
             val retrofit = getRetrofit() // Retrofit 인스턴스 가져오기
             val service = retrofit.create(MedicineAlarmService::class.java)
-            val call = service.checkMedicineAlarm(userMedicineId)
+            val call = service.checkMedicineAlarm(token, userMedicineId)
+
+            Log.d("ContentDrugRVAdaptor", "Checking alarm status. ID: $userMedicineId with token: $token")
 
             call.enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         // 성공적으로 업데이트됨
+                        Log.d("ContentDrugRVAdaptor", "Alarm checked successfully. ID: $userMedicineId")
                     } else {
                         // 업데이트 실패 처리
+                        Log.e("ContentDrugRVAdaptor", "Failed to check alarm. ID: $userMedicineId, Response code: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
                     // 네트워크 오류 처리
+                    Log.e("ContentDrugRVAdaptor", "Error checking alarm. ID: $userMedicineId", t)
                 }
             })
         }
@@ -91,22 +103,29 @@ class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>) :
         private fun uncheckMedicineAlarmStatus(userMedicineId: Int) {
             val retrofit = getRetrofit() // Retrofit 인스턴스 가져오기
             val service = retrofit.create(MedicineAlarmOffService::class.java)
-            val call = service.uncheckMedicineAlarm(userMedicineId)
+            val call = service.uncheckMedicineAlarm(token, userMedicineId)
+
+            Log.d("ContentDrugRVAdaptor", "Unchecking alarm status. ID: $userMedicineId with token: $token")
 
             call.enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
                     if (response.isSuccessful) {
                         // 성공적으로 업데이트됨
+                        Log.d("ContentDrugRVAdaptor", "Alarm unchecked successfully. ID: $userMedicineId")
                     } else {
                         // 업데이트 실패 처리
+                        Log.e("ContentDrugRVAdaptor", "Failed to uncheck alarm. ID: $userMedicineId, Response code: ${response.code()}")
                     }
                 }
 
                 override fun onFailure(call: Call<Void>, t: Throwable) {
                     // 네트워크 오류 처리
+                    Log.e("ContentDrugRVAdaptor", "Error unchecking alarm. ID: $userMedicineId", t)
                 }
             })
         }
+
+
     }
 
     fun updateData(newContentDrugList: List<ContentDrug>) {

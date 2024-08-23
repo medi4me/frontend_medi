@@ -1,7 +1,9 @@
 package com.example.mediforme.onboarding
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,11 +16,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
-import com.example.mediforme.Data.MedicineApiService
 import com.example.mediforme.Data.MedicineRequest
 import com.example.mediforme.Data.MedicineResponse
 import com.example.mediforme.Data.MedicineSaveService
-import com.example.mediforme.Data.Medicines
 import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.databinding.ActivityOnboardingDetailBinding
 import retrofit2.Call
@@ -29,13 +29,23 @@ class OnboardingDetailActivity : AppCompatActivity() {
     lateinit var binding: ActivityOnboardingDetailBinding
     private var selectedTime: String? = null // 선택된 시간 저장 변수
     private var selectedMealTime: String? = null // 선택된 식사 시간 저장 변수
-    private val memberId: Int = 2 // 고정된 멤버 ID
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var memberID: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
+
+        // SharedPreferences에서 memberID 가져오기
+        sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        memberID = sharedPreferences.getString("memberID", null) ?: ""
+
+        if (memberID.isEmpty()) {
+            Log.e("OnboardingDetailActivity", "Member ID is missing in SharedPreferences")
+            // 필요한 경우, memberID가 없는 경우에 대한 처리 로직 추가
+        }
 
         val medicineName = intent.getStringExtra("medicine_name")
         if (medicineName != null) {
@@ -93,15 +103,14 @@ class OnboardingDetailActivity : AppCompatActivity() {
             Log.d("OnboardingDetailActivity", "Selected Meal Time: $mealTime")
             Log.d("OnboardingDetailActivity", "Dosage One-time: $dosageOnetime")
 
-
-            //startActivity(Intent(this, OnboardingMedicineActivity::class.java))
             // MedicineRequest 데이터 클래스에 필요한 데이터를 생성
             val medicineRequest = MedicineRequest(
+                memberID = memberID,
                 name = (medicineSaveName ?: "Unknown Medicine").toString(),
                 meal = mealTime ?: "",
                 time = selectedTime ?: "",
                 dosage = dosageOnetime,
-                memberId = memberId // 고정된 멤버 ID 사용
+                memberId = 0 // 고정된 멤버 ID 사용
             )
 
             // Retrofit 인스턴스 생성 및 서비스 인터페이스 초기화
@@ -110,11 +119,12 @@ class OnboardingDetailActivity : AppCompatActivity() {
 
             // POST 요청을 서버로 보내기
             val call = service.saveMedicine(
+                memberID = memberID,
                 name = medicineName ?: "Unknown Medicine",
                 meal = mealTime ?: "MEAL",
                 time = selectedTime ?: "00:00",
                 dosage = dosageOnetime,
-                memberId = memberId
+                memberId = 0
             )
             Log.d("MedicineRequest", "Request Body: $medicineRequest")
             call.enqueue(object : Callback<MedicineResponse> {
@@ -140,9 +150,6 @@ class OnboardingDetailActivity : AppCompatActivity() {
             startActivity(Intent(this, MainActivity::class.java))
         }
     }
-
-
-
 
     private fun showTimePickerDialog() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_time_picker, null)

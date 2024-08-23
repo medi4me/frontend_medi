@@ -46,6 +46,7 @@ class MyPageFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var myPageNameTV: TextView
     private lateinit var authService: AuthService
+    private var accessToken: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,23 +60,25 @@ class MyPageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         authService = getRetrofit().create(AuthService::class.java)
-
-
-        // 더미 데이터 생성
-        val contentDrugList = arrayListOf(
-            ContentDrug(1, R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", true),
-            ContentDrug(1, R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일", true),
-            ContentDrug(1, R.drawable.ic_drug_default, "타이레놀 500mg", "06:00 PM", "매일",true),
-            ContentDrug(1, R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", false),
-            ContentDrug(1, R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일",false),
-            ContentDrug(1, R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", true),
-            ContentDrug(1, R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일", true),
-            ContentDrug(1, R.drawable.ic_drug_default, "타이레놀 500mg", "06:00 PM", "매일",true),
-            ContentDrug(1, R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", false),
-            ContentDrug(1, R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일",false),
-        )
-
         sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        accessToken = sharedPreferences.getString("accessToken", "") ?: ""
+
+
+//        // 더미 데이터 생성
+//        val contentDrugList = arrayListOf(
+//            ContentDrug(1, R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", true),
+//            ContentDrug(1, R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일", true),
+//            ContentDrug(1, R.drawable.ic_drug_default, "타이레놀 500mg", "06:00 PM", "매일",true),
+//            ContentDrug(1, R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", false),
+//            ContentDrug(1, R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일",false),
+//            ContentDrug(1, R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", true),
+//            ContentDrug(1, R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일", true),
+//            ContentDrug(1, R.drawable.ic_drug_default, "타이레놀 500mg", "06:00 PM", "매일",true),
+//            ContentDrug(1, R.drawable.ic_drug_default, "테스트민 정 0.1mg", "09:00 AM", "매일", false),
+//            ContentDrug(1, R.drawable.ic_drug_default, "아스피린 100mg", "12:00 PM", "매일",false),
+//        )
+//
+//        sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         myPageNameTV = binding.myNameTV
 
         val memberID = sharedPreferences.getString("memberID", "Unknown ID")
@@ -84,7 +87,7 @@ class MyPageFragment : Fragment() {
         myPageNameTV.text = "$name"
 
 
-        adapter = ContentDrugRVAdaptor(contentDrugList)
+        adapter = ContentDrugRVAdaptor(arrayListOf(), requireContext())
         binding.myDrugRV.adapter = adapter
         binding.myDrugRV.layoutManager = LinearLayoutManager(requireContext())
         binding.myDrugRV.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
@@ -117,7 +120,7 @@ class MyPageFragment : Fragment() {
     private fun fetchMedicines() {
         val retrofit = getRetrofit()
         val service = retrofit.create(MedicineShowService::class.java)
-        val call = service.getUserMedicines(memberId = "1") // 사용자의 memberId로 변경해야 함
+        val call = service.getUserMedicines("Bearer $accessToken")
 
         call.enqueue(object : Callback<MedicineResponse> {
             override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {

@@ -35,6 +35,10 @@ class AddMedicineResultActivity : AppCompatActivity() {
         setContentView(binding.root)
         enableEdgeToEdge()
 
+        // SharedPreferences에서 memberID 가져오기
+        val sharedPreferences = getSharedPreferences("your_shared_preferences_name", MODE_PRIVATE)
+        val memberID = sharedPreferences.getString("memberID", null)
+
         // Intent로부터 데이터 받기
         val medicineName = intent.getStringExtra("medicine_name")
         val medicineDosage = intent.getStringExtra("medicine_dosage")
@@ -95,11 +99,12 @@ class AddMedicineResultActivity : AppCompatActivity() {
 
             // POST 요청을 서버로 보내기 (개별 파라미터 전달)
             val call = service.saveMedicine(
+                memberID = memberID.toString(),
                 name = medicineSaveName,
                 meal = mealTime,
                 time = selectedTime,
                 dosage = dosageOnetime,
-                memberId = memberId
+                memberId = 0
             )
 
             Log.d("AddMedicineResultActivity", "Request Params: name=$medicineSaveName, meal=$mealTime, time=$selectedTime, dosage=$dosageOnetime, memberId=$memberId")

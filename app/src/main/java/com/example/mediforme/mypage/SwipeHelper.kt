@@ -2,6 +2,7 @@ package com.example.mediforme.mypage
 
 import android.app.AlertDialog
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Canvas
 import android.util.Log
 import android.view.LayoutInflater
@@ -30,6 +31,7 @@ class SwipeHelper(
     private var previousPosition: Int? = null
     private var currentDx = 0f
     private var clamp = 0f
+    private val sharedPreferences: SharedPreferences = context.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
 
     override fun getMovementFlags(
         recyclerView: RecyclerView,
@@ -138,7 +140,15 @@ class SwipeHelper(
 
             val retrofit = getRetrofit()
             val service = retrofit.create(MedicineDeleteService::class.java)
-            val call = service.deleteMedicine(memberId, userMedicineId)
+
+            // SharedPreferences에서 토큰 가져오기
+            val accessToken = sharedPreferences.getString("accessToken", null)
+            if (accessToken.isNullOrEmpty()) {
+                Log.e("SwipeHelper", "Access token is missing. Cannot delete medicine.")
+                return@setOnClickListener
+            }
+
+            val call = service.deleteMedicine("Bearer $accessToken", userMedicineId)
 
             Log.d("SwipeHelper", "Attempting to delete userMedicineId: $userMedicineId, memberId: $memberId")
             call.enqueue(object : Callback<ResponseBody> {

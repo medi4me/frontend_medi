@@ -1,9 +1,11 @@
 package com.example.mediforme.onboarding
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +18,7 @@ import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
+import com.example.mediforme.login.LoginActivity
 import com.example.mediforme.search.CameraActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import retrofit2.Call
@@ -24,13 +27,19 @@ import retrofit2.Response
 
 class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickListener {
 
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var binding: ActivityOnboardingMedicineBinding
+    private var accessToken: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingMedicineBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
+
+        // Fetching the token from SharedPreferences
+        sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
+        accessToken = sharedPreferences.getString("accessToken", null)
 
         binding.veriBtn.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
@@ -113,9 +122,8 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
 
     private fun fetchMedicinesInfoFromServer() {
         val apiService = getRetrofit().create(MedicineShowService::class.java)
-        // 여기서는 memberID를 "1"로 고정하여 테스트
-        val memberId = "2"
-        val call = apiService.getUserMedicines(memberId)
+        val call = apiService.getUserMedicines("Bearer $accessToken")
+        Log.d("OnboardingMedicineActivity", "Token: $accessToken")
 
         call.enqueue(object : Callback<MedicineResponse> {
             override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
@@ -126,6 +134,9 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
                 } else {
                     Log.e("OnboardingMedicineActivity", "Response error: ${response.code()} ${response.message()}")
                     Log.e("OnboardingMedicineActivity", "Response body: ${response.errorBody()?.string()}")
+//                    if (response.code() == 401) {
+//                        handleUnauthorized()
+//                    }
                 }
             }
 
@@ -133,6 +144,15 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
                 Log.e("OnboardingMedicineActivity", "Fetch error", t)
             }
         })
+    }
+
+    private fun handleUnauthorized() {
+        // 토큰이 만료되었거나 유효하지 않을 때 처리하는 로직 추가
+        // 예: 사용자를 로그인 화면으로 보내기
+        Toast.makeText(this, "인증이 만료되었습니다. 다시 로그인해주세요.", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     private fun setupRecyclerView(medicines: List<Medicines>) {
