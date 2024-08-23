@@ -75,6 +75,13 @@ interface MedicineAlarmService {
     ): Call<Void>
 }
 
+interface MedicineAlarmOffService {
+    @PUT("{userMedicineId}/check/alarmOff")
+    fun uncheckMedicineAlarm(
+        @Path("userMedicineId") userMedicineId: Int
+    ): Call<Void>
+}
+
 
 
 data class MedicineResponse(

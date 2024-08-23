@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mediforme.Data.MedicineAlarmOffService
 import com.example.mediforme.Data.MedicineAlarmService
 import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.R
@@ -55,8 +56,12 @@ class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>) :
                 val newBellIcon = if (contentDrug.isBellOn) R.drawable.ic_bell_on else R.drawable.ic_bell_off
                 contentDrugBell.setImageResource(newBellIcon)
 
-                // 서버에 알람 상태 업데이트 요청
-                checkMedicineAlarmStatus(contentDrug.userMedicineId)
+                // 알림 상태에 따라 서버에 업데이트 요청
+                if (contentDrug.isBellOn) {
+                    checkMedicineAlarmStatus(contentDrug.userMedicineId)
+                } else {
+                    uncheckMedicineAlarmStatus(contentDrug.userMedicineId)
+                }
 
                 val toastMessage = if (contentDrug.isBellOn) "알림 On" else "알림 Off"
                 Toast.makeText(itemView.context, toastMessage, Toast.LENGTH_SHORT).show()
@@ -67,6 +72,26 @@ class ContentDrugRVAdaptor(val contentDrugList: ArrayList<ContentDrug>) :
             val retrofit = getRetrofit() // Retrofit 인스턴스 가져오기
             val service = retrofit.create(MedicineAlarmService::class.java)
             val call = service.checkMedicineAlarm(userMedicineId)
+
+            call.enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                    if (response.isSuccessful) {
+                        // 성공적으로 업데이트됨
+                    } else {
+                        // 업데이트 실패 처리
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>, t: Throwable) {
+                    // 네트워크 오류 처리
+                }
+            })
+        }
+
+        private fun uncheckMedicineAlarmStatus(userMedicineId: Int) {
+            val retrofit = getRetrofit() // Retrofit 인스턴스 가져오기
+            val service = retrofit.create(MedicineAlarmOffService::class.java)
+            val call = service.uncheckMedicineAlarm(userMedicineId)
 
             call.enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>, response: Response<Void>) {
