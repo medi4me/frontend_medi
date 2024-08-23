@@ -59,10 +59,10 @@ class HomeFragment : Fragment() {
         val bannerAdapter = BannerVPAdapter(this)
         bannerAdapter.addFragment(BannerFragment.newInstance(R.drawable.img_home_viewpager_exp))
         bannerAdapter.addFragment(BannerFragment.newInstance(R.drawable.img_home_viewpager_exp2))
-        binding.homeBannerVp.adapter = bannerAdapter
-        binding.homeBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        binding.homeBannerIndicator.setViewPager(binding.homeBannerVp)
-        startAutoSlide(bannerAdapter)
+//        binding.homeBannerVp.adapter = bannerAdapter
+//        binding.homeBannerVp.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+//        binding.homeBannerIndicator.setViewPager(binding.homeBannerVp)
+//        startAutoSlide(bannerAdapter)
 
         sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         homeNameTV = binding.homeNameTV
@@ -195,18 +195,18 @@ class HomeFragment : Fragment() {
         }
         routineDrugAdapter.updateData(routineDrugList)
     }
-
-    private fun startAutoSlide(adapter: BannerVPAdapter) {
-        // Auto slide banners every 5 seconds
-        timer.scheduleAtFixedRate(5000, 5000) {
-            handler.post {
-                val nextItem = binding.homeBannerVp.currentItem + 1
-                if (nextItem < adapter.itemCount) {
-                    binding.homeBannerVp.currentItem = nextItem
-                } else {
-                    binding.homeBannerVp.currentItem = 0 // Loop to first item
-                }
-            }
-        }
-    }
+//
+//    private fun startAutoSlide(adapter: BannerVPAdapter) {
+//        // Auto slide banners every 5 seconds
+//        timer.scheduleAtFixedRate(5000, 5000) {
+//            handler.post {
+//                val nextItem = binding.homeBannerVp.currentItem + 1
+//                if (nextItem < adapter.itemCount) {
+//                    binding.homeBannerVp.currentItem = nextItem
+//                } else {
+//                    binding.homeBannerVp.currentItem = 0 // Loop to first item
+//                }
+//            }
+//        }
+//    }
 }
