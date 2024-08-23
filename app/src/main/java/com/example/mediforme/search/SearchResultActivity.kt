@@ -12,10 +12,24 @@ import android.Manifest
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mediforme.Data.CameraMedicineResponse
+import com.example.mediforme.Data.CameraService
+import com.example.mediforme.Data.MedicineResponse
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivitySearchresultBinding
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 
 class SearchResultActivity : AppCompatActivity() {
     lateinit var binding: ActivitySearchresultBinding
@@ -33,6 +47,8 @@ class SearchResultActivity : AppCompatActivity() {
         // Check for permissions and set up listeners
         checkPermissions()
 
+        uploadDrawableImage()
+
         //이미지 뷰에 클릭 리스너 달고, 사진찍게 함
         binding.medicineIv.setOnClickListener {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
@@ -47,34 +63,6 @@ class SearchResultActivity : AppCompatActivity() {
             binding.medicineIv.setImageBitmap(it)
         }
 
-        // 더미 데이터 생성
-        val dummyData = listOf(
-            MedicineList(
-                imageResId = R.drawable.medicine_ex,
-                name = "부타정",
-                dosage = "0.7mg",
-                effects = "이 약의 효능입니다.",
-                howToEat = "하루 2번 / 3정 이하"
-            ),
-            MedicineList(
-                imageResId = R.drawable.medicine_ex,
-                name = "파프티정",
-                dosage = "1.0mg",
-                effects = "부작용이 적습니다.",
-                howToEat = "하루 1번 / 2정 이하"
-            ),
-            MedicineList(
-                imageResId = R.drawable.medicine_ex,
-                name = "테스민정",
-                dosage = "0.5mg",
-                effects = "효능이 좋습니다.",
-                howToEat = "하루 3번 / 1정 이하"
-            )
-        )
-
-
-        val listAdapter = MedicineListAdapter(dummyData)
-        binding.medicineInfoRecyclerView.adapter = listAdapter
 
         // 복용 약에 추가하기 버튼을 눌렀을 시
         val bottomSheetFragment = BottomSheetFragment()
@@ -100,6 +88,57 @@ class SearchResultActivity : AppCompatActivity() {
             onBackPressed()
         }
     }
+
+    private fun uploadDrawableImage() {
+        // drawable 리소스에서 이미지 파일을 가져오기
+        val inputStream: InputStream = resources.openRawResource(R.drawable.tairenol)
+        val file = File(cacheDir, "tirenol.png")
+        val outputStream = FileOutputStream(file)
+
+        inputStream.use { input ->
+            outputStream.use { output ->
+                input.copyTo(output)
+            }
+        }
+
+        val requestFile = RequestBody.create("image/png".toMediaTypeOrNull(), file)
+        val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+        // Retrofit 인스턴스 생성 및 요청 실행
+        val retrofit = getRetrofit() // getRetrofit()은 Retrofit 인스턴스를 반환하는 메서드입니다.
+        val service = retrofit.create(CameraService::class.java)
+        val call = service.uploadImage(body)
+
+        call.enqueue(object : Callback<List<CameraMedicineResponse>> {
+            override fun onResponse(call: Call<List<CameraMedicineResponse>>, response: Response<List<CameraMedicineResponse>>) {
+                if (response.isSuccessful) {
+                    val cameraMedicineResponses = response.body()
+
+                    // 서버에서 받은 데이터를 MedicineList로 변환
+                    val medicines = cameraMedicineResponses?.map { response ->
+                        MedicineList(
+                            imageResId = response.imageUrl,
+                            name = response.name,
+                            dosage = response.dosage ?: "",
+                            effects = response.benefit ?: "",
+                            howToEat = response.drugInteraction ?: ""
+                        )
+                    } ?: emptyList()
+
+                    // RecyclerView 어댑터에 데이터 설정
+                    val listAdapter = MedicineListAdapter(medicines)
+                    binding.medicineInfoRecyclerView.adapter = listAdapter
+                } else {
+                    Log.e("SearchResultActivity", "Error: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<CameraMedicineResponse>>, t: Throwable) {
+                Log.e("SearchResultActivity", "Request failed", t)
+            }
+        })
+    }
+
     private fun checkPermissions() {
         val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
         if (permissions.any { ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED }) {

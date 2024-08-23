@@ -114,7 +114,7 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
     private fun fetchMedicinesInfoFromServer() {
         val apiService = getRetrofit().create(MedicineShowService::class.java)
         // 여기서는 memberID를 "1"로 고정하여 테스트
-        val memberId = "1"
+        val memberId = "2"
         val call = apiService.getUserMedicines(memberId)
 
         call.enqueue(object : Callback<MedicineResponse> {
