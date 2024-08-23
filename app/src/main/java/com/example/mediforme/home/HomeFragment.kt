@@ -44,6 +44,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var homeNameTV: TextView
+    private var accessToken: String? = null
 
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
@@ -67,8 +68,8 @@ class HomeFragment : Fragment() {
         sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         homeNameTV = binding.homeNameTV
 
-        // Retrieve the stored memberID and name
-        val memberID = sharedPreferences.getString("memberID", "Unknown ID")
+        // SharedPreferences에서 저장된 토큰과 이름 가져오기
+        accessToken = sharedPreferences.getString("accessToken", "") ?: ""
         val name = sharedPreferences.getString("name", "Unknown Name")
 
         // Set the retrieved values to the TextView
@@ -155,7 +156,7 @@ class HomeFragment : Fragment() {
         }
 
         // 약물 리스트 RecyclerView 설정
-        routineDrugAdapter = RoutineDrugRVAdaptor(arrayListOf())
+        routineDrugAdapter = RoutineDrugRVAdaptor(arrayListOf(), requireContext())
         binding.homeRoutineRV.adapter = routineDrugAdapter
         binding.homeRoutineRV.layoutManager = LinearLayoutManager(requireContext())
 
@@ -165,7 +166,7 @@ class HomeFragment : Fragment() {
     private fun fetchMedicines() {
         val retrofit = getRetrofit()
         val service = retrofit.create(MedicineShowService::class.java)
-        val call = service.getUserMedicines(memberId = "1") // 사용자의 memberId로 변경해야 함
+        val call = service.getUserMedicines("Bearer $accessToken") // 사용자의 memberId로 변경해야 함
 
         call.enqueue(object : Callback<MedicineResponse> {
             override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
