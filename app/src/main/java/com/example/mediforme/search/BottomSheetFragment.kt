@@ -1,8 +1,10 @@
 package com.example.mediforme.search
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,11 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.mediforme.Data.CameraMedicineResponse
+import com.example.mediforme.Data.CameraService
+import com.example.mediforme.Data.MedicineInfoResponse
+import com.example.mediforme.Data.MedicineService
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentBottomSheet3Binding
 import com.example.mediforme.databinding.FragmentBottomSheetBinding
@@ -17,6 +24,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.parcel.Parcelize
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -83,12 +100,8 @@ class BottomSheetFragment2 : BottomSheetDialogFragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var tabAdapter: TabAdapter
 
-    // 약 정보를 담은 리스트
-    private val medicineInfoList = listOf(
-        MedicineInfo("부타정", "아세트아미노펜과립", "0.7mg"),
-        MedicineInfo("피프티정", "이부프로펜", "0.5mg"),
-        MedicineInfo("타이레놀", "아세트아미노펜", "0.3mg")
-    )
+    // 약 정보를 담을 리스트 (초기화는 나중에 서버 데이터로 대체)
+    private var medicineInfoList: List<MedicineInfo> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,35 +112,64 @@ class BottomSheetFragment2 : BottomSheetDialogFragment() {
         tabLayout = view.findViewById(R.id.tab_layout)
         recyclerView = view.findViewById(R.id.recycler_view)
 
-        // RecyclerView 초기화 및 설정
-        tabAdapter = TabAdapter(medicineInfoList)
+        // RecyclerView 초기화
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = tabAdapter
 
-        // TabLayout과 RecyclerView를 연결합니다.
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.let {
-                    val position = it.position
-                    recyclerView.scrollToPosition(position)
+        // 전달받은 약물 이름을 번들로부터 가져옴
+        val medicineNames = arguments?.getStringArrayList("medicine_names") ?: emptyList()
+
+        // 서버에서 데이터를 받아와서 리스트 초기화
+        fetchMedicineInfo(medicineNames)
+
+        return view
+    }
+
+    private fun fetchMedicineInfo(medicineNames: List<String>) {
+        val retrofit = getRetrofit() // Retrofit 인스턴스를 가져오는 함수
+        val service = retrofit.create(MedicineService::class.java)
+        val call = service.getMedicineInfo(medicineNames)
+
+        // medicineNames 리스트 로그로 출력
+        Log.d("BottomSheetFragment2", "Requesting info for: $medicineNames")
+
+        call.enqueue(object : Callback<List<MedicineInfoResponse>> {
+            override fun onResponse(
+                call: Call<List<MedicineInfoResponse>>,
+                response: Response<List<MedicineInfoResponse>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let { responseList ->
+                        // 서버로부터 받은 여러 개의 MedicineInfo를 리스트에 추가
+                        medicineInfoList = responseList.map { response ->
+                            MedicineInfo(
+                                title = response.name,
+                                ingredient = response.componentName,
+                                amount = response.amount
+                            )
+                        }
+
+                        // 서버에서 받아온 리스트 로그로 출력
+                        Log.d("BottomSheetFragment2", "Received Medicine Info List: $medicineInfoList")
+
+                        // TabAdapter 설정
+                        tabAdapter = TabAdapter(medicineInfoList)
+                        recyclerView.adapter = tabAdapter
+
+                        // TabLayout의 탭을 설정
+                        tabLayout.removeAllTabs()
+                        for (i in medicineInfoList.indices) {
+                            tabLayout.addTab(tabLayout.newTab().setText(medicineInfoList[i].title))
+                        }
+                    }
+                } else {
+                    Log.e("BottomSheetFragment2", "Error: ${response.errorBody()?.string()}")
                 }
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // Do nothing
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                // Do nothing
+            override fun onFailure(call: Call<List<MedicineInfoResponse>>, t: Throwable) {
+                Log.e("BottomSheetFragment2", "Request failed", t)
             }
         })
-
-        // TabLayout의 탭을 설정합니다.
-        for (i in medicineInfoList.indices) {
-            tabLayout.addTab(tabLayout.newTab().setText(medicineInfoList[i].title))
-        }
-
-        return view
     }
 
     @Parcelize
@@ -141,9 +183,12 @@ class BottomSheetFragment2 : BottomSheetDialogFragment() {
 
 
 
+
 // BottomSheetFragment3.kt
 class BottomSheetFragment3 : BottomSheetDialogFragment() {
+
     lateinit var binding: FragmentBottomSheet3Binding
+    private lateinit var cameraService: CameraService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -151,15 +196,57 @@ class BottomSheetFragment3 : BottomSheetDialogFragment() {
     ): View? {
         binding = FragmentBottomSheet3Binding.inflate(inflater, container, false)
 
-        binding.veriBtnCombination.setOnClickListener {
-            val intent = Intent(requireContext(), CheckMedicineActivity::class.java)
-            startActivity(intent)
+        // Retrofit 초기화
+        cameraService = getRetrofit().create(CameraService::class.java)
+
+        val photoUri = arguments?.getString("photoUri")
+
+        // 사진 파일을 서버로 전송
+        photoUri?.let {
+            val file = File(Uri.parse(it).path)
+            val requestFile = RequestBody.create("image/png".toMediaTypeOrNull(), file)
+            val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
+
+            uploadPhotoAndDisplayWarnings(body)
         }
+
+//        binding.veriBtnCombination.setOnClickListener {
+//            val intent = Intent(requireContext(), CheckMedicineActivity::class.java)
+//            startActivity(intent)
+//        }
 
         return binding.root
     }
+
+    private fun uploadPhotoAndDisplayWarnings(body: MultipartBody.Part) {
+        cameraService.uploadImage(body).enqueue(object : Callback<List<CameraMedicineResponse>> {
+            override fun onResponse(
+                call: Call<List<CameraMedicineResponse>>,
+                response: Response<List<CameraMedicineResponse>>
+            ) {
+                if (response.isSuccessful) {
+                    val responseData = response.body()
+                    responseData?.let { data ->
+                        if (data.isNotEmpty()) {
+                            val drugInteraction = data[0].drugInteraction
+                            val alcoholWarning = data[0].alcoholWarning
+
+                            // 서버에서 받은 데이터 중 drugInteraction와 alcoholWarning를 UI에 반영
+                            binding.warningNameTv.text = drugInteraction
+                            binding.warningTextBlack2.text = alcoholWarning
+                        }
+                    }
+                } else {
+                    // 응답이 실패했을 경우 처리
+                    Log.e("BottomSheetFragment3", "Error: ${response.errorBody()?.string()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<CameraMedicineResponse>>, t: Throwable) {
+                // 네트워크 오류 등으로 요청이 실패한 경우 처리
+                Log.e("BottomSheetFragment3", "Failure: ${t.message}")
+            }
+        })
+    }
 }
-
-
-
 

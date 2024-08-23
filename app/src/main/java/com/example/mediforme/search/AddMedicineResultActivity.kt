@@ -12,14 +12,22 @@ import android.widget.Button
 import android.widget.TimePicker
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mediforme.Data.MedicineRequest
+import com.example.mediforme.Data.MedicineResponse
+import com.example.mediforme.Data.MedicineSaveService
+import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentAddMedicineBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class AddMedicineResultActivity : AppCompatActivity() {
     private lateinit var binding: FragmentAddMedicineBinding
     private var selectedTime: String? = null // 선택된 시간 저장 변수
     private var selectedMealTime: String? = null // 선택된 식사 시간 저장 변수
+    private val memberId: Int = 2 // 고정된 멤버 ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,10 +77,50 @@ class AddMedicineResultActivity : AppCompatActivity() {
 
         binding.veriBtn.setOnClickListener {
             val dosageOnetime = binding.dosageOnetimeEV.text.toString()
-            Log.d("AddMedicineResultActivity", "Selected Time: $selectedTime")
-            Log.d("AddMedicineResultActivity", "Selected Meal Time: $selectedMealTime")
-            Log.d("AddMedicineResultActivity", "Dosage One-time: $dosageOnetime")
-            startActivity(Intent(this, AddMedicineActivity::class.java))
+
+            // selectedMealTime 값을 변환
+            val mealTime = when (selectedMealTime) {
+                "식전" -> "NOMEAL"
+                "식후" -> "MEAL"
+                else -> selectedMealTime ?: "MEAL"
+            }
+
+            // MedicineRequest에서 필요한 데이터를 개별적으로 추출
+            val medicineSaveName = binding.medicineName.text.toString()
+            val selectedTime = selectedTime ?: "00:00"
+
+            // Retrofit 인스턴스 생성 및 서비스 인터페이스 초기화
+            val retrofit = getRetrofit()
+            val service = retrofit.create(MedicineSaveService::class.java)
+
+            // POST 요청을 서버로 보내기 (개별 파라미터 전달)
+            val call = service.saveMedicine(
+                name = medicineSaveName,
+                meal = mealTime,
+                time = selectedTime,
+                dosage = dosageOnetime,
+                memberId = memberId
+            )
+
+            Log.d("AddMedicineResultActivity", "Request Params: name=$medicineSaveName, meal=$mealTime, time=$selectedTime, dosage=$dosageOnetime, memberId=$memberId")
+
+            call.enqueue(object : Callback<MedicineResponse> {
+                override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+                    if (response.isSuccessful) {
+                        // 서버로부터 성공적으로 응답을 받았을 때 처리
+                        Log.d("AddMedicineResultActivity", "Medicine saved successfully: ${response.body()}")
+                        startActivity(Intent(this@AddMedicineResultActivity, MainActivity::class.java))
+                    } else {
+                        // 서버로부터 응답이 왔지만 성공하지 않은 경우 처리
+                        Log.e("AddMedicineResultActivity", "Failed to save medicine: ${response.errorBody()?.string()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
+                    // 요청이 실패했을 때 처리
+                    Log.e("AddMedicineResultActivity", "Error saving medicine", t)
+                }
+            })
         }
 
     }
