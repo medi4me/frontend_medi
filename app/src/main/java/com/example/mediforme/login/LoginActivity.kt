@@ -118,6 +118,11 @@ class LoginActivity : AppCompatActivity() {
         editor.putString("refreshToken", refreshToken)
         editor.apply()
 
+        // 추가로 로그를 확인하기 위해 로그 출력
+        Log.d("LoginActivity", "SharedPreferences에 저장된 memberID: $memberID")
+        Log.d("LoginActivity", "SharedPreferences에 저장된 accessToken: $accessToken")
+        Log.d("LoginActivity", "SharedPreferences에 저장된 refreshToken: $refreshToken")
+
         // 로그인 성공 후 이름 저장
         fetchUserNameAndSave(memberID)
     }

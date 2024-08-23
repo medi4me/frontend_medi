@@ -29,7 +29,7 @@ class OnboardingDetailActivity : AppCompatActivity() {
     lateinit var binding: ActivityOnboardingDetailBinding
     private var selectedTime: String? = null // 선택된 시간 저장 변수
     private var selectedMealTime: String? = null // 선택된 식사 시간 저장 변수
-    private val memberId: Int = 1 // 고정된 멤버 ID
+    private val memberId: Int = 2 // 고정된 멤버 ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
