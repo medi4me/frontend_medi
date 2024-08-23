@@ -123,8 +123,9 @@ class SearchIDFragment : Fragment() {
                 if (response.isSuccessful) {
                     val verificationResponse = response.body()
                     verificationResponse?.let {
-                        if (it.isSuccess) {
+                        if (it.isSuccess && it.code == "COMMON200") {
                             Toast.makeText(requireContext(), "인증 코드가 발송되었습니다.", Toast.LENGTH_SHORT).show()
+
                         } else if (it.code == "PHONE_NOT_FOUND") {
                             Toast.makeText(requireContext(), "존재하지 않는 번호입니다.", Toast.LENGTH_SHORT).show()
                         }
@@ -146,7 +147,7 @@ class SearchIDFragment : Fragment() {
                 if (response.isSuccessful) {
                     val findIDResponse = response.body()
                     findIDResponse?.let {
-                        if (it.isSuccess) {
+                        if (it.isSuccess && it.code =="COMMON200") {
                             memberID = it.result?.memberID
                             password = it.result?.password
 
