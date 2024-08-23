@@ -57,6 +57,8 @@ class LoginActivity : AppCompatActivity() {
         hidePasswordIv = findViewById(R.id.sign_up_hide_password_iv)
 
 
+
+
         // 아이디 찾기 텍스트뷰 클릭 리스너
         binding.searchIdTV.setOnClickListener {
             startActivity(Intent(this, SearchmainActivity::class.java))
@@ -69,6 +71,18 @@ class LoginActivity : AppCompatActivity() {
 
         binding.joinTV.setOnClickListener {
             startActivity(Intent(this, JoinServiceActivity::class.java))
+        }
+        // 비밀번호 보기/숨기기 기능 설정
+        viewPasswordIv.setOnClickListener {
+            passwordET.transformationMethod = HideReturnsTransformationMethod.getInstance()
+            viewPasswordIv.visibility = ImageView.GONE
+            hidePasswordIv.visibility = ImageView.VISIBLE
+        }
+
+        hidePasswordIv.setOnClickListener {
+            passwordET.transformationMethod = PasswordTransformationMethod.getInstance()
+            viewPasswordIv.visibility = ImageView.VISIBLE
+            hidePasswordIv.visibility = ImageView.GONE
         }
 
 
