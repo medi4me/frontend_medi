@@ -33,6 +33,7 @@ import java.io.InputStream
 
 class SearchResultActivity : AppCompatActivity() {
     lateinit var binding: ActivitySearchresultBinding
+    private var selectedMedicineName: String? = null  // 선택된 약품 이름을 저장할 변수
 
     // Define request codes
     private val REQUEST_PERMISSIONS = 1
@@ -71,11 +72,34 @@ class SearchResultActivity : AppCompatActivity() {
             startActivity(Intent(this, AddMedicineActivity::class.java))
         }
 
-        // 정보 더 알아보기 버튼 눌렀을 시
-        val bottomSheetFragment2 = BottomSheetFragment2()
+        // 정보 더 알아보기 버튼 클릭 시
         binding.moreInfoTv.setOnClickListener {
-            bottomSheetFragment2.show(supportFragmentManager, "BottomSheetDialog2")
+            selectedMedicineName?.let { medicineNames ->
+                val bottomSheetFragment2 = BottomSheetFragment2()
+
+                // 약물 이름 리스트를 Intent로 전달
+                val bundle = Bundle()
+                bundle.putStringArrayList("medicine_names", arrayListOf(medicineNames))
+                bottomSheetFragment2.arguments = bundle
+
+                bottomSheetFragment2.show(supportFragmentManager, "BottomSheetDialog2")
+            }
         }
+
+        // 정보 더 알아보기 테스트 부분
+//        binding.moreInfoTv.setOnClickListener {
+//            val selectedMedicineName = "초당아스피린장용정"  // 여기에 약물 이름을 직접 할당합니다.
+//
+//            val bottomSheetFragment2 = BottomSheetFragment2()
+//
+//            // 약물 이름 리스트를 Bundle로 전달
+//            val bundle = Bundle()
+//            bundle.putStringArrayList("medicine_names", arrayListOf(selectedMedicineName))
+//            bottomSheetFragment2.arguments = bundle
+//
+//            bottomSheetFragment2.show(supportFragmentManager, "BottomSheetDialog2")
+//        }
+
 
         // 약물 조합 확인하기 버튼 눌렀을 시
         val bottomSheetFragment3 = BottomSheetFragment3()
@@ -124,6 +148,13 @@ class SearchResultActivity : AppCompatActivity() {
                             howToEat = response.drugInteraction ?: ""
                         )
                     } ?: emptyList()
+
+                    // 특정 약품 이름이 포함된 경우 변수에 저장
+                    selectedMedicineName = cameraMedicineResponses?.firstOrNull {
+                        it.name.contains("타이레놀") ||
+                                it.name.contains("초당아스피린장용정") ||
+                                it.name.contains("페니라민정")
+                    }?.name
 
                     // RecyclerView 어댑터에 데이터 설정
                     val listAdapter = MedicineListAdapter(medicines)
