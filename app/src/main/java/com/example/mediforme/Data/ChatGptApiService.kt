@@ -10,7 +10,7 @@ interface ChatGptApiService {
     @POST("/chat-gpt/question")
     fun askQuestion(
         @Header("Authorization") authToken: String,
-        @Body question: QuestionRequestDto
+        @Body questionRequest: QuestionRequestDto
     ): Call<ChatGptResponseDto>
 }
 

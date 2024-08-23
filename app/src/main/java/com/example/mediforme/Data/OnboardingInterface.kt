@@ -5,6 +5,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -22,6 +23,7 @@ interface MedicineApiService {
 interface MedicineSaveService {
     @POST("api/medi/save")
     fun saveMedicine(
+        @Query("memberID") memberID: String,
         @Query("name") name: String,
         @Query("meal") meal: String,
         @Query("time") time: String,
@@ -32,28 +34,38 @@ interface MedicineSaveService {
 
 
 // 온보딩, 메인화면, 마이페이지에서 복용약 모두 조회
-interface MedicineShowService{
+interface MedicineShowService {
     @GET("list/medicines")
-    fun getUserMedicines(@Query("memberId") memberId: String
+    fun getUserMedicines(
+        @Header("Authorization") token: String
     ): Call<MedicineResponse>
 }
+
 
 
 // 마이페이지 복용약 삭제
 interface MedicineDeleteService {
     @DELETE("delete/userMedicine")
     fun deleteMedicine(
-        @Query("memberId") memberId: Int,
-        @Query("userMedicineId") userMedicineId: Int
+        @Header("Authorization") token: String,       // Authorization 헤더 추가
+        @Query("userMedicineId") userMedicineId: Int  // Query parameter로 userMedicineId만 사용
     ): Call<ResponseBody>
 }
 
 
 
 // 메인화면 checkbox 체크, 해체 api
+//interface MedicineCheckService {
+//    @PUT("{userMedicineId}/check")
+//    fun checkMedicine(
+//        @Path("userMedicineId") userMedicineId: Int
+//    ): Call<Void>
+//}
+// 메인화면 checkbox 체크, 해체 api
 interface MedicineCheckService {
     @PUT("{userMedicineId}/check")
     fun checkMedicine(
+        @Header("Authorization") token: String,
         @Path("userMedicineId") userMedicineId: Int
     ): Call<Void>
 }
@@ -61,16 +73,16 @@ interface MedicineCheckService {
 interface MedicineCheckOffService {
     @PUT("{userMedicineId}/checkOff")
     fun uncheckMedicine(
+        @Header("Authorization") token: String,
         @Path("userMedicineId") userMedicineId: Int
     ): Call<Void>
 }
-
-
 
 // 마이페이지 알람 체크, 해체 api
 interface MedicineAlarmService {
     @PUT("{userMedicineId}/check/alarm")
     fun checkMedicineAlarm(
+        @Header("Authorization") token: String,
         @Path("userMedicineId") userMedicineId: Int
     ): Call<Void>
 }
@@ -78,9 +90,11 @@ interface MedicineAlarmService {
 interface MedicineAlarmOffService {
     @PUT("{userMedicineId}/check/alarmOff")
     fun uncheckMedicineAlarm(
+        @Header("Authorization") token: String,
         @Path("userMedicineId") userMedicineId: Int
     ): Call<Void>
 }
+
 
 
 
@@ -93,9 +107,9 @@ data class Medicines(
     @SerializedName("itemName") val itemName: String,
     @SerializedName("itemImage") val itemImage: String?,
     @SerializedName("description") val description: String?,
-    @SerializedName("benefit") val benefit:                                                                                                 String?,
+    @SerializedName("benefit") val benefit: String?,
     @SerializedName("drugInteraction") val drugInteraction: String?,
-    @SerializedName("meal") val meal: String?,
+    @SerializedName("meal") val meal: String,
     @SerializedName("time") val time: String?,
     @SerializedName("dosage") val dosage: String?,
     @SerializedName("alarm") val alarm: Boolean,
@@ -103,7 +117,8 @@ data class Medicines(
 )
 
 data class MedicineRequest(
-    @SerializedName("name") val name: String?,
+    @SerializedName("memberID") val memberID: String,
+    @SerializedName("name") val name: String,
     @SerializedName("meal") val meal: String,
     @SerializedName("time") val time: String,
     @SerializedName("dosage") val dosage: String,

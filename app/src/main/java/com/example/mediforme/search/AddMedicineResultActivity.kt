@@ -1,7 +1,9 @@
 package com.example.mediforme.search
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -27,13 +29,18 @@ class AddMedicineResultActivity : AppCompatActivity() {
     private lateinit var binding: FragmentAddMedicineBinding
     private var selectedTime: String? = null // 선택된 시간 저장 변수
     private var selectedMealTime: String? = null // 선택된 식사 시간 저장 변수
-    private val memberId: Int = 2 // 고정된 멤버 ID
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var memberID: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentAddMedicineBinding.inflate(layoutInflater)
         setContentView(binding.root)
         enableEdgeToEdge()
+
+        // SharedPreferences에서 memberID 가져오기
+        sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        memberID = sharedPreferences.getString("memberID", null) ?: ""
 
         // Intent로부터 데이터 받기
         val medicineName = intent.getStringExtra("medicine_name")
@@ -95,14 +102,15 @@ class AddMedicineResultActivity : AppCompatActivity() {
 
             // POST 요청을 서버로 보내기 (개별 파라미터 전달)
             val call = service.saveMedicine(
+                memberID = memberID.toString(),
                 name = medicineSaveName,
                 meal = mealTime,
                 time = selectedTime,
                 dosage = dosageOnetime,
-                memberId = memberId
+                memberId = 0
             )
 
-            Log.d("AddMedicineResultActivity", "Request Params: name=$medicineSaveName, meal=$mealTime, time=$selectedTime, dosage=$dosageOnetime, memberId=$memberId")
+            Log.d("AddMedicineResultActivity", "Request Params: name=$medicineSaveName, meal=$mealTime, time=$selectedTime, dosage=$dosageOnetime, memberId=0")
 
             call.enqueue(object : Callback<MedicineResponse> {
                 override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {

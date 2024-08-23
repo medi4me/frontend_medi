@@ -4,14 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.mediforme.Data.getRetrofit
 import com.example.mediforme.databinding.FragmentChatBinding
 import retrofit2.Call
@@ -19,32 +15,20 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 
-class ChatFragment : Fragment() {
+class ChatActivity : AppCompatActivity() {
 
     private lateinit var binding: FragmentChatBinding
     private lateinit var chatAdapter: ChatAdapter
     private val messages = mutableListOf<Message>()
     private lateinit var apiService: ChatGptApiService
-    private val authToken = "Bearer API키!!!!!!!!" // 여기에 실제 API 키를 입력하세요
     private lateinit var sharedPreferences: SharedPreferences
     private var userName:  String? = null // userName을 String 타입으로 선언
 
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentChatBinding.inflate(inflater, container, false)
-
-        // SharedPreferences에서 저장된 사용자 이름 가져오기
-        sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
-        userName = sharedPreferences.getString("name", "Unknown Name")
-
-        Log.d("dddkkk","${userName}")
-        // 사용자 이름을 chat_name_TV에 설정
-        binding.chatNameTV.text = userName
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = FragmentChatBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Retrofit 초기화 및 API 서비스 생성
         val retrofit: Retrofit = getRetrofit()
@@ -53,13 +37,21 @@ class ChatFragment : Fragment() {
         // RecyclerView 설정
         chatAdapter = ChatAdapter(messages)
         binding.chatRecyclerView.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(this@ChatActivity)
             adapter = chatAdapter
         }
+        // SharedPreferences에서 저장된 사용자 이름 가져오기
+        sharedPreferences = this.getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        userName = sharedPreferences.getString("name", "Unknown Name")
 
-        // 뒤로가기 버튼 클릭 시 이전 프래그먼트로 돌아감
+        Log.d("dddkkk","${userName}")
+        // 사용자 이름을 chat_name_TV에 설정
+        binding.chatNameTV.text = userName
+
+
+        // 뒤로가기 버튼 클릭 시 액티비티 종료
         binding.howTodayBackBtnIV.setOnClickListener {
-            parentFragmentManager.popBackStack()
+            finish()
         }
 
         // 전송 버튼 클릭 시 API 호출
@@ -68,11 +60,9 @@ class ChatFragment : Fragment() {
             if (userQuestion.isNotEmpty()) {
                 sendMessage(userQuestion)
             } else {
-                Toast.makeText(context, "질문을 입력해주세요.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "질문을 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
-
-        return binding.root
     }
 
     private fun sendMessage(question: String) {
@@ -83,6 +73,17 @@ class ChatFragment : Fragment() {
 
         // 메시지 전송 후 EditText의 내용을 지움
         binding.sendET.text.clear()
+
+        // SharedPreferences에서 액세스 토큰 가져오기
+        val sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
+        val authToken = "Bearer ${sharedPreferences.getString("accessToken", "")}"
+
+        Log.d("token", "토큰: $authToken")
+
+        if (authToken.isNullOrEmpty() || authToken == "Bearer ") {
+            receiveMessage("토큰이 없습니다. 로그인하세요.")
+            return
+        }
 
         // API 호출
         val questionRequest = QuestionRequestDto(question)

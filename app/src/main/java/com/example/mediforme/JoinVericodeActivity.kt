@@ -57,7 +57,7 @@ class JoinVericodeActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val verificationResponse = response.body()
                     verificationResponse?.let {
-                        if (it.isSuccess) {
+                        if (it.isSuccess && it.code == "COMMON200") {
                             // 인증 성공 시 다음 화면으로 이동
                             Toast.makeText(this@JoinVericodeActivity, "인증에 성공했습니다.", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this@JoinVericodeActivity, JoinIdActivity::class.java)
