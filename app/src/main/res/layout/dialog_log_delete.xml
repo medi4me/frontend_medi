@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialog_log_delete"
+    android:background="@drawable/dialog_background"
+    android:layout_width="250dp"
+    android:layout_height="200dp"
+
+    >
+
+
+    <ImageView
+        android:id="@+id/dialog_log_delete_xBtn_IV"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/icon_x"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="13dp"/>
+
+    <LinearLayout
+        android:id="@+id/dialog_log_delete_LL1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:id="@+id/dialog_log_delete_text1_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="정말 탈퇴하시겠습니까?"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+          />
+
+        <TextView
+            android:id="@+id/dialog_log_delete_text2_TV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="기록이 모두 삭제되며\n 다시 복구할 수 없습니다. "
+            android:textSize="13sp"
+            android:gravity="center"
+            android:layout_marginTop="13dp"
+          />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_log_delete_LL1"
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="10dp"
+        >
+
+        <android.widget.Button
+            android:id="@+id/dialog_log_delete_BTN"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:text="탈퇴"
+            android:textColor="@drawable/text_color_selector"
+            android:background="@drawable/option_button_background3"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            />
+        <android.widget.Button
+            android:id="@+id/dialog_log_delete_back_BTN"
+            android:layout_marginStart="10dp"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:text="취소"
+            android:textColor="@drawable/text_color_selector2"
+            android:background="@drawable/option_button_background2"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            />
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="215dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="23dp"
+        android:src="@drawable/icon_main_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/back_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"/>
+
+    <ImageView
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:src="@drawable/back_bar_purple"
+        android:layout_marginEnd="220dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        android:layout_marginTop="8dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="정확한 맞춤형 서비스를 위해"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"/>
+
+    <TextView
+        android:id="@+id/explain_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="당신의 나이를 알려주세요."
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+         />
+
+    <EditText
+        android:id="@+id/age_ET"
+        android:layout_width="352dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="60dp"
+        android:background="@drawable/background_input"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:hint="나이를 입력해주세요."
+        android:paddingStart="30dp"
+        android:fontFamily="@font/pretendard_regular"
+        app:layout_constraintTop_toBottomOf="@+id/explain_tv"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/veri_btn"
+        android:layout_width="352dp"
+        android:layout_height="68dp"
+        android:background="@drawable/btn_select"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="다음"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/skipping_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/skipping_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="건너뛰기"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

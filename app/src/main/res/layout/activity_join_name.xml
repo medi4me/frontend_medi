@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".JoinNameActivity">
+
+    <ImageView
+        android:id="@+id/main_logo_IV"
+        android:layout_width="215dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="23dp"
+        android:src="@drawable/icon_main_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/back_bar_IV"
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/back_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_logo_IV" />
+
+    <ImageView
+        android:id="@+id/point_bar"
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:src="@drawable/back_bar_purple"
+        app:layout_constraintEnd_toEndOf="@+id/back_bar_IV"
+        app:layout_constraintStart_toStartOf="@+id/back_bar_IV"
+        app:layout_constraintTop_toTopOf="@+id/back_bar_IV" />
+
+    <TextView
+        android:id="@+id/input_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="52dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="이름을 입력해주세요."
+        android:textColor="@color/black"
+        android:textSize="22sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_bar_IV" />
+
+    <EditText
+        android:id="@+id/user_name_ET"
+        android:layout_width="352dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="33dp"
+        android:background="@drawable/background_input"
+        android:fontFamily="@font/pretendard_regular"
+        android:inputType="text"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
+        android:paddingStart="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/input_TV" />
+
+    <TextView
+        android:id="@+id/id_check_TV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="메디포미는 본명사용을 권장해요."
+        android:textColor="@color/inactive_btn"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/user_name_ET"
+        app:layout_constraintTop_toBottomOf="@+id/user_name_ET" />
+
+    <TextView
+        android:id="@+id/id_check_TV2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="변경이 어려우니 신중하게 설정해주세요."
+        android:textColor="@color/inactive_btn"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/user_name_ET"
+        app:layout_constraintTop_toBottomOf="@+id/id_check_TV" />
+
+
+    <Button
+        android:id="@+id/next_btn"
+        android:layout_width="352dp"
+        android:layout_height="68dp"
+        android:background="@drawable/btn_select"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="메디포미 시작하기"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="67dp"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

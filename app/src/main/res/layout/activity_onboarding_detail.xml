@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="215dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="23dp"
+        android:src="@drawable/icon_main_logo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/back_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"/>
+
+    <ImageView
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:src="@drawable/back_bar_purple"
+        android:layout_marginEnd="220dp"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        android:layout_marginTop="8dp"/>
+
+    <ImageView
+        android:layout_width="352dp"
+        android:layout_height="3dp"
+        android:src="@drawable/back_bar_purple"
+        app:layout_constraintEnd_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toStartOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        android:layout_marginTop="8dp"/>
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back_btn"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <TextView
+        android:id="@+id/medicine_name_tv"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:text="타이레놀정 500mg"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/back_button"
+        app:layout_constraintStart_toEndOf="@+id/back_button"
+        app:layout_constraintTop_toTopOf="@+id/back_button" />
+
+
+    <TextView
+        android:id="@+id/doseTime_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="30dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="복용시간"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_button" />
+
+    <Button
+        android:id="@+id/doseTime_spinner"
+        android:layout_width="350dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/option_background"
+        android:paddingStart="10dp"
+        android:text="00:00"
+        android:gravity="start|center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/doseTime_tv" />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_dropdown"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/doseTime_spinner"
+        app:layout_constraintEnd_toEndOf="@+id/doseTime_spinner"
+        app:layout_constraintTop_toTopOf="@+id/doseTime_spinner"
+        android:elevation="4dp" />
+
+    <Spinner
+        android:id="@+id/mealTime_spinner"
+        android:layout_width="350dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/option_background"
+        android:entries="@array/mealTime"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/doseTime_spinner" />
+
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_dropdown"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mealTime_spinner"
+        app:layout_constraintEnd_toEndOf="@+id/mealTime_spinner"
+        app:layout_constraintTop_toTopOf="@+id/mealTime_spinner"
+        android:elevation="4dp" />
+
+    <TextView
+        android:id="@+id/dosage_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/pretendard_medium"
+        android:text="1회 복용량"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mealTime_spinner" />
+
+    <EditText
+        android:id="@+id/dosage_onetime_EV"
+        android:layout_width="350dp"
+        android:layout_height="68dp"
+        android:background="@drawable/option_background"
+        android:fontFamily="@font/pretendard_regular"
+        android:layout_marginTop="5dp"
+        android:hint="예) 1정 또는 1포"
+        android:paddingStart="30dp"
+        android:inputType="text"
+        android:maxLines="1"
+        android:imeOptions="actionDone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dosage_tv" />
+
+
+    <Button
+        android:id="@+id/veri_btn"
+        android:layout_width="352dp"
+        android:layout_height="68dp"
+        android:background="@drawable/btn_select"
+        android:fontFamily="@font/pretendard_regular"
+        android:text="저장하기"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/skipping_tv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/skipping_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="건너뛰기"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MediForMe</string>
+    <string name="title_activity_search_results">SearchResultsActivity</string>
+    <string name="date_format">%1$d.%2$02d.%3$s</string>
 </resources>

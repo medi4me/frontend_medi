@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- 하단 삭제 view 영역 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/erase_item_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/btncolor"
+            tools:visibility="visible">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintWidth_percent="0.2"
+                tools:layout_editor_absoluteY="0dp">
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:src="@drawable/ic_delete"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 상단 아이템 view 영역 -->
+        <LinearLayout
+            android:id="@+id/item_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="15dp"
+            android:background="@color/itemColor">
+
+            <!-- Medication Icon -->
+            <ImageView
+                android:id="@+id/my_item_drug_img"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_drug_default"
+                android:layout_marginEnd="10dp"/>
+
+            <!-- Medication Name -->
+            <TextView
+                android:id="@+id/my_item_drug_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="테스트민 정 0.1mg"
+                android:layout_weight="1"
+                android:textSize="14sp"
+                android:textColor="#323232"
+                android:layout_marginEnd="10dp"
+                android:textStyle="bold"/>
+
+            <!-- Time -->
+            <TextView
+                android:id="@+id/my_item_drug_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09:00 AM"
+                android:textSize="13sp"
+                android:layout_marginEnd="10dp"/>
+
+            <!-- Frequency -->
+            <TextView
+                android:id="@+id/my_item_drug_frequency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="매일"
+                android:textSize="13sp"
+                android:layout_marginEnd="10dp"/>
+
+            <!-- Notification Icon -->
+            <ImageView
+                android:id="@+id/my_item_bell_switch"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_bell_on"
+                android:layout_marginEnd="20dp"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+</layout>

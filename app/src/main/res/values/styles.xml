@@ -1,0 +1,14 @@
+<!-- res/values/styles.xml -->
+<resources>
+    <style name="CustomDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- 다이얼로그의 배경을 둥글게 설정 -->
+        <item name="android:background">@drawable/dialog_background</item>
+        <!-- 추가적인 다이얼로그 스타일 설정 -->
+    </style>
+
+    <style name="CustomTabTextAppearance" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+    </style>
+
+</resources>
