@@ -18,8 +18,8 @@ import com.example.mediforme.remote.api.getRetrofit
 import com.example.mediforme.ui.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
-import com.example.mediforme.login.LoginActivity
-import com.example.mediforme.search.CameraActivity
+import com.example.mediforme.ui.login.LoginActivity
+import com.example.mediforme.ui.search.CameraActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import retrofit2.Call
 import retrofit2.Callback
