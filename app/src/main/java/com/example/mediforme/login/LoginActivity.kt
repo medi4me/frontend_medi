@@ -21,7 +21,7 @@ import com.example.mediforme.Data.LoginRequest
 import com.example.mediforme.Data.LoginResponse
 import com.example.mediforme.Data.NameResponse
 import com.example.mediforme.Data.getRetrofit
-import com.example.mediforme.JoinServiceActivity
+import com.example.mediforme.join.JoinServiceActivity
 import com.example.mediforme.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityLoginBinding
