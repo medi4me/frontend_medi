@@ -69,13 +69,13 @@
             android:name=".home.chat.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".search.AddMedicineActivity"
+            android:name=".ui.search.AddMedicineActivity"
             android:exported="false" />
         <activity
             android:name=".search.AddMedicineResultActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="false" />
         <activity
             android:name=".splash.SplashActivity"
