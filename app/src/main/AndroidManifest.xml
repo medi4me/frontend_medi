@@ -48,22 +48,22 @@
             android:name=".login.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".JoinNameActivity"
+            android:name=".join.JoinNameActivity"
             android:exported="false" />
         <activity
-            android:name=".JoinPasswordActivity"
+            android:name=".join.JoinPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".JoinServiceActivity"
+            android:name=".join.JoinServiceActivity"
             android:exported="false" />
         <activity
-            android:name=".JoinIdActivity"
+            android:name=".join.JoinIdActivity"
             android:exported="false" />
         <activity
-            android:name=".JoinVericodeActivity"
+            android:name=".join.JoinVericodeActivity"
             android:exported="false" />
         <activity
-            android:name=".JoinPhoneActivity"
+            android:name=".join.JoinPhoneActivity"
             android:exported="false" />
         <activity
             android:name=".home.chat.ChatActivity"
@@ -78,7 +78,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".splash.SplashActivity"
             android:windowSoftInputMode="adjustPan"
             android:exported="true">
             <intent-filter>
@@ -106,7 +106,7 @@
             android:name=".onboarding.OnboardingMedicineActivity"
             android:exported="true" />
         <activity
-            android:name=".SplashChoiceActivity"
+            android:name=".splash.SplashChoiceActivity"
             android:exported="false" />
         <activity
             android:name=".search.CheckMedicineActivity"

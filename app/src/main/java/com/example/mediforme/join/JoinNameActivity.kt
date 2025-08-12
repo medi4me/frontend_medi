@@ -1,24 +1,19 @@
-package com.example.mediforme
+package com.example.mediforme.join
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.service.autofill.UserData
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.example.mediforme.Data.Register
 import com.example.mediforme.Data.RegisterResponse
 import com.example.mediforme.Data.RegisterUserData
 import com.example.mediforme.Data.getRetrofit
+import com.example.mediforme.R
 import com.example.mediforme.login.LoginActivity
-import com.example.mediforme.onboarding.OnboardingAgeActivity
-import com.example.mediforme.onboarding.OnboardingMedicineActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -1,4 +1,4 @@
-package com.example.mediforme
+package com.example.mediforme.join
 
 import android.content.Context
 import android.content.Intent
@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.mediforme.Data.PhoneNumberResponse
 import com.example.mediforme.Data.Register
 import com.example.mediforme.Data.getRetrofit
+import com.example.mediforme.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -1,13 +1,14 @@
-package com.example.mediforme
+package com.example.mediforme.splash
 
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mediforme.join.JoinServiceActivity
+import com.example.mediforme.MainActivity
 import com.example.mediforme.databinding.ActivitySplashChoiceBinding
 import com.example.mediforme.login.LoginActivity
-import com.example.mediforme.onboarding.OnboardingMedicineActivity
 
 
 class SplashChoiceActivity : AppCompatActivity() {

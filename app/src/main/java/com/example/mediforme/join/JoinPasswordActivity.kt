@@ -1,4 +1,4 @@
-package com.example.mediforme
+package com.example.mediforme.join
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.mediforme.R
 
 class JoinPasswordActivity : AppCompatActivity() {
 
@@ -81,40 +82,56 @@ class JoinPasswordActivity : AppCompatActivity() {
 
         // Check length
         if (password.length >= 8) {
-            criteriaLength.background = ContextCompat.getDrawable(this, R.drawable.background_pwcheck)
+            criteriaLength.background = ContextCompat.getDrawable(this,
+                R.drawable.background_pwcheck
+            )
             criteriaLength.setTextColor(resources.getColor(R.color.active_btn))
         } else {
-            criteriaLength.background = ContextCompat.getDrawable(this, R.drawable.background_pwwrong)
+            criteriaLength.background = ContextCompat.getDrawable(this,
+                R.drawable.background_pwwrong
+            )
             criteriaLength.setTextColor(resources.getColor(R.color.light_gray))
             isValid = false
         }
 
         // Check for number
         if (password.any { it.isDigit() }) {
-            criteriaNumber.background = ContextCompat.getDrawable(this, R.drawable.background_pwcheck)
+            criteriaNumber.background = ContextCompat.getDrawable(this,
+                R.drawable.background_pwcheck
+            )
             criteriaNumber.setTextColor(resources.getColor(R.color.active_btn))
         } else {
-            criteriaNumber.background = ContextCompat.getDrawable(this, R.drawable.background_pwwrong)
+            criteriaNumber.background = ContextCompat.getDrawable(this,
+                R.drawable.background_pwwrong
+            )
             criteriaNumber.setTextColor(resources.getColor(R.color.light_gray))
             isValid = false
         }
 
         // Check for letter
         if (password.any { it.isLetter() }) {
-            criteriaLetter.background = ContextCompat.getDrawable(this, R.drawable.background_pwcheck)
+            criteriaLetter.background = ContextCompat.getDrawable(this,
+                R.drawable.background_pwcheck
+            )
             criteriaLetter.setTextColor(resources.getColor(R.color.active_btn))
         } else {
-            criteriaLetter.background = ContextCompat.getDrawable(this, R.drawable.background_pwwrong)
+            criteriaLetter.background = ContextCompat.getDrawable(this,
+                R.drawable.background_pwwrong
+            )
             criteriaLetter.setTextColor(resources.getColor(R.color.light_gray))
             isValid = false
         }
 
         // Check for special character
         if (password.any { !it.isLetterOrDigit() }) {
-            criteriaSpecial.background = ContextCompat.getDrawable(this, R.drawable.background_pwcheck)
+            criteriaSpecial.background = ContextCompat.getDrawable(this,
+                R.drawable.background_pwcheck
+            )
             criteriaSpecial.setTextColor(resources.getColor(R.color.active_btn))
         } else {
-            criteriaSpecial.background = ContextCompat.getDrawable(this, R.drawable.background_pwwrong)
+            criteriaSpecial.background = ContextCompat.getDrawable(this,
+                R.drawable.background_pwwrong
+            )
             criteriaSpecial.setTextColor(resources.getColor(R.color.light_gray))
             isValid = false
         }
