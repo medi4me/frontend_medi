@@ -5,10 +5,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mediforme.join.JoinServiceActivity
+import com.example.mediforme.ui.join.JoinServiceActivity
 import com.example.mediforme.ui.MainActivity
 import com.example.mediforme.databinding.ActivitySplashChoiceBinding
-import com.example.mediforme.login.LoginActivity
+import com.example.mediforme.ui.login.LoginActivity
 
 
 class SplashChoiceActivity : AppCompatActivity() {

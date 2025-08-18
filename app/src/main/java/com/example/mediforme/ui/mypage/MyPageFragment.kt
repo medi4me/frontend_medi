@@ -26,8 +26,8 @@ import com.example.mediforme.remote.api.ResignResponse
 import com.example.mediforme.remote.api.getRetrofit
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentMypageBinding
-import com.example.mediforme.login.LoginActivity
-import com.example.mediforme.onboarding.OnboardingMedicineActivity
+import com.example.mediforme.ui.login.LoginActivity
+import com.example.mediforme.ui.onboarding.OnboardingMedicineActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

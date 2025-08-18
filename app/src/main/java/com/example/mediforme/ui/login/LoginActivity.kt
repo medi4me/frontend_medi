@@ -21,7 +21,7 @@ import com.example.mediforme.remote.api.LoginRequest
 import com.example.mediforme.remote.api.LoginResponse
 import com.example.mediforme.remote.api.NameResponse
 import com.example.mediforme.remote.api.getRetrofit
-import com.example.mediforme.join.JoinServiceActivity
+import com.example.mediforme.ui.join.JoinServiceActivity
 import com.example.mediforme.ui.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityLoginBinding

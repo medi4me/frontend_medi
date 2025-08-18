@@ -6,8 +6,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login.SearchpwdFragment">
-    android:background="@color/white"
+    tools:context=".ui.login.SearchpwdFragment"
+    android:background="@color/white">
 
     <EditText
         android:id="@+id/phone_num_ET"
