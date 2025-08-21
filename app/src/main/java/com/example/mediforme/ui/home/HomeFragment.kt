@@ -21,7 +21,7 @@ import com.example.mediforme.remote.api.MedicineResponse
 import com.example.mediforme.remote.api.MedicineShowService
 import com.example.mediforme.remote.api.Medicines
 import com.example.mediforme.remote.api.getRetrofit
-import com.example.mediforme.home.chat.ChatActivity
+import com.example.mediforme.ui.home.chat.ChatActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -74,7 +74,7 @@ class HomeFragment : Fragment() {
         homeNameTV.text = "$name"
 
         // 날짜 데이터 초기화
-        val weekData2 = com.example.mediforme.home.getWeekDates()
+        val weekData2 = com.example.mediforme.ui.home.getWeekDates()
         items2 = weekData2.first
         todayIndex2 = weekData2.second
 

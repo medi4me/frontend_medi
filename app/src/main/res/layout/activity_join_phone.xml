@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".join.JoinPhoneActivity">
+    tools:context=".ui.join.JoinPhoneActivity">
 
     <ImageView
         android:id="@+id/main_logo_IV"

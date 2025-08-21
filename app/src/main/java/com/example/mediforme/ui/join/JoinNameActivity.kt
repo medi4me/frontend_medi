@@ -13,7 +13,7 @@ import com.example.mediforme.remote.api.RegisterResponse
 import com.example.mediforme.remote.api.RegisterUserData
 import com.example.mediforme.remote.api.getRetrofit
 import com.example.mediforme.R
-import com.example.mediforme.login.LoginActivity
+import com.example.mediforme.ui.login.LoginActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
