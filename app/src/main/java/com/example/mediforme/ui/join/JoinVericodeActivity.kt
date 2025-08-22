@@ -32,7 +32,7 @@ class JoinVericodeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_join_vericode)
 
         register = getRetrofit().create(Register::class.java)
-        phoneNumber = intent.getStringExtra("user_phoneNumber") ?: ""
+        phoneNumber = intent.getStringExtra("phoneNumber") ?: ""
 
         setTimer()
 
