@@ -2,17 +2,19 @@ package com.example.mediforme.ui.join
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mediforme.AppConfig
+import com.example.mediforme.R
 import com.example.mediforme.remote.api.PhoneVerificationRequest
 import com.example.mediforme.remote.api.PhoneVerificationResponse
 import com.example.mediforme.remote.api.Register
 import com.example.mediforme.remote.api.getRetrofit
-import com.example.mediforme.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,9 +24,16 @@ class JoinVericodeActivity : AppCompatActivity() {
 
     private var second = 0
     private var minute = 0
-    private var timeTick = 300 // 제한시간 5분을 300초로 설정
+    private var timeTick = 10 // 제한시간 5분을 300초로 설정
     private lateinit var register: Register
     private lateinit var phoneNumber: String
+    private lateinit var veriBtn: Button
+    private lateinit var timerTv: TextView
+    private lateinit var doneTv: TextView
+    private lateinit var codeEt: EditText
+    private lateinit var remainTv: TextView
+    private lateinit var reveri_TV: TextView
+    private var countdownTimer: java.util.Timer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,40 +43,93 @@ class JoinVericodeActivity : AppCompatActivity() {
         register = getRetrofit().create(Register::class.java)
         phoneNumber = intent.getStringExtra("phoneNumber") ?: ""
 
-        setTimer()
+        veriBtn = findViewById(R.id.veri_btn)
+        timerTv = findViewById(R.id.timer_TV)
+        doneTv = findViewById(R.id.done_TV)
+        codeEt = findViewById(R.id.veri_code_ET)
+        remainTv = findViewById(R.id.remain_TV)
+        remainTv = findViewById(R.id.remain_TV)
+        reveri_TV = findViewById(R.id.reveri_TV)
 
-        val veri_btn: Button = findViewById(R.id.veri_btn)
-        val reveri_TV: TextView = findViewById(R.id.reveri_TV)
-        val veri_code_ET: EditText = findViewById(R.id.veri_code_ET)
+        startTimer()
 
-        reveri_TV.setOnClickListener {
-            finish()
+        veriBtn.setOnClickListener {
+            val code = codeEt.text.toString().trim()
+
+            // 공통 입력검증: 6자리 숫자
+            if (code.length != 6 || !code.all { it.isDigit() }) {
+                Toast.makeText(this, "인증 코드는 6자리 숫자여야 합니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            if (AppConfig.MOCK_MODE) {
+                Toast.makeText(this, "인증에 성공했습니다. (MOCK)", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, JoinIdActivity::class.java))
+                finish()
+            } else {
+                verifyPhoneNumber(phoneNumber, code)
+            }
         }
 
-        veri_btn.setOnClickListener {
-            val verificationCode = veri_code_ET.text.toString().trim()
-            verifyPhoneNumber(phoneNumber, verificationCode)
+        reveri_TV.setOnClickListener {
+            // 서버에 인증법호 재발급 요청
+            //
+
+            startTimer()
+            Toast.makeText(this, "새 인증번호를 발송했습니다.", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private fun startTimer() {
+        second = timeTick % 60
+        minute = timeTick / 60
+
+        // 시작 상태 남은시간/타이머 보이기, 만료문구 숨기기
+        remainTv.visibility = View.VISIBLE
+        timerTv.visibility = View.VISIBLE
+        doneTv.visibility = View.GONE
+        veriBtn.isEnabled = true
+
+        countdownTimer?.cancel()
+        countdownTimer = timer(period = 1000, initialDelay = 1000) {
+            runOnUiThread {
+                timerTv.text = String.format("0%d : %02d", minute, second)
+
+                if (minute == 0 && second == 0) { remainTv.visibility = View.GONE
+                    timerTv.visibility = View.GONE
+                    doneTv.visibility = View.VISIBLE
+                    veriBtn.isEnabled = false
+                    countdownTimer?.cancel()
+                    return@runOnUiThread
+                }
+
+                if (second == 0) {
+                    minute--
+                    second = 59
+                } else {
+                    second--
+                }
+            }
         }
     }
 
+
     private fun verifyPhoneNumber(phone: String, verificationCode: String) {
         val request = PhoneVerificationRequest(phone, verificationCode)
-
         register.verifyPhone(request).enqueue(object : Callback<PhoneVerificationResponse> {
-            override fun onResponse(call: Call<PhoneVerificationResponse>, response: Response<PhoneVerificationResponse>) {
+            override fun onResponse(
+                call: Call<PhoneVerificationResponse>,
+                response: Response<PhoneVerificationResponse>
+            ) {
                 if (response.isSuccessful) {
-                    val verificationResponse = response.body()
-                    verificationResponse?.let {
-                        if (it.isSuccess && it.code == "COMMON200") {
-                            // 인증 성공 시 다음 화면으로 이동
-                            Toast.makeText(this@JoinVericodeActivity, "인증에 성공했습니다.", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this@JoinVericodeActivity, JoinIdActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        } else if (it.code == "VERIFICATION_FAILED") {
-                            // 인증 실패 메시지 표시
-                            Toast.makeText(this@JoinVericodeActivity, "인증 코드가 잘못되었습니다.", Toast.LENGTH_SHORT).show()
-                        }
+                    val body = response.body()
+                    if (body?.isSuccess == true && body.code == "COMMON200") {
+                        Toast.makeText(this@JoinVericodeActivity, "인증에 성공했습니다.", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@JoinVericodeActivity, JoinIdActivity::class.java))
+                        finish()
+                    } else if (body?.code == "VERIFICATION_FAILED") {
+                        Toast.makeText(this@JoinVericodeActivity, "인증 코드가 잘못되었습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -78,25 +140,8 @@ class JoinVericodeActivity : AppCompatActivity() {
         })
     }
 
-
-    private fun setTimer() {
-        second = timeTick % 60
-        minute = timeTick / 60
-        val textView: TextView = findViewById(R.id.timer_TV)
-
-        timer(period = 1000, initialDelay = 1000) {
-            runOnUiThread {
-                textView.text = String.format("0%d : %02d", minute, second)
-                if (second == 0) {
-                    if (minute == 0) {
-                        cancel() // 타이머 종료
-                    } else {
-                        minute--
-                        second = 60
-                    }
-                }
-                second--
-            }
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+        countdownTimer?.cancel()
     }
 }
