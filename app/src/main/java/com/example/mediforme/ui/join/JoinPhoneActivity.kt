@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mediforme.AppConfig
 import com.example.mediforme.remote.api.PhoneNumberResponse
 import com.example.mediforme.remote.api.Register
 import com.example.mediforme.remote.api.getRetrofit
@@ -54,8 +55,19 @@ class JoinPhoneActivity : AppCompatActivity() {
         veri_btn.setOnClickListener {
             val phoneNumber = phone_num_ET.text.toString().trim()
 
-            checkPhoneNumber(phoneNumber)
+            if (!isPhoneNumberValid(phoneNumber)) return@setOnClickListener
+
+            // mock 모드
+            if (AppConfig.MOCK_MODE) {
+                savePhoneNumber(phoneNumber)
+                val intent = Intent(this@JoinPhoneActivity, JoinVericodeActivity::class.java)
+                intent.putExtra("phoneNumber", phoneNumber)
+                startActivity(intent)
+            } else { // 기존 서버 호출
+                checkPhoneNumber(phoneNumber)
+            }
         }
+
     }
 
     // 전화번호 유효성을 확인하는 함수
