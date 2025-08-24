@@ -46,6 +46,12 @@ class JoinNameActivity : AppCompatActivity() {
         nextBtn.setOnClickListener {
             val user_name = user_name_ET.text.toString()
 
+            // 이름 유효성 검사
+            if (!isValidName(user_name)) {
+                Toast.makeText(this, "이름은 2~10자의 한글, 영문, 숫자만 입력 가능합니다.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             if (AppConfig.MOCK_MODE) {
                 // MOCK 모드
                 Toast.makeText(this, "회원가입 성공 (MOCK)", Toast.LENGTH_SHORT).show()
@@ -59,6 +65,12 @@ class JoinNameActivity : AppCompatActivity() {
         }
     }
 
+    // 이름 유효성 함수
+    private fun isValidName(name: String): Boolean {
+        // 2~10자, 한글/영문/숫자만 허용
+        val regex = "^[가-힣a-zA-Z0-9]{2,10}$".toRegex()
+        return regex.matches(name)
+    }
 
     //회원가입 처리함수
     private fun registerUser(name: String, password: String, phone: String, memberID: String, consent: String) {
