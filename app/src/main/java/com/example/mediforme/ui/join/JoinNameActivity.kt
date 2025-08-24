@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.mediforme.AppConfig
 import com.example.mediforme.remote.api.Register
 import com.example.mediforme.remote.api.RegisterResponse
 import com.example.mediforme.remote.api.RegisterUserData
@@ -43,13 +45,20 @@ class JoinNameActivity : AppCompatActivity() {
         // 회원가입 버튼
         nextBtn.setOnClickListener {
             val user_name = user_name_ET.text.toString()
-            //회원가입 처리함수 호출, (API 연결 함수)!!
-            registerUser(user_name,user_password,phoneNumber,user_id,consent)
-//
-//            val intent = Intent(this, OnboardingMedicineActivity::class.java)
-//            startActivity(intent)
+
+            if (AppConfig.MOCK_MODE) {
+                // MOCK 모드
+                Toast.makeText(this, "회원가입 성공 (MOCK)", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            } else {
+                // 회원가입 처리함수 호출, (API 연결 함수)!!
+                registerUser(user_name, user_password, phoneNumber, user_id, consent)
+            }
         }
     }
+
 
     //회원가입 처리함수
     private fun registerUser(name: String, password: String, phone: String, memberID: String, consent: String) {
@@ -71,6 +80,7 @@ class JoinNameActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?.let {
                         if (it.isSuccess) {
+                            // 회원가입 성공 시
                             Log.d("Register", "회원가입 성공: ${it.message}")
                             val intent = Intent(this@JoinNameActivity, LoginActivity::class.java)
                             startActivity(intent)
