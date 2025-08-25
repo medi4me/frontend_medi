@@ -15,23 +15,26 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mediforme.remote.api.CalenderResponse
-import com.example.mediforme.remote.api.CalenderStatus
-import com.example.mediforme.remote.api.CalenderUpdateRequest
-import com.example.mediforme.remote.api.Status
-import com.example.mediforme.remote.api.StatusRequest
-import com.example.mediforme.remote.api.StatusResponse
-import com.example.mediforme.remote.api.getRetrofit
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentTodayConditionBinding
-import retrofit2.Call
-import retrofit2.Callback
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.request.CalenderUpdateRequest
+import com.example.mediforme.remote.model.request.StatusRequest
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.CalenderResponse
+import com.example.mediforme.remote.model.response.StatusResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class TodayConditionFragment : Fragment() {
     lateinit var binding: FragmentTodayConditionBinding
     private lateinit var adapter: WeekDayAdapter
@@ -45,6 +48,10 @@ class TodayConditionFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var homeNameTV: TextView
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
@@ -67,8 +74,6 @@ class TodayConditionFragment : Fragment() {
 
         val name = sharedPreferences.getString("name", "Unknown Name")
         homeNameTV.text = "$name"
-
-
 
 
         binding.howTodayBackBtnIV.setOnClickListener {
@@ -298,31 +303,27 @@ class TodayConditionFragment : Fragment() {
             date = date
         )
 
-        val statusService = getRetrofit().create(Status::class.java)
-
-        statusService.addStatus(statusRequest).enqueue(object : Callback<StatusResponse> {
-            override fun onResponse(call: Call<StatusResponse>, response: Response<StatusResponse>) {
+        // 코루틴을 사용하여 API 호출
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<StatusResponse>> = apiService.addStatus(statusRequest)
                 if (response.isSuccessful) {
                     // 서버로부터 성공적인 응답을 받은 경우
-                    val statusResponse = response.body()
-                    Log.d("TodayConditionFragment", "Status saved: $statusResponse")
+                    Log.d("TodayConditionFragment", "Status saved: ${response.body()}")
 
                     // 저장 버튼 비활성화 및 수정 버튼 활성화
                     binding.saveBtn.visibility = View.GONE
                     binding.editBtn.visibility = View.VISIBLE
-
                     updateTextViewStatus()
                 } else {
                     // 서버 응답이 실패한 경우
                     Log.e("TodayConditionFragment", "Failed to save status: ${response.code()}")
                 }
-            }
-
-            override fun onFailure(call: Call<StatusResponse>, t: Throwable) {
+            } catch (e: Exception) {
                 // 네트워크 오류 등의 실패 처리
-                Log.e("TodayConditionFragment", "Error saving status", t)
+                Log.e("TodayConditionFragment", "Error saving status", e)
             }
-        })
+        }
     }
 
 
@@ -388,17 +389,18 @@ class TodayConditionFragment : Fragment() {
             memo = statusText,
             date = date
         )
-        val calendarService = getRetrofit().create(CalenderStatus::class.java)
 
-        calendarService.updateDateStatus(date, updateRequest).enqueue(object : Callback<CalenderResponse> {
-            override fun onResponse(call: Call<CalenderResponse>, response: Response<CalenderResponse>) {
+        // 코루틴을 사용하여 API 호출
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<CalenderResponse>> = apiService.updateDateStatus(date, updateRequest)
                 if (response.isSuccessful) {
                     // 서버로부터 성공적인 응답을 받은 경우
                     val statusResponse = response.body()
                     Log.d("TodayConditionFragment", "Status updated: $statusResponse")
 
                     // 수정된 날짜에 해당하는 WeekDayItem의 상태를 업데이트
-                    selectedDateItem?.status = statusResponse?.status
+                    selectedDateItem?.status = statusResponse?.result?.status
                     selectedDateItem?.isStatusLoaded = true
 
                     // 어댑터에게 데이터 변경을 알림
@@ -407,19 +409,16 @@ class TodayConditionFragment : Fragment() {
                     // 수정 버튼 비활성화 및 저장 버튼 활성화
                     binding.saveBtn.visibility = View.GONE
                     binding.editBtn.visibility = View.VISIBLE
-
                     updateTextViewStatus()
                 } else {
                     // 서버 응답이 실패한 경우
                     Log.e("TodayConditionFragment", "Failed to update status: ${response.code()}")
                 }
-            }
-
-            override fun onFailure(call: Call<CalenderResponse>, t: Throwable) {
+            } catch (e: Exception) {
                 // 네트워크 오류 등의 실패 처리
-                Log.e("TodayConditionFragment", "Error updating status", t)
+                Log.e("TodayConditionFragment", "Error updating status", e)
             }
-        })
+        }
 
 
         Log.d("TodayConditionFragment", "Selected Edit Option2: $selectedText")
@@ -529,33 +528,30 @@ class TodayConditionFragment : Fragment() {
 
     // 다른 날짜 아이템 버튼 눌렀을 때, 정보 가져와서 밑에 프래그먼트에 저장된 값들 선택되어있게
     private fun fetchDataForDate(date: String) {
-        // Retrofit를 사용하여 데이터를 가져온다
-        val calendarService = getRetrofit().create(CalenderStatus::class.java)
-        calendarService.getDateDetails(date).enqueue(object : Callback<CalenderResponse>{
-            override fun onResponse(call: Call<CalenderResponse>, response: Response<CalenderResponse>) {
-                if(response.isSuccessful){
+        // 코루틴을 사용하여 API 호출
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<CalenderResponse>> = apiService.getDateDetails(date)
+                if (response.isSuccessful) {
                     val calenderResponse = response.body()
-                    if (calenderResponse != null) {
-                        Log.d("TodayConditionFragment","Sucess fetch data for date: ${response.code()}")
-                        updateUIWithFetchedData(calenderResponse.status, calenderResponse.drink, calenderResponse.statusCondition, calenderResponse.memo)
+                    if (calenderResponse != null && calenderResponse.isSuccess) {
+                        Log.d("TodayConditionFragment", "Sucess fetch data for date: ${response.code()}")
+                        updateUIWithFetchedData(calenderResponse.result.status, calenderResponse.result.drink, calenderResponse.result.statusCondition, calenderResponse.result.memo)
                     } else {
                         // 빈 응답 처리
-                        Log.e("TodayConditionFragment", "No data found for the selected date")
+                        Log.e("TodayConditionFragment", "No data found for the selected date: ${response.code()}")
                         resetViewToInitialState()
                     }
-                }else{
+                } else {
                     //빈 응답 처리, 데이터가 중복되어있으면 500 에러, 데이터가 비어있으면 response.code 값이 길게 나옴
-                    Log.e("TodayConditionFragment","Failed to fetch data for date: ${response.code()}")
+                    Log.e("TodayConditionFragment", "Failed to fetch data for date: ${response.code()}")
                     resetViewToInitialState()
                 }
-            }
-
-            override fun onFailure(call: Call<CalenderResponse>, t: Throwable) {
-                Log.e("TodayConditionFragment", "Error fetching data for date", t)
+            } catch (e: Exception) {
+                Log.e("TodayConditionFragment", "Error fetching data for date", e)
                 resetViewToInitialState()
             }
-
-        })
+        }
     }
 
     private fun updateUIWithFetchedData(status: String?, drink: String?, statusCondition: String?, memo: String?) {
