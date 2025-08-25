@@ -6,25 +6,33 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mediforme.remote.api.PhoneNumberResponse
-import com.example.mediforme.remote.api.Register
-import com.example.mediforme.remote.api.getRetrofit
+import androidx.lifecycle.lifecycleScope
 import com.example.mediforme.R
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.PhoneNumberResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class JoinPhoneActivity : AppCompatActivity() {
 
     private lateinit var phone_num_ET: EditText
     private lateinit var veri_btn: Button
     private lateinit var isAvailableTV: TextView
-    private lateinit var register: Register
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +42,6 @@ class JoinPhoneActivity : AppCompatActivity() {
         phone_num_ET = findViewById(R.id.phone_num_ET)
         veri_btn = findViewById(R.id.veri_btn)
         isAvailableTV = findViewById(R.id.isAvailable)
-        register = getRetrofit().create(Register::class.java)
 
         veri_btn.isEnabled = false
 
@@ -65,29 +72,28 @@ class JoinPhoneActivity : AppCompatActivity() {
 
     // 전화번호를 서버에 제출하여 중복 확인
     private fun checkPhoneNumber(phoneNumber: String) {
-        register.checkPhoneNumber(phoneNumber).enqueue(object : Callback<PhoneNumberResponse> {
-            override fun onResponse(call: Call<PhoneNumberResponse>, response: Response<PhoneNumberResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: retrofit2.Response<ApiResponse<PhoneNumberResponse>> = apiService.checkPhoneNumber(phoneNumber)
                 if (response.isSuccessful) {
                     val phoneResponse = response.body()
                     phoneResponse?.let {
                         if (it.isSuccess && it.code == "COMMON200") {
-                            // Phone number is valid and available
                             isAvailableTV.visibility = TextView.GONE
                             savePhoneNumber(phoneNumber)
                             val intent = Intent(this@JoinPhoneActivity, JoinVericodeActivity::class.java)
-                            intent.putExtra("phoneNumber",phoneNumber)
+                            intent.putExtra("phoneNumber", phoneNumber)
                             startActivity(intent)
                         } else if (it.code == "PHONE_FOUND") {
-                            isAvailableTV.visibility = TextView.VISIBLE
+                            isAvailableTV.visibility = View.VISIBLE
                         }
                     }
                 }
+            } catch (e: Exception) {
+                Log.e("JoinPhoneActivity", "네트워크 오류", e)
+                Toast.makeText(this@JoinPhoneActivity, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
-
-            override fun onFailure(call: Call<PhoneNumberResponse>, t: Throwable) {
-              Log.d("JoinPhoneActivity", "네트워크 오류!")
-            }
-        })
+        }
     }
 
 

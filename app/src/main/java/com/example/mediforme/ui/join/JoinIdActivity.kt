@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -11,22 +12,28 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mediforme.remote.api.MemberIDRequest
-import com.example.mediforme.remote.api.MemberIDResponse
-import com.example.mediforme.remote.api.Register
-import com.example.mediforme.remote.api.getRetrofit
+import androidx.lifecycle.lifecycleScope
 import com.example.mediforme.R
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.request.MemberIDRequest
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.MemberIDResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class JoinIdActivity : AppCompatActivity() {
     private lateinit var user_id_ET: EditText
     private lateinit var nextBtn: Button
-    private lateinit var resisterService: Register
     private lateinit var idCheckImpossibleTV: TextView
     private lateinit var idCheckPossibleTV: TextView
     private lateinit var alertIcon: ImageView
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +41,6 @@ class JoinIdActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_join_id)
 
-        resisterService = getRetrofit().create(Register::class.java)
         nextBtn = findViewById(R.id.next_btn)
         user_id_ET = findViewById(R.id.user_id_ET)
         idCheckImpossibleTV = findViewById(R.id.id_check_impossible_TV)
@@ -75,8 +81,9 @@ class JoinIdActivity : AppCompatActivity() {
             // 다른 필드는 기본값으로 설정됨
         )
 
-        resisterService.checkMemberID(request).enqueue(object : Callback<MemberIDResponse> {
-            override fun onResponse(call: Call<MemberIDResponse>, response: Response<MemberIDResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: retrofit2.Response<ApiResponse<MemberIDResponse>> = apiService.checkMemberID(request)
                 if (response.isSuccessful) {
                     val memberIDResponse = response.body()
                     memberIDResponse?.let {
@@ -99,11 +106,10 @@ class JoinIdActivity : AppCompatActivity() {
                         }
                     }
                 }
+            } catch (e: Exception) {
+                Log.e("JoinIdActivity", "네트워크 오류", e)
+                // 오류 메시지 표시
             }
-
-            override fun onFailure(call: Call<MemberIDResponse>, t: Throwable) {
-                // 에러 처리, 예를 들어 토스트 메시지 표시
-            }
-        })
+        }
     }
 }
