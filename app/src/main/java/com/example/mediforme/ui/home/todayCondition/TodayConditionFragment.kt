@@ -86,7 +86,7 @@ class TodayConditionFragment : Fragment() {
         todayIndex = weekData.second
 
         // RecyclerView 설정
-        adapter = WeekDayAdapter(items) { dateItem ->
+        adapter = WeekDayAdapter(items, apiService, viewLifecycleOwner.lifecycleScope) { dateItem ->
             selectedDateItem = dateItem
             onDateItemClick(dateItem)
         }
