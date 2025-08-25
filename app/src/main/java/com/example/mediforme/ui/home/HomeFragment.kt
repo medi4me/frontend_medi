@@ -16,19 +16,24 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.example.mediforme.remote.api.MedicineResponse
-import com.example.mediforme.remote.api.MedicineShowService
-import com.example.mediforme.remote.api.Medicines
-import com.example.mediforme.remote.api.getRetrofit
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.MedicineResponse
+import com.example.mediforme.remote.model.response.Medicines
 import com.example.mediforme.ui.home.chat.ChatActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.Timer
+import javax.inject.Inject
+
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
@@ -42,7 +47,10 @@ class HomeFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var homeNameTV: TextView
-    private var accessToken: String? = null
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     companion object {
         private const val REQUEST_IMAGE_PICK = 1
@@ -66,8 +74,6 @@ class HomeFragment : Fragment() {
         sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         homeNameTV = binding.homeNameTV
 
-        // SharedPreferences에서 저장된 토큰과 이름 가져오기
-        accessToken = sharedPreferences.getString("accessToken", "") ?: ""
         val name = sharedPreferences.getString("name", "Unknown Name")
 
         // Set the retrieved values to the TextView
@@ -153,34 +159,41 @@ class HomeFragment : Fragment() {
             startActivity(intent)
         }
 
+        // SharedPreferences에서 저장된 토큰과 이름 가져오기
+        val accessToken = sharedPreferences.getString("accessToken", "") ?: ""
 
         // 약물 리스트 RecyclerView 설정
-        routineDrugAdapter = RoutineDrugRVAdaptor(arrayListOf(), requireContext())
+        routineDrugAdapter = RoutineDrugRVAdaptor(arrayListOf(), accessToken, apiService, lifecycleScope)
         binding.homeRoutineRV.adapter = routineDrugAdapter
         binding.homeRoutineRV.layoutManager = LinearLayoutManager(requireContext())
 
-        fetchMedicines()
+        fetchMedicines(accessToken!!)
     }
 
-    private fun fetchMedicines() {
-        val retrofit = getRetrofit()
-        val service = retrofit.create(MedicineShowService::class.java)
-        val call = service.getUserMedicines("Bearer $accessToken") // 사용자의 memberId로 변경해야 함
+    private fun fetchMedicines(token: String) {
 
-        call.enqueue(object : Callback<MedicineResponse> {
-            override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: retrofit2.Response<ApiResponse<MedicineResponse>> = apiService.getUserMedicines(token)
+
                 if (response.isSuccessful) {
-                    val medicineList = response.body()?.medicines ?: emptyList()
-                    updateRecyclerView(medicineList)
+                    val apiResponse = response.body()
+                    if (apiResponse != null && apiResponse.isSuccess) {
+                        val medicineList = apiResponse.result?.medicines ?: emptyList()
+                        updateRecyclerView(medicineList)
+                    } else {
+                        Log.e(TAG, "API 응답 실패: ${apiResponse?.message}")
+                        Toast.makeText(context, "API 응답 실패: ${apiResponse?.message}", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
-                    Log.e(TAG, "Failed to fetch medicines: ${response.errorBody()?.string()}")
+                    Log.e(TAG, "서버 응답 실패: ${response.code()}")
+                    Toast.makeText(context, "서버 응답 실패: ${response.code()}", Toast.LENGTH_SHORT).show()
                 }
+            } catch (e: Exception) {
+                Log.e(TAG, "API 호출 중 오류 발생", e)
+                Toast.makeText(context, "오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-
-            override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
-                Log.e(TAG, "Error fetching medicines", t)
-            }
-        })
+        }
     }
 
     private fun updateRecyclerView(medicineList: List<Medicines>) {
