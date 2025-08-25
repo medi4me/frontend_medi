@@ -1,7 +1,5 @@
 package com.example.mediforme.ui.home
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +9,6 @@ import com.example.mediforme.databinding.ItemRoutineDrugBinding
 import com.example.mediforme.remote.api.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 
 class RoutineDrugRVAdaptor(
