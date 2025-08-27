@@ -14,32 +14,38 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mediforme.remote.api.MedicineResponse
-import com.example.mediforme.remote.api.MedicineShowService
-import com.example.mediforme.remote.api.Medicines
-import com.example.mediforme.remote.api.AuthService
-import com.example.mediforme.remote.api.LogoutResponse
-import com.example.mediforme.remote.api.ResignResponse
-import com.example.mediforme.remote.api.getRetrofit
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentMypageBinding
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.LogoutResponse
+import com.example.mediforme.remote.model.response.MedicineResponse
+import com.example.mediforme.remote.model.response.Medicines
+import com.example.mediforme.remote.model.response.ResignResponse
 import com.example.mediforme.ui.login.LoginActivity
 import com.example.mediforme.ui.onboarding.OnboardingMedicineActivity
-import retrofit2.Call
-import retrofit2.Callback
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class MyPageFragment : Fragment() {
     lateinit var binding: FragmentMypageBinding
     lateinit var adapter: ContentDrugRVAdaptor
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var myPageNameTV: TextView
-    private lateinit var authService: AuthService
     private var accessToken: String? = null
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,7 +58,6 @@ class MyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        authService = getRetrofit().create(AuthService::class.java)
         sharedPreferences = requireContext().getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         accessToken = sharedPreferences.getString("accessToken", "") ?: ""
 
@@ -79,19 +84,19 @@ class MyPageFragment : Fragment() {
 
         myPageNameTV.text = "$name"
 
-
-        adapter = ContentDrugRVAdaptor(arrayListOf(), requireContext())
+        val token = "Bearer ${accessToken}"
+        adapter = ContentDrugRVAdaptor(arrayListOf(), apiService, viewLifecycleOwner.lifecycleScope, token)
         binding.myDrugRV.adapter = adapter
         binding.myDrugRV.layoutManager = LinearLayoutManager(requireContext())
         binding.myDrugRV.addItemDecoration(DividerItemDecoration(requireContext(), DividerItemDecoration.VERTICAL))
 
 
-        val swipeHelper = SwipeHelper(requireContext(),adapter)
+        val swipeHelper = SwipeHelper(requireContext(), adapter, apiService, viewLifecycleOwner.lifecycleScope, token)
         val itemTouchHelper = ItemTouchHelper(swipeHelper)
         itemTouchHelper.attachToRecyclerView(binding.myDrugRV)
 
         // 서버에서 데이터를 가져와서 RecyclerView에 표시
-        fetchMedicines()
+        fetchMedicines(token)
 
         // 추가하기 버튼 클릭시 온보딩 화면으로 전환
         binding.myPlusBtnBtn.setOnClickListener {
@@ -110,25 +115,21 @@ class MyPageFragment : Fragment() {
 
     }
 
-    private fun fetchMedicines() {
-        val retrofit = getRetrofit()
-        val service = retrofit.create(MedicineShowService::class.java)
-        val call = service.getUserMedicines("Bearer $accessToken")
-
-        call.enqueue(object : Callback<MedicineResponse> {
-            override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+    private fun fetchMedicines(token: String) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<MedicineResponse>> = apiService.getUserMedicines(token)
                 if (response.isSuccessful) {
-                    val medicineList = response.body()?.medicines ?: emptyList()
+                    val apiResponse = response.body()
+                    val medicineList = apiResponse?.result?.medicines ?: emptyList()
                     updateRecyclerView(medicineList)
                 } else {
-                    // 서버에서 오류가 발생했을 때 처리
+                    Log.e("MyPageFragment", "Failed to fetch medicines: ${response.code()}")
                 }
+            } catch (e: Exception) {
+                Log.e("MyPageFragment", "Error fetching medicines", e)
             }
-
-            override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
-                // 네트워크 오류 또는 서버 오류 처리
-            }
-        })
+        }
     }
 
     private fun updateRecyclerView(medicineList: List<Medicines>) {
@@ -194,93 +195,85 @@ class MyPageFragment : Fragment() {
     }
     // 회원탈퇴 처리 메서드
     private fun resign() {
-        val accessToken = sharedPreferences.getString("accessToken", null)
-
-        if (accessToken != null) {
-            val authToken = "Bearer $accessToken"
-
-            authService.resign(authToken).enqueue(object : Callback<ResignResponse> {
-                override fun onResponse(
-                    call: Call<ResignResponse>,
-                    response: Response<ResignResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val resignResponse = response.body()
-                        resignResponse?.let {
-                            if (it.isSuccess) {
-                                Toast.makeText(requireContext(), "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
-                                clearSharedPreferences()
-                                val intent = Intent(requireActivity(), LoginActivity::class.java)
-                                startActivity(intent)
-                                requireActivity().finish()
-                            } else {
-                                Toast.makeText(requireContext(), "회원 탈퇴 실패: ${it.message}", Toast.LENGTH_SHORT).show()
-                            }
-                        } ?: run {
-                            Toast.makeText(requireContext(), "회원 탈퇴 실패: 응답이 없습니다.", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Toast.makeText(requireContext(), "서버 오류로 탈퇴에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                        Log.e("MyPageFragment", "Resign failed with code: ${response.code()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<ResignResponse>, t: Throwable) {
-                    Toast.makeText(requireContext(), "네트워크 오류로 탈퇴에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    Log.e("MyPageFragment", "Resign failed: ${t.message}")
-                }
-            })
-        } else {
+        val token = "Bearer ${accessToken}"
+        if (accessToken.isNullOrEmpty()) {
             Toast.makeText(requireContext(), "액세스 토큰이 없습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show()
             val intent = Intent(requireActivity(), LoginActivity::class.java)
             startActivity(intent)
             requireActivity().finish()
+            return
+        }
+
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<ResignResponse>> = apiService.resign(token)
+                if (response.isSuccessful) {
+                    val resignResponse = response.body()
+                    resignResponse?.let {
+                        if (it.isSuccess) {
+                            // 회원탈퇴 성공
+                            Toast.makeText(requireContext(), "회원 탈퇴가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+
+                            // SharedPreferences 초기화 (회원탈퇴 처리)
+                            clearSharedPreferences()
+
+                            // 로그인 화면으로 이동
+                            val intent = Intent(requireActivity(), LoginActivity::class.java)
+                            startActivity(intent)
+                            requireActivity().finish()
+                        } else {
+                            // 회원탈퇴 실패 메시지 처리
+                            Toast.makeText(requireContext(), "회원 탈퇴 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "서버 오류로 탈퇴에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                    Log.e("MyPageFragment", "Resign failed with code: ${response.code()}")
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "네트워크 오류로 탈퇴에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                Log.e("MyPageFragment", "Resign failed: ${e.message}")
+            }
         }
     }
     private fun logout() {
-        // SharedPreferences에서 액세스 토큰 불러오기
-        val accessToken = sharedPreferences.getString("accessToken", null)
-
-        if (accessToken != null) {
-            // Authorization 헤더에 Bearer 토큰 추가
-            val authToken = "Bearer $accessToken"
-
-            // 로그아웃 API 호출
-            authService.logout(authToken).enqueue(object : Callback<LogoutResponse> {
-                override fun onResponse(call: Call<LogoutResponse>, response: Response<LogoutResponse>) {
-                    if (response.isSuccessful) {
-                        val logoutResponse = response.body()
-                        logoutResponse?.let {
-                            if (it.isSuccess) {
-                                // 로그아웃 성공
-                                Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
-
-                                // SharedPreferences 초기화 (로그아웃 처리)
-                                clearSharedPreferences()
-
-                                // 로그인 화면으로 이동
-                                val intent = Intent(requireActivity(), LoginActivity::class.java)
-                                startActivity(intent)
-                                requireActivity().finish()
-                            } else {
-                                // 로그아웃 실패 메시지 처리
-                                Toast.makeText(requireContext(), "로그아웃 실패: ${it.message}", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    } else {
-                        Toast.makeText(requireContext(), "서버 오류로 로그아웃에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<LogoutResponse>, t: Throwable) {
-                    Toast.makeText(requireContext(), "네트워크 오류로 로그아웃에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                }
-            })
-        } else {
+        val token = "Bearer ${accessToken}"
+        if (accessToken.isNullOrEmpty()) {
             Toast.makeText(requireContext(), "액세스 토큰이 없습니다. 다시 로그인해 주세요.", Toast.LENGTH_SHORT).show()
             val intent = Intent(requireActivity(), LoginActivity::class.java)
             startActivity(intent)
             requireActivity().finish()
+            return
+        }
+
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<LogoutResponse>> = apiService.logout(token)
+                if (response.isSuccessful) {
+                    val logoutResponse = response.body()
+                    logoutResponse?.let {
+                        if (it.isSuccess) {
+                            // 로그아웃 성공
+                            Toast.makeText(requireContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show()
+
+                            // SharedPreferences 초기화 (로그아웃 처리)
+                            clearSharedPreferences()
+
+                            // 로그인 화면으로 이동
+                            val intent = Intent(requireActivity(), LoginActivity::class.java)
+                            startActivity(intent)
+                            requireActivity().finish()
+                        } else {
+                            // 로그아웃 실패 메시지 처리
+                            Toast.makeText(requireContext(), "로그아웃 실패: ${it.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "서버 오류로 로그아웃에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "네트워크 오류로 로그아웃에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
