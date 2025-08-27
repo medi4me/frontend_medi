@@ -8,28 +8,35 @@ import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mediforme.remote.api.MedicineApiService
-import com.example.mediforme.remote.api.MedicineResponse
-import com.example.mediforme.remote.api.MedicineShowService
-import com.example.mediforme.remote.api.Medicines
-import com.example.mediforme.remote.api.getRetrofit
 import com.example.mediforme.ui.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityOnboardingMedicineBinding
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.MedicineResponse
+import com.example.mediforme.remote.model.response.Medicines
 import com.example.mediforme.ui.login.LoginActivity
 import com.example.mediforme.ui.search.CameraActivity
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import retrofit2.Call
-import retrofit2.Callback
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnItemClickListener {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var binding: ActivityOnboardingMedicineBinding
     private var accessToken: String? = null
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,24 +88,21 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
     }
 
     private fun fetchMedicinesFromServer(query: String) {
-        val apiService = getRetrofit().create(MedicineApiService::class.java)
-        val call = apiService.getMedicines(query)
-
-        call.enqueue(object : Callback<MedicineResponse> {
-            override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<MedicineResponse>> = apiService.getMedicines(query)
                 if (response.isSuccessful) {
-                    val medicines = response.body()?.medicines ?: emptyList()
+                    val medicines = response.body()?.result?.medicines ?: emptyList()
+
                     // BottomSheetDialog에 데이터 전달
                     showSearchResultsBottomSheet(medicines)
                 } else {
-                    Log.e("OnboardingMedicineActivity", "Response error")
+                    Log.e("OnboardingMedicineActivity", "Response error: ${response.code()}")
                 }
+            } catch (e: Exception) {
+                Log.e("OnboardingMedicineActivity", "Fetch error", e)
             }
-
-            override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
-                Log.e("OnboardingMedicineActivity", "Fetch error", t)
-            }
-        })
+        }
     }
 
     private fun showSearchResultsBottomSheet(medicines: List<Medicines>) {
@@ -121,29 +125,30 @@ class OnboardingMedicineActivity : AppCompatActivity(), SearchResultAdapter.OnIt
     }
 
     private fun fetchMedicinesInfoFromServer() {
-        val apiService = getRetrofit().create(MedicineShowService::class.java)
-        val call = apiService.getUserMedicines("Bearer $accessToken")
-        Log.d("OnboardingMedicineActivity", "Token: $accessToken")
+        val token = "Bearer $accessToken"
+        if (accessToken.isNullOrEmpty()) {
+            handleUnauthorized()
+            return
+        }
 
-        call.enqueue(object : Callback<MedicineResponse> {
-            override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<MedicineResponse>> = apiService.getUserMedicines(token)
                 Log.d("OnboardingMedicineActivity", "Response received: ${response.code()}")
                 if (response.isSuccessful) {
-                    val medicines = response.body()?.medicines ?: emptyList()
+                    val medicines = response.body()?.result?.medicines ?: emptyList()
                     setupRecyclerView(medicines)
                 } else {
                     Log.e("OnboardingMedicineActivity", "Response error: ${response.code()} ${response.message()}")
                     Log.e("OnboardingMedicineActivity", "Response body: ${response.errorBody()?.string()}")
-//                    if (response.code() == 401) {
-//                        handleUnauthorized()
-//                    }
+                    if (response.code() == 401) {
+                        handleUnauthorized()
+                    }
                 }
+            } catch (e: Exception) {
+                Log.e("OnboardingMedicineActivity", "Fetch error", e)
             }
-
-            override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
-                Log.e("OnboardingMedicineActivity", "Fetch error", t)
-            }
-        })
+        }
     }
 
     private fun handleUnauthorized() {

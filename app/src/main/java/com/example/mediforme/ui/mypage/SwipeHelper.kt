@@ -18,8 +18,6 @@ import com.example.mediforme.remote.api.ApiService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import kotlin.math.max
 import kotlin.math.min
