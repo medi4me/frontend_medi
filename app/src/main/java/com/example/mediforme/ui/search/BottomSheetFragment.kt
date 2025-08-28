@@ -8,19 +8,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mediforme.remote.api.CameraMedicineResponse
-import com.example.mediforme.remote.api.CameraService
-import com.example.mediforme.remote.api.MedicineInfoResponse
-import com.example.mediforme.remote.api.MedicineService
-import com.example.mediforme.remote.api.getRetrofit
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentBottomSheet3Binding
 import com.example.mediforme.databinding.FragmentBottomSheetBinding
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.CameraMedicineResponse
+import com.example.mediforme.remote.model.response.MedicineInfoResponse
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayout
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.parcel.Parcelize
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -28,6 +30,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import javax.inject.Inject
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
 
@@ -87,7 +90,10 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
     }
 }
 
+
 // BottomSheetFragment2.kt
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class BottomSheetFragment2 : BottomSheetDialogFragment() {
 
     private lateinit var tabLayout: TabLayout
@@ -96,6 +102,9 @@ class BottomSheetFragment2 : BottomSheetDialogFragment() {
 
     // 약 정보를 담을 리스트 (초기화는 나중에 서버 데이터로 대체)
     private var medicineInfoList: List<MedicineInfo> = emptyList()
+
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -119,51 +128,41 @@ class BottomSheetFragment2 : BottomSheetDialogFragment() {
     }
 
     private fun fetchMedicineInfo(medicineNames: List<String>) {
-        val retrofit = getRetrofit() // Retrofit 인스턴스를 가져오는 함수
-        val service = retrofit.create(MedicineService::class.java)
-        val call = service.getMedicineInfo(medicineNames)
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<List<MedicineInfoResponse>>> = apiService.getMedicineInfo(medicineNames)
+                Log.d("BottomSheetFragment2", "Requesting info for: $medicineNames")
 
-        // medicineNames 리스트 로그로 출력
-        Log.d("BottomSheetFragment2", "Requesting info for: $medicineNames")
-
-        call.enqueue(object : Callback<List<MedicineInfoResponse>> {
-            override fun onResponse(
-                call: Call<List<MedicineInfoResponse>>,
-                response: Response<List<MedicineInfoResponse>>
-            ) {
                 if (response.isSuccessful) {
-                    response.body()?.let { responseList ->
-                        // 서버로부터 받은 여러 개의 MedicineInfo를 리스트에 추가
-                        medicineInfoList = responseList.map { response ->
-                            MedicineInfo(
-                                title = response.name,
-                                ingredient = response.componentName,
-                                amount = response.amount
-                            )
-                        }
+                    response.body()?.let { apiResponse ->
+                        apiResponse.result?.let { responseList ->
+                            medicineInfoList = responseList.map { response ->
+                                MedicineInfo(
+                                    title = response.name,
+                                    ingredient = response.componentName,
+                                    amount = response.amount
+                                )
+                            }
+                            Log.d("BottomSheetFragment2", "Received Medicine Info List: $medicineInfoList")
 
-                        // 서버에서 받아온 리스트 로그로 출력
-                        Log.d("BottomSheetFragment2", "Received Medicine Info List: $medicineInfoList")
+                            // TabAdapter 설정
+                            tabAdapter = TabAdapter(medicineInfoList)
+                            recyclerView.adapter = tabAdapter
 
-                        // TabAdapter 설정
-                        tabAdapter = TabAdapter(medicineInfoList)
-                        recyclerView.adapter = tabAdapter
-
-                        // TabLayout의 탭을 설정
-                        tabLayout.removeAllTabs()
-                        for (i in medicineInfoList.indices) {
-                            tabLayout.addTab(tabLayout.newTab().setText(medicineInfoList[i].title))
+                            // TabLayout의 탭을 설정
+                            tabLayout.removeAllTabs()
+                            for (i in medicineInfoList.indices) {
+                                tabLayout.addTab(tabLayout.newTab().setText(medicineInfoList[i].title))
+                            }
                         }
                     }
                 } else {
                     Log.e("BottomSheetFragment2", "Error: ${response.errorBody()?.string()}")
                 }
+            } catch (e: Exception) {
+                Log.e("BottomSheetFragment2", "Request failed", e)
             }
-
-            override fun onFailure(call: Call<List<MedicineInfoResponse>>, t: Throwable) {
-                Log.e("BottomSheetFragment2", "Request failed", t)
-            }
-        })
+        }
     }
 
     @Parcelize
@@ -179,19 +178,20 @@ class BottomSheetFragment2 : BottomSheetDialogFragment() {
 
 
 // BottomSheetFragment3.kt
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class BottomSheetFragment3 : BottomSheetDialogFragment() {
 
     lateinit var binding: FragmentBottomSheet3Binding
-    private lateinit var cameraService: CameraService
+
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentBottomSheet3Binding.inflate(inflater, container, false)
-
-        // Retrofit 초기화
-        cameraService = getRetrofit().create(CameraService::class.java)
 
         val photoUri = arguments?.getString("photoUri")
 
@@ -213,13 +213,11 @@ class BottomSheetFragment3 : BottomSheetDialogFragment() {
     }
 
     private fun uploadPhotoAndDisplayWarnings(body: MultipartBody.Part) {
-        cameraService.uploadImage(body).enqueue(object : Callback<List<CameraMedicineResponse>> {
-            override fun onResponse(
-                call: Call<List<CameraMedicineResponse>>,
-                response: Response<List<CameraMedicineResponse>>
-            ) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<List<CameraMedicineResponse>>> = apiService.uploadImage(body)
                 if (response.isSuccessful) {
-                    val responseData = response.body()
+                    val responseData = response.body()?.result
                     responseData?.let { data ->
                         if (data.isNotEmpty()) {
                             val drugInteraction = data[0].drugInteraction
@@ -234,13 +232,11 @@ class BottomSheetFragment3 : BottomSheetDialogFragment() {
                     // 응답이 실패했을 경우 처리
                     Log.e("BottomSheetFragment3", "Error: ${response.errorBody()?.string()}")
                 }
-            }
-
-            override fun onFailure(call: Call<List<CameraMedicineResponse>>, t: Throwable) {
+            } catch (e: Exception) {
                 // 네트워크 오류 등으로 요청이 실패한 경우 처리
-                Log.e("BottomSheetFragment3", "Failure: ${t.message}")
+                Log.e("BottomSheetFragment3", "Failure: ${e.message}")
             }
-        })
+        }
     }
 }
 

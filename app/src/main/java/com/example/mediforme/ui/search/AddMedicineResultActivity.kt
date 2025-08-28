@@ -14,22 +14,32 @@ import android.widget.Button
 import android.widget.TimePicker
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mediforme.remote.api.MedicineResponse
-import com.example.mediforme.remote.api.MedicineSaveService
-import com.example.mediforme.remote.api.getRetrofit
+import androidx.lifecycle.lifecycleScope
 import com.example.mediforme.ui.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.FragmentAddMedicineBinding
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.MedicineResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class AddMedicineResultActivity : AppCompatActivity() {
     private lateinit var binding: FragmentAddMedicineBinding
     private var selectedTime: String? = null // 선택된 시간 저장 변수
     private var selectedMealTime: String? = null // 선택된 식사 시간 저장 변수
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var memberID: String
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +50,7 @@ class AddMedicineResultActivity : AppCompatActivity() {
         // SharedPreferences에서 memberID 가져오기
         sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         memberID = sharedPreferences.getString("memberID", null) ?: ""
+        val memberIdInt = sharedPreferences.getString("memberId", "0")?.toIntOrNull() ?: 0
 
         // Intent로부터 데이터 받기
         val medicineName = intent.getStringExtra("medicine_name")
@@ -95,41 +106,41 @@ class AddMedicineResultActivity : AppCompatActivity() {
             val medicineSaveName = binding.medicineName.text.toString()
             val selectedTime = selectedTime ?: "00:00"
 
-            // Retrofit 인스턴스 생성 및 서비스 인터페이스 초기화
-            val retrofit = getRetrofit()
-            val service = retrofit.create(MedicineSaveService::class.java)
-
-            // POST 요청을 서버로 보내기 (개별 파라미터 전달)
-            val call = service.saveMedicine(
-                memberID = memberID.toString(),
+            saveMedicine(
+                memberID = memberID,
                 name = medicineSaveName,
                 meal = mealTime,
                 time = selectedTime,
                 dosage = dosageOnetime,
-                memberId = 0
+                memberId = memberIdInt
             )
-
-            Log.d("AddMedicineResultActivity", "Request Params: name=$medicineSaveName, meal=$mealTime, time=$selectedTime, dosage=$dosageOnetime, memberId=0")
-
-            call.enqueue(object : Callback<MedicineResponse> {
-                override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
-                    if (response.isSuccessful) {
-                        // 서버로부터 성공적으로 응답을 받았을 때 처리
-                        Log.d("AddMedicineResultActivity", "Medicine saved successfully: ${response.body()}")
-                        startActivity(Intent(this@AddMedicineResultActivity, MainActivity::class.java))
-                    } else {
-                        // 서버로부터 응답이 왔지만 성공하지 않은 경우 처리
-                        Log.e("AddMedicineResultActivity", "Failed to save medicine: ${response.errorBody()?.string()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
-                    // 요청이 실패했을 때 처리
-                    Log.e("AddMedicineResultActivity", "Error saving medicine", t)
-                }
-            })
         }
+    }
 
+    private fun saveMedicine(memberID: String, name: String, meal: String, time: String, dosage: String, memberId: Int) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<MedicineResponse>> = apiService.saveMedicine(
+                    memberID = memberID,
+                    name = name,
+                    meal = meal,
+                    time = time,
+                    dosage = dosage,
+                    memberId = memberId
+                )
+                if (response.isSuccessful) {
+                    // 서버로부터 성공적으로 응답을 받았을 때 처리
+                    Log.d("AddMedicineResultActivity", "Medicine saved successfully: ${response.body()}")
+                    startActivity(Intent(this@AddMedicineResultActivity, MainActivity::class.java))
+                } else {
+                    // 서버로부터 응답이 왔지만 성공하지 않은 경우 처리
+                    Log.e("AddMedicineResultActivity", "Failed to save medicine: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                // 요청이 실패했을 때 처리
+                Log.e("AddMedicineResultActivity", "Error saving medicine", e)
+            }
+        }
     }
 
     private fun showTimePickerDialog() {

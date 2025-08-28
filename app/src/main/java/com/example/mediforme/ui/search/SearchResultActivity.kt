@@ -11,25 +11,34 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.mediforme.remote.api.CameraMedicineResponse
-import com.example.mediforme.remote.api.CameraService
-import com.example.mediforme.remote.api.getRetrofit
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mediforme.databinding.ActivitySearchresultBinding
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.CameraMedicineResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
 import java.io.FileOutputStream
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class SearchResultActivity : AppCompatActivity() {
     lateinit var binding: ActivitySearchresultBinding
     private var selectedMedicineName: String? = null
 
     private val REQUEST_PERMISSIONS = 1
     private val REQUEST_IMAGE_CAPTURE = 2
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -137,16 +146,13 @@ class SearchResultActivity : AppCompatActivity() {
         val requestFile = RequestBody.create("image/png".toMediaTypeOrNull(), file)
         val body = MultipartBody.Part.createFormData("file", file.name, requestFile)
 
-        val retrofit = getRetrofit()
-        val service = retrofit.create(CameraService::class.java)
-        val call = service.uploadImage(body)
-
-        call.enqueue(object : Callback<List<CameraMedicineResponse>> {
-            override fun onResponse(call: Call<List<CameraMedicineResponse>>, response: Response<List<CameraMedicineResponse>>) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<List<CameraMedicineResponse>>> = apiService.uploadImage(body)
                 if (response.isSuccessful) {
-                    val cameraMedicineResponses = response.body()
+                    val cameraMedicineResponses = response.body()?.result ?: emptyList()
 
-                    val medicines = cameraMedicineResponses?.map { response ->
+                    val medicines = cameraMedicineResponses.map { response ->
                         MedicineList(
                             imageResId = response.imageUrl,
                             name = response.name,
@@ -154,24 +160,23 @@ class SearchResultActivity : AppCompatActivity() {
                             effects = response.benefit ?: "",
                             howToEat = response.dosage ?: ""
                         )
-                    } ?: emptyList()
+                    }
 
-                    selectedMedicineName = cameraMedicineResponses?.firstOrNull {
+                    selectedMedicineName = cameraMedicineResponses.firstOrNull {
                         it.name.contains("타이레놀") ||
                                 it.name.contains("초당아스피린장용정") ||
                                 it.name.contains("페니라민정")
                     }?.name
 
                     val listAdapter = MedicineListAdapter(medicines)
+                    binding.medicineInfoRecyclerView.layoutManager = LinearLayoutManager(this@SearchResultActivity)
                     binding.medicineInfoRecyclerView.adapter = listAdapter
                 } else {
                     Toast.makeText(this@SearchResultActivity, "Error: ${response.errorBody()?.string()}", Toast.LENGTH_SHORT).show()
                 }
+            } catch (e: Exception) {
+                Toast.makeText(this@SearchResultActivity, "Request failed: ${e.message}", Toast.LENGTH_SHORT).show()
             }
-
-            override fun onFailure(call: Call<List<CameraMedicineResponse>>, t: Throwable) {
-                Toast.makeText(this@SearchResultActivity, "Request failed: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
+        }
     }
 }

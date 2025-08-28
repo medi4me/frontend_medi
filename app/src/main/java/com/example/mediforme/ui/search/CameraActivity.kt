@@ -27,8 +27,6 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 
-
-
 class CameraActivity : AppCompatActivity() {
     lateinit var binding: ActivityCameraBinding
 
