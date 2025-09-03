@@ -37,10 +37,6 @@ class ChatActivity : AppCompatActivity() {
         binding = FragmentChatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        // 코루틴과 의존성 주입방식을 사용 -> getRetrofit()을 호출하는 초기화 과정 생략
-//        val retrofit = getRetrofit()
-//        apiService = retrofit.create(ApiService::class.java)
-
         // RecyclerView 설정
         chatAdapter = ChatAdapter(messages)
         binding.chatRecyclerView.apply {
