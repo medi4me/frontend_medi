@@ -7,8 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.mediforme.remote.api.Medicines
 import com.example.mediforme.R
+import com.example.mediforme.remote.model.response.Medicines
 
 class SearchWithNameAdapter(private val results: List<Medicines>) : RecyclerView.Adapter<SearchWithNameAdapter.ViewHolder>() {
 

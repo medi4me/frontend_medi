@@ -9,16 +9,18 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mediforme.remote.api.CalenderResponse
-import com.example.mediforme.remote.api.CalenderStatus
-import com.example.mediforme.remote.api.getRetrofit
 import com.example.mediforme.R
-import retrofit2.Call
-import retrofit2.Callback
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.CalenderResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class WeekDayAdapter(
     private val items: List<WeekDayItem>,
+    private val apiService: ApiService,
+    private val coroutineScope: CoroutineScope,
     private val onItemClick: (WeekDayItem) -> Unit
 ) : RecyclerView.Adapter<WeekDayAdapter.ViewHolder>() {
 
@@ -53,19 +55,19 @@ class WeekDayAdapter(
                 // 날짜 형식을 맞추기 (yyyy-MM-dd)
                 val formattedDate = "2024-${item.month.toString().padStart(2, '0')}-${item.date.padStart(2, '0')}"
 
-                // Retrofit을 사용하여 상태 데이터를 가져오기
-                val calendarService = getRetrofit().create(CalenderStatus::class.java)
-                calendarService.getDateDetails(formattedDate).enqueue(object : Callback<CalenderResponse> {
-                    override fun onResponse(call: Call<CalenderResponse>, response: Response<CalenderResponse>) {
+                // 코루틴을 사용하여 상태 데이터를 가져오기
+                coroutineScope.launch {
+                    try {
+                        val response: Response<ApiResponse<CalenderResponse>> = apiService.getDateDetails(formattedDate)
                         if (response.isSuccessful) {
                             val calenderResponse = response.body()
-                            if (calenderResponse != null) {
+                            if (calenderResponse != null && calenderResponse.isSuccess) {
                                 // 상태 값 저장 및 이미지 설정
-                                item.status = calenderResponse.status
+                                item.status = calenderResponse.result.status
                                 item.isStatusLoaded = true
 
                                 // 상태에 따른 이미지 설정
-                                when (calenderResponse.status) {
+                                when (item.status) {
                                     "GOOD" -> imageView.setImageResource(R.drawable.ic_emoji_good)
                                     "NOTBAD" -> imageView.setImageResource(R.drawable.ic_emoji_soso)
                                     "BAD" -> imageView.setImageResource(R.drawable.ic_emoji_bad)
@@ -75,12 +77,10 @@ class WeekDayAdapter(
                         } else {
                             Log.e("WeekDayAdapter", "Failed to fetch data for date: $formattedDate, error code: ${response.code()}")
                         }
+                    } catch (e: Exception) {
+                        Log.e("WeekDayAdapter", "Error fetching data for date: $formattedDate", e)
                     }
-
-                    override fun onFailure(call: Call<CalenderResponse>, t: Throwable) {
-                        Log.e("WeekDayAdapter", "Error fetching data for date: $formattedDate", t)
-                    }
-                })
+                }
             }
 
             if (item.isSelected) {

@@ -8,18 +8,25 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mediforme.remote.api.Register
-import com.example.mediforme.remote.api.RegisterResponse
-import com.example.mediforme.remote.api.RegisterUserData
-import com.example.mediforme.remote.api.getRetrofit
+import androidx.lifecycle.lifecycleScope
 import com.example.mediforme.R
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.request.RegisterUserData
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.RegisterResponse
 import com.example.mediforme.ui.login.LoginActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class JoinNameActivity : AppCompatActivity() {
     private lateinit var user_name_ET: EditText
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +46,6 @@ class JoinNameActivity : AppCompatActivity() {
         val nextBtn: Button = findViewById(R.id.next_btn)
         user_name_ET = findViewById(R.id.user_name_ET)
 
-
         // 회원가입 버튼
         nextBtn.setOnClickListener {
             val user_name = user_name_ET.text.toString()
@@ -55,9 +61,6 @@ class JoinNameActivity : AppCompatActivity() {
     private fun registerUser(name: String, password: String, phone: String, memberID: String, consent: String) {
         Log.d("Register", "이름: $name\n비번: $password\n전번: $phone,\n아이디: $memberID,\n동의 여부: $consent")
 
-        val retrofit = getRetrofit()
-        val apiService = retrofit.create(Register::class.java)
-
         val userData = RegisterUserData(
             name = name,
             password = password,
@@ -66,8 +69,9 @@ class JoinNameActivity : AppCompatActivity() {
             consent = consent
         )
 
-        apiService.registerUser(userData).enqueue(object : Callback<RegisterResponse> {
-            override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: retrofit2.Response<ApiResponse<RegisterResponse>> = apiService.registerUser(userData)
                 if (response.isSuccessful) {
                     response.body()?.let {
                         if (it.isSuccess) {
@@ -81,12 +85,10 @@ class JoinNameActivity : AppCompatActivity() {
                 } else {
                     Log.d("Register", "서버 응답 실패: ${response.code()}")
                 }
+            } catch (e: Exception) {
+                Log.e("Register", "회원가입 요청 실패", e)
             }
-
-            override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                Log.e("Register", "회원가입 요청 실패", t)
-            }
-        })
+        }
     }
     // SharedPreferences에서 전화번호를 가져오는 함수
     private fun getPhoneNumber(): String? {

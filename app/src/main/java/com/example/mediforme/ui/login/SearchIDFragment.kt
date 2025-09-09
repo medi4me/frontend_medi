@@ -1,8 +1,10 @@
 package com.example.mediforme.ui.login
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,16 +13,20 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.mediforme.remote.api.AuthService
-import com.example.mediforme.remote.api.FindIDResponse
-import com.example.mediforme.remote.api.VerificationRequest
-import com.example.mediforme.remote.api.VerificationResponse
-import com.example.mediforme.remote.api.getRetrofit
+import androidx.lifecycle.lifecycleScope
 import com.example.mediforme.R
-import retrofit2.Call
-import retrofit2.Callback
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.request.VerificationRequest
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.FindIDResponse
+import com.example.mediforme.remote.model.response.VerificationResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class SearchIDFragment : Fragment() {
 
     private lateinit var phoneNumET: EditText
@@ -28,11 +34,15 @@ class SearchIDFragment : Fragment() {
     private lateinit var veriSendBtn: Button
     private lateinit var enterBtn: Button
     private lateinit var searchIdBtn: Button
-    private lateinit var authService: AuthService
 
     private var memberID: String? = null
     private var password: String? = null
 
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
+
+    @SuppressLint("ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,8 +55,6 @@ class SearchIDFragment : Fragment() {
         veriSendBtn = view.findViewById(R.id.veri_send_btn)
         enterBtn = view.findViewById(R.id.enter_Btn)
         searchIdBtn = view.findViewById(R.id.saerch_id_Btn)
-
-        authService = getRetrofit().create(AuthService::class.java)
 
         // 초기 상태에서 버튼을 비활성화합니다.
         veriSendBtn.isEnabled = false
@@ -107,61 +115,58 @@ class SearchIDFragment : Fragment() {
 
         veriSendBtn.isEnabled = phoneNumFilled
         enterBtn.isEnabled = veriFilled
-       //searchIdBtn.isEnabled = phoneNumFilled && veriFilled
+        //searchIdBtn.isEnabled = phoneNumFilled && veriFilled
     }
 
     private fun sendVerificationCode() {
         val phoneNumber = phoneNumET.text.toString().trim()
         val request = VerificationRequest(phone = phoneNumber)
 
-        authService.sendVerificationCode(request).enqueue(object : Callback<VerificationResponse> {
-            override fun onResponse(call: Call<VerificationResponse>, response: Response<VerificationResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<VerificationResponse>> = apiService.sendVerificationCode(request)
                 if (response.isSuccessful) {
                     val verificationResponse = response.body()
                     verificationResponse?.let {
                         if (it.isSuccess && it.code == "COMMON200") {
                             Toast.makeText(requireContext(), "인증 코드가 발송되었습니다.", Toast.LENGTH_SHORT).show()
-
                         } else if (it.code == "PHONE_NOT_FOUND") {
                             Toast.makeText(requireContext(), "존재하지 않는 번호입니다.", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
-            }
-            override fun onFailure(call: Call<VerificationResponse>, t: Throwable) {
+            } catch (e: Exception) {
+                Log.e("SearchIDFragment", "네트워크 오류", e)
                 Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
-        })
+        }
     }
     private fun verifyAndFindID() {
         val phoneNumber = phoneNumET.text.toString().trim()
         val verificationCode = veriET.text.toString().trim()
         val request = VerificationRequest(phone = phoneNumber, verificationCode = verificationCode)
 
-        authService.verifyAndFindID(request).enqueue(object : Callback<FindIDResponse> {
-            override fun onResponse(call: Call<FindIDResponse>, response: Response<FindIDResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<FindIDResponse>> = apiService.verifyAndFindID(request)
                 if (response.isSuccessful) {
                     val findIDResponse = response.body()
                     findIDResponse?.let {
-                        if (it.isSuccess && it.code =="COMMON200") {
-                            memberID = it.result?.memberID
-                            password = it.result?.password
-
-                            // 인증 성공 시 "아이디 찾기" 버튼을 활성화
+                        if (it.isSuccess && it.code == "COMMON200") {
+                            memberID = it.result.result?.memberID
+                            password = it.result.result?.password
                             searchIdBtn.isEnabled = true
-
                         } else {
                             Toast.makeText(requireContext(), "인증에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                            searchIdBtn.isEnabled = false // 인증 실패 시 버튼 비활성화
+                            searchIdBtn.isEnabled = false
                         }
                     }
                 }
-            }
-
-            override fun onFailure(call: Call<FindIDResponse>, t: Throwable) {
+            } catch (e: Exception) {
+                Log.e("SearchIDFragment", "네트워크 오류", e)
                 Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
-        })
+        }
     }
 }
 

@@ -3,7 +3,8 @@ plugins {
     id("kotlin-android")
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
-
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 
@@ -55,7 +56,7 @@ android {
 
 
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.8"
     }
     packaging {
         resources {
@@ -82,6 +83,7 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.camera.core)
     implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.espresso.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -120,7 +122,16 @@ dependencies {
     //Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.squareup.retrofit2:adapter-rxjava2:2.9.0")
+
+    //Coroutines for asynchronous processing
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
+    // Dagger Hilt 핵심 라이브러리 및 의존성 정리
+    implementation ("com.google.dagger:hilt-android:2.48")
+    ksp ("com.google.dagger:hilt-android-compiler:2.48")
+    implementation ("androidx.hilt:hilt-navigation-fragment:1.2.0")
+    ksp ("androidx.hilt:hilt-compiler:1.2.0")
 
     //okHttp
     implementation ("com.squareup.okhttp3:okhttp:4.9.0")
@@ -128,6 +139,6 @@ dependencies {
 
     //Glide (이미지 처리)
     implementation ("com.github.bumptech.glide:glide:4.11.0")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
+    ksp ("com.github.bumptech.glide:compiler:4.11.0")
 
 }

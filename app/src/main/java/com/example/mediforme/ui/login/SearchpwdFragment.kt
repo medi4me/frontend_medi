@@ -1,5 +1,6 @@
 package com.example.mediforme.ui.login
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,16 +13,20 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.mediforme.remote.api.AuthService
-import com.example.mediforme.remote.api.FindPasswordResponse
-import com.example.mediforme.remote.api.VerificationRequest
-import com.example.mediforme.remote.api.VerificationResponse
-import com.example.mediforme.remote.api.getRetrofit
+import androidx.lifecycle.lifecycleScope
 import com.example.mediforme.R
-import retrofit2.Call
-import retrofit2.Callback
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.request.VerificationRequest
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.FindPasswordResponse
+import com.example.mediforme.remote.model.response.VerificationResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class SearchpwdFragment : Fragment() {
 
 
@@ -30,11 +35,15 @@ class SearchpwdFragment : Fragment() {
     private lateinit var veriSendBtn: Button
     private lateinit var enterBtn: Button
     private lateinit var searchpwdBtn: Button
-    private lateinit var authService: AuthService
 
     private var memberID: String? = null
     private var password: String? = null
 
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
+
+    @SuppressLint("ResourceType")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -47,8 +56,6 @@ class SearchpwdFragment : Fragment() {
         veriSendBtn = view.findViewById(R.id.veri_send_btn)
         enterBtn = view.findViewById(R.id.enter_Btn)
         searchpwdBtn = view.findViewById(R.id.search_pwd_Btn)
-
-        authService = getRetrofit().create(AuthService::class.java)
 
         // 초기 상태에서 버튼을 비활성화합니다.
         veriSendBtn.isEnabled = false
@@ -77,7 +84,7 @@ class SearchpwdFragment : Fragment() {
             if (searchpwdBtn.isEnabled) {
                 val fragment = InfoPWDFragment().apply {
                     arguments = Bundle().apply {
-                       // putString("memberID", memberID)
+                        // putString("memberID", memberID)
                         putString("password", password)
                     }
                 }
@@ -108,15 +115,16 @@ class SearchpwdFragment : Fragment() {
 
         veriSendBtn.isEnabled = phoneNumFilled
         enterBtn.isEnabled = veriFilled
-       // searchpwdBtn.isEnabled = phoneNumFilled && veriFilled
+        // searchpwdBtn.isEnabled = phoneNumFilled && veriFilled
     }
 
     private fun sendVerificationCode() {
         val phoneNumber = phoneNumET.text.toString().trim()
         val request = VerificationRequest(phone = phoneNumber)
 
-        authService.sendVerificationCode(request).enqueue(object : Callback<VerificationResponse> {
-            override fun onResponse(call: Call<VerificationResponse>, response: Response<VerificationResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<VerificationResponse>> = apiService.sendVerificationCode(request)
                 if (response.isSuccessful) {
                     val verificationResponse = response.body()
                     verificationResponse?.let {
@@ -127,42 +135,40 @@ class SearchpwdFragment : Fragment() {
                         }
                     }
                 }
-            }
-
-            override fun onFailure(call: Call<VerificationResponse>, t: Throwable) {
+            } catch (e: Exception) {
+                Log.e("SearchpwdFragment", "네트워크 오류", e)
                 Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
-        })
+        }
     }
     private fun verifyAndFindPW() {
         val phoneNumber = phoneNumET.text.toString().trim()
         val verificationCode = veriET.text.toString().trim()
         val request = VerificationRequest(phone = phoneNumber, verificationCode = verificationCode)
 
-        authService.verifyAndFindPassword(request).enqueue(object : Callback<FindPasswordResponse> {
-            override fun onResponse(call: Call<FindPasswordResponse>, response: Response<FindPasswordResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<FindPasswordResponse>> = apiService.verifyAndFindPassword(request)
                 if (response.isSuccessful) {
                     val findPasswordResponse = response.body()
                     findPasswordResponse?.let {
                         if (it.isSuccess && it.code == "COMMON200") {
                             //memberID = it.result?.memberID
-                            password = it.result?.password
+                            password = it.result.result?.password
                             Log.d("PWD","${password}")
 
                             // 인증 성공 시 "비밀번호 찾기" 버튼을 활성화
                             searchpwdBtn.isEnabled = true
-
                         } else {
                             Toast.makeText(requireContext(), "인증에 실패했습니다.", Toast.LENGTH_SHORT).show()
-                            searchpwdBtn.isEnabled = false // 인증 실패 시 버튼 비활성화
+                            searchpwdBtn.isEnabled = false
                         }
                     }
                 }
-            }
-
-            override fun onFailure(call: Call<FindPasswordResponse>, t: Throwable) {
+            } catch (e: Exception) {
+                Log.e("SearchpwdFragment", "네트워크 오류", e)
                 Toast.makeText(requireContext(), "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
-        })
+        }
     }
 }

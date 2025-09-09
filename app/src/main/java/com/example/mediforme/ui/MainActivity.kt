@@ -8,7 +8,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController

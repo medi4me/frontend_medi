@@ -14,23 +14,31 @@ import android.widget.Button
 import android.widget.TimePicker
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.mediforme.ui.MainActivity
 import com.example.mediforme.R
-import com.example.mediforme.remote.api.MedicineRequest
-import com.example.mediforme.remote.api.MedicineResponse
-import com.example.mediforme.remote.api.MedicineSaveService
-import com.example.mediforme.remote.api.getRetrofit
 import com.example.mediforme.databinding.ActivityOnboardingDetailBinding
-import retrofit2.Call
-import retrofit2.Callback
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.request.MedicineRequest
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.MedicineResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class OnboardingDetailActivity : AppCompatActivity() {
     lateinit var binding: ActivityOnboardingDetailBinding
     private var selectedTime: String? = null // 선택된 시간 저장 변수
     private var selectedMealTime: String? = null // 선택된 식사 시간 저장 변수
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var memberID: String
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +49,7 @@ class OnboardingDetailActivity : AppCompatActivity() {
         // SharedPreferences에서 memberID 가져오기
         sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
         memberID = sharedPreferences.getString("memberID", null) ?: ""
+        val memberIdInt = sharedPreferences.getString("memberId", "0")?.toIntOrNull() ?: 0
 
         if (memberID.isEmpty()) {
             Log.e("OnboardingDetailActivity", "Member ID is missing in SharedPreferences")
@@ -95,7 +104,7 @@ class OnboardingDetailActivity : AppCompatActivity() {
                 else -> selectedMealTime // 만약 다른 값이 있으면 원래 값을 그대로 사용
             }
 
-            val medicineSaveName = binding.medicineNameTv.text
+            val medicineSaveName = binding.medicineNameTv.text.toString()
 
             // 선택된 시간, 식사 시간, 복용량을 로그로 출력
             Log.d("OnboardingDetailActivity", "Medicine Name: $medicineSaveName")
@@ -113,41 +122,43 @@ class OnboardingDetailActivity : AppCompatActivity() {
                 memberId = 0 // 고정된 멤버 ID 사용
             )
 
-            // Retrofit 인스턴스 생성 및 서비스 인터페이스 초기화
-            val retrofit = getRetrofit()
-            val service = retrofit.create(MedicineSaveService::class.java)
-
-            // POST 요청을 서버로 보내기
-            val call = service.saveMedicine(
+            saveMedicine(
                 memberID = memberID,
-                name = medicineName ?: "Unknown Medicine",
+                name = medicineName ?: medicineSaveName,
                 meal = mealTime ?: "MEAL",
                 time = selectedTime ?: "00:00",
                 dosage = dosageOnetime,
-                memberId = 0
+                memberId = memberIdInt
             )
-            Log.d("MedicineRequest", "Request Body: $medicineRequest")
-            call.enqueue(object : Callback<MedicineResponse> {
-                override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
-                    if (response.isSuccessful) {
-                        // 서버로부터 성공적으로 응답을 받았을 때 처리
-                        Log.d("OnboardingDetailActivity", "Medicine saved successfully: ${response.body()}")
-                        startActivity(Intent(this@OnboardingDetailActivity, OnboardingMedicineActivity::class.java))
-                    } else {
-                        // 서버로부터 응답이 왔지만 성공하지 않은 경우 처리
-                        Log.e("OnboardingDetailActivity", "Failed to save medicine: ${response.errorBody()?.string()}")
-                    }
-                }
 
-                override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
-                    // 요청이 실패했을 때 처리
-                    Log.e("OnboardingDetailActivity", "Error saving medicine", t)
-                }
-            })
+            Log.d("MedicineRequest", "Request Body: $medicineRequest")
         }
 
         binding.skippingTv.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
+        }
+    }
+
+    private fun saveMedicine(memberID: String, name: String, meal: String, time: String, dosage: String, memberId: Int) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<MedicineResponse>> = apiService.saveMedicine(
+                    memberID = memberID,
+                    name = name,
+                    meal = meal,
+                    time = time,
+                    dosage = dosage,
+                    memberId = memberId
+                )
+                if (response.isSuccessful) {
+                    Log.d("OnboardingDetailActivity", "Medicine saved successfully: ${response.body()}")
+                    startActivity(Intent(this@OnboardingDetailActivity, OnboardingMedicineActivity::class.java))
+                } else {
+                    Log.e("OnboardingDetailActivity", "Failed to save medicine: ${response.errorBody()?.string()}")
+                }
+            } catch (e: Exception) {
+                Log.e("OnboardingDetailActivity", "Error saving medicine", e)
+            }
         }
     }
 

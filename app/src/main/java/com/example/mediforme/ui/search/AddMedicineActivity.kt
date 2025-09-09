@@ -9,19 +9,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mediforme.databinding.FragmentBottomSheetBinding
 import android.net.Uri
 import android.util.Log
-import com.example.mediforme.remote.api.CameraMedicineResponse
-import com.example.mediforme.remote.api.CameraService
-import com.example.mediforme.remote.api.getRetrofit
+import androidx.lifecycle.lifecycleScope
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.CameraMedicineResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import javax.inject.Inject
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class AddMedicineActivity : AppCompatActivity() {
     private lateinit var binding: FragmentBottomSheetBinding
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,24 +58,18 @@ class AddMedicineActivity : AppCompatActivity() {
         val requestFile = RequestBody.create("image/png".toMediaTypeOrNull(), photoFile)
         val body = MultipartBody.Part.createFormData("file", photoFile.name, requestFile)
 
-        val retrofit = getRetrofit() // Retrofit 인스턴스를 가져오는 함수
-        val service = retrofit.create(CameraService::class.java)
-        val call = service.uploadImage(body)
-
-        call.enqueue(object : Callback<List<CameraMedicineResponse>> {
-            override fun onResponse(call: Call<List<CameraMedicineResponse>>, response: Response<List<CameraMedicineResponse>>) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<List<CameraMedicineResponse>>> = apiService.uploadImage(body)
                 if (response.isSuccessful) {
-                    val medicineResponses = response.body()
-
-                    val medicines = medicineResponses?.map { response ->
-                        com.example.mediforme.ui.search.Medicine(
+                    val medicineResponses = response.body()?.result ?: emptyList()
+                    val medicines = medicineResponses.map { response ->
+                        Medicine(
                             name = response.name,
                             dosage = ""
                         )
-                    } ?: emptyList()
-
-                    // 어댑터 설정
-                    val adapter = com.example.mediforme.ui.search.MedicineAdapter(
+                    }
+                    val adapter = MedicineAdapter(
                         this@AddMedicineActivity,
                         medicines
                     ) { medicine ->
@@ -75,16 +77,13 @@ class AddMedicineActivity : AppCompatActivity() {
                     }
                     binding.medicineRecyclerView.layoutManager = LinearLayoutManager(this@AddMedicineActivity)
                     binding.medicineRecyclerView.adapter = adapter
-
                 } else {
                     Log.e("AddMedicineActivity", "Error: ${response.errorBody()?.string()}")
                 }
+            } catch (e: Exception) {
+                Log.e("AddMedicineActivity", "Request failed", e)
             }
-
-            override fun onFailure(call: Call<List<CameraMedicineResponse>>, t: Throwable) {
-                Log.e("AddMedicineActivity", "Request failed", t)
-            }
-        })
+        }
     }
 
     private fun showAddMedicineActivity(medicine: com.example.mediforme.ui.search.Medicine) {

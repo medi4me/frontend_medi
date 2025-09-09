@@ -10,21 +10,24 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mediforme.remote.api.MedicineDeleteService
-import com.example.mediforme.remote.api.getRetrofit
 import com.example.mediforme.R
+import com.example.mediforme.remote.api.ApiService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
 import kotlin.math.max
 import kotlin.math.min
 
 class SwipeHelper(
-    private val context: Context, // Context 추가
-    private val adapter: ContentDrugRVAdaptor
+    private val context: Context,
+    private val adapter: ContentDrugRVAdaptor,
+    private val apiService: ApiService,
+    private val coroutineScope: CoroutineScope,
+    private val token: String
 ) : ItemTouchHelper.Callback() {
 
     private var currentPosition: Int? = null
@@ -133,45 +136,35 @@ class SwipeHelper(
             alertDialog.dismiss()
         }
         deleteBtn.setOnClickListener {
-            // 약물 삭제 서버 요청
             val contentDrug = adapter.contentDrugList[position]
-            val memberId = 1 // 실제 memberId를 사용해야 합니다.
-            val userMedicineId = contentDrug.userMedicineId // 해당 약물의 userMedicineId를 사용해야 합니다.
+            val userMedicineId = contentDrug.userMedicineId
 
-            val retrofit = getRetrofit()
-            val service = retrofit.create(MedicineDeleteService::class.java)
-
-            // SharedPreferences에서 토큰 가져오기
-            val accessToken = sharedPreferences.getString("accessToken", null)
-            if (accessToken.isNullOrEmpty()) {
-                Log.e("SwipeHelper", "Access token is missing. Cannot delete medicine.")
-                return@setOnClickListener
-            }
-
-            val call = service.deleteMedicine("Bearer $accessToken", userMedicineId)
-
-            Log.d("SwipeHelper", "Attempting to delete userMedicineId: $userMedicineId, memberId: $memberId")
-            call.enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()?.string() // 응답을 직접 읽음
-                        Log.d("SwipeHelper", "Response: $responseBody")
-                        // 성공적으로 삭제된 경우 로컬에서도 삭제 처리
-                        adapter.removeItem(position)
-                        alertDialog.dismiss()
-                    } else {
-                        Log.e("SwipeHelper", "Failed to delete medicine: ${response.errorBody()?.string()}")
-                    }
-                }
-
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    Log.e("SwipeHelper", "Error deleting medicine", t)
-                }
-            })
+            deleteMedicine(userMedicineId, position)
+            alertDialog.dismiss()
         }
         alertDialog.show()
     }
 
+    private fun deleteMedicine(userMedicineId: Int, position: Int) {
+        coroutineScope.launch {
+            try {
+                val response: Response<ResponseBody> = apiService.deleteMedicine(token, userMedicineId)
+                if (response.isSuccessful) {
+                    Log.d("SwipeHelper", "Successfully deleted userMedicineId: $userMedicineId")
+
+                    // 성공적으로 삭제된 경우 로컬에서도 삭제 처리
+                    adapter.removeItem(position)
+                    Toast.makeText(context, "약물 삭제가 완료되었습니다.", Toast.LENGTH_SHORT).show()
+                } else {
+                    Log.e("SwipeHelper", "Failed to delete medicine: ${response.errorBody()?.string()}")
+                    Toast.makeText(context, "약물 삭제 실패", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Log.e("SwipeHelper", "Error deleting medicine", e)
+                Toast.makeText(context, "네트워크 오류로 약물 삭제에 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     private fun clampViewPositionHorizontal(
         view: View,

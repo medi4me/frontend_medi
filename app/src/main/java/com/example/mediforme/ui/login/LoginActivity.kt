@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-
 import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
@@ -16,26 +15,34 @@ import android.text.method.PasswordTransformationMethod
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mediforme.remote.api.AuthService
-import com.example.mediforme.remote.api.LoginRequest
-import com.example.mediforme.remote.api.LoginResponse
-import com.example.mediforme.remote.api.NameResponse
-import com.example.mediforme.remote.api.getRetrofit
+import androidx.lifecycle.lifecycleScope
 import com.example.mediforme.ui.join.JoinServiceActivity
 import com.example.mediforme.ui.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivityLoginBinding
-import retrofit2.Call
-import retrofit2.Callback
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.request.LoginRequest
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.LoginResponse
+import com.example.mediforme.remote.model.response.NameResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import retrofit2.Response
+import javax.inject.Inject
+
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var passwordET: EditText
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var authService: AuthService
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var viewPasswordIv: ImageView
     private lateinit var hidePasswordIv: ImageView
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,17 +54,11 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        // authService 초기화
-        authService = getRetrofit().create(AuthService::class.java)
         sharedPreferences = getSharedPreferences("LoginPrefs", Context.MODE_PRIVATE)
 
         passwordET = findViewById(R.id.password_ET)
         viewPasswordIv = findViewById(R.id.sign_up_view_password_iv)
         hidePasswordIv = findViewById(R.id.sign_up_hide_password_iv)
-
-
-
 
         // 아이디 찾기 텍스트뷰 클릭 리스너
         binding.searchIdTV.setOnClickListener {
@@ -85,42 +86,43 @@ class LoginActivity : AppCompatActivity() {
             hidePasswordIv.visibility = ImageView.GONE
         }
 
-
         // 로그인 버튼 클릭 리스너
         binding.veriBtn.setOnClickListener {
             val id = binding.idET.text.toString()
             val password = binding.passwordET.text.toString()
 
-            // Retrofit을 사용하여 로그인 API 호출
-            val loginRequest = LoginRequest(
-                memberID = id,
-                password = password
-            )
+            login(id, password)
+        }
+    }
 
-            authService.login(loginRequest).enqueue(object : Callback<LoginResponse> {
-                override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                    if (response.isSuccessful) {
-                        val loginResponse = response.body()
-                        loginResponse?.let {
-                            if (it.isSuccess) {
-                                // 로그인 성공 시, 토큰을 저장하고 다음 작업 진행
-                                saveTokensAndProceed(id, it.result.accessToken, it.result.refreshToken)
-                            } else {
-                                Log.e("LoginActivity", "Login Failed: ${it.message}")
-                                loginFailDialog()
-                            }
+    private fun login(id: String, password: String) {
+
+        lifecycleScope.launch {
+            try {
+                val loginRequest = LoginRequest(memberID = id, password = password)
+                val response: Response<ApiResponse<LoginResponse>> = apiService.login(loginRequest)
+
+                if (response.isSuccessful) {
+                    val loginApiResponse = response.body()
+                    loginApiResponse?.let { apiResponse ->
+                        if (apiResponse.isSuccess) {
+                            // ApiResponse의 result (LoginResponse 객체)
+                            val loginResponseData = apiResponse.result
+                            // 로그인 성공 시, 토큰을 저장하고 다음 작업 진행
+                            saveTokensAndProceed(id, loginResponseData.result.accessToken, loginResponseData.result.refreshToken)
+                        } else {
+                            Log.e("LoginActivity", "Login Failed: ${apiResponse.message}")
+                            loginFailDialog()
                         }
-                    } else {
-                        Log.e("LoginActivity", "Response Error: ${response.code()}")
-                        loginFailDialog()
                     }
+                } else {
+                    Log.e("LoginActivity", "Response Error: ${response.code()}")
+                    loginFailDialog()
                 }
-
-                override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Log.e("LoginActivity", "Network Error: ${t.message}")
-                    Toast.makeText(this@LoginActivity, "로그인 실패: 네트워크 오류", Toast.LENGTH_SHORT).show()
-                }
-            })
+            } catch (e: Exception) {
+                Log.e("LoginActivity", "Network Error: ${e.message}")
+                Toast.makeText(this@LoginActivity, "로그인 실패: 네트워크 오류", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -162,14 +164,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun fetchUserNameAndSave(memberID: String) {
-        authService.getName(memberID).enqueue(object : Callback<NameResponse> {
-            override fun onResponse(call: Call<NameResponse>, response: Response<NameResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<NameResponse>> = apiService.getName(memberID)
                 if (response.isSuccessful) {
                     val nameResponse = response.body()
                     nameResponse?.let {
                         if (it.isSuccess) {
                             val editor = sharedPreferences.edit()
-                            editor.putString("name", it.result)
+                            editor.putString("name", it.result.result)
                             editor.apply()
 
                             Log.d("LoginActivity", "Name fetched and saved: ${it.result}")
@@ -187,13 +190,11 @@ class LoginActivity : AppCompatActivity() {
                     Log.e("LoginActivity", "Response Error: ${response.code()}")
                     Toast.makeText(this@LoginActivity, "이름 가져오기 실패: 서버 오류", Toast.LENGTH_SHORT).show()
                 }
-            }
-
-            override fun onFailure(call: Call<NameResponse>, t: Throwable) {
-                Log.e("LoginActivity", "Network Error: ${t.message}")
+            } catch (e: Exception) {
+                Log.e("LoginActivity", "Network Error: ${e.message}")
                 Toast.makeText(this@LoginActivity, "이름 가져오기 실패: 네트워크 오류", Toast.LENGTH_SHORT).show()
             }
-        })
+        }
 
         viewPasswordIv.setOnClickListener {
             passwordET.transformationMethod = HideReturnsTransformationMethod.getInstance()

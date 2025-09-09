@@ -2,36 +2,42 @@ package com.example.mediforme.ui.join
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.example.mediforme.remote.api.PhoneVerificationRequest
-import com.example.mediforme.remote.api.PhoneVerificationResponse
-import com.example.mediforme.remote.api.Register
-import com.example.mediforme.remote.api.getRetrofit
+import androidx.lifecycle.lifecycleScope
 import com.example.mediforme.R
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.request.PhoneVerificationRequest
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.PhoneVerificationResponse
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.concurrent.timer
 
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class JoinVericodeActivity : AppCompatActivity() {
 
     private var second = 0
     private var minute = 0
     private var timeTick = 300 // 제한시간 5분을 300초로 설정
-    private lateinit var register: Register
     private lateinit var phoneNumber: String
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_join_vericode)
 
-        register = getRetrofit().create(Register::class.java)
         phoneNumber = intent.getStringExtra("user_phoneNumber") ?: ""
 
         setTimer()
@@ -53,8 +59,9 @@ class JoinVericodeActivity : AppCompatActivity() {
     private fun verifyPhoneNumber(phone: String, verificationCode: String) {
         val request = PhoneVerificationRequest(phone, verificationCode)
 
-        register.verifyPhone(request).enqueue(object : Callback<PhoneVerificationResponse> {
-            override fun onResponse(call: Call<PhoneVerificationResponse>, response: Response<PhoneVerificationResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: retrofit2.Response<ApiResponse<PhoneVerificationResponse>> = apiService.verifyPhone(request)
                 if (response.isSuccessful) {
                     val verificationResponse = response.body()
                     verificationResponse?.let {
@@ -70,12 +77,11 @@ class JoinVericodeActivity : AppCompatActivity() {
                         }
                     }
                 }
-            }
-
-            override fun onFailure(call: Call<PhoneVerificationResponse>, t: Throwable) {
+            } catch (e: Exception) {
+                Log.e("JoinVericodeActivity", "네트워크 오류", e)
                 Toast.makeText(this@JoinVericodeActivity, "네트워크 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
             }
-        })
+        }
     }
 
 

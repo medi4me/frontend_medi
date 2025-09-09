@@ -8,24 +8,30 @@ import android.util.Log
 import android.view.LayoutInflater
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mediforme.remote.api.MedicineApiService
-import com.example.mediforme.remote.api.MedicineResponse
-import com.example.mediforme.remote.api.getRetrofit
 import com.example.mediforme.ui.MainActivity
 import com.example.mediforme.R
 import com.example.mediforme.databinding.ActivitySearchWithNameBinding
+import com.example.mediforme.remote.api.ApiService
+import com.example.mediforme.remote.model.response.ApiResponse
+import com.example.mediforme.remote.model.response.MedicineResponse
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+import retrofit2.Response
+import javax.inject.Inject
+
+// Hilt를 사용하여 의존성 주입을 활성화
+@AndroidEntryPoint
 class SearchWithNameActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchWithNameBinding
-    private val apiService by lazy {
-        getRetrofit().create(MedicineApiService::class.java)
-    }
+
+    // Hilt를 통해 ApiService 인스턴스 주입
+    @Inject
+    lateinit var apiService: ApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,22 +86,20 @@ class SearchWithNameActivity : AppCompatActivity() {
 
         val searchQuery = binding.medicineNameEV.text.toString()
 
-        // 서버에서 데이터 호출
-        apiService.getMedicines(searchQuery).enqueue(object : Callback<MedicineResponse> {
-            override fun onResponse(call: Call<MedicineResponse>, response: Response<MedicineResponse>) {
+        lifecycleScope.launch {
+            try {
+                val response: Response<ApiResponse<MedicineResponse>> = apiService.getMedicines(searchQuery)
                 if (response.isSuccessful) {
-                    val dataMedicines = response.body()?.medicines ?: emptyList()
+                    val dataMedicines = response.body()?.result?.medicines ?: emptyList()
                     val adapter = SearchWithNameAdapter(dataMedicines)
                     recyclerView.adapter = adapter
                 } else {
                     Log.e("CheckMedicineActivity", "Failed to get medicines: ${response.errorBody()?.string()}")
                 }
+            } catch (e: Exception) {
+                Log.e("CheckMedicineActivity", "API call failed", e)
             }
-
-            override fun onFailure(call: Call<MedicineResponse>, t: Throwable) {
-                Log.e("CheckMedicineActivity", "API call failed", t)
-            }
-        })
+        }
 
         bottomSheetDialog.show()
     }
